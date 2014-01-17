@@ -5,3 +5,5 @@
 *.war
 *.ear
 /bin
+
+.DS_Store
