@@ -11,7 +11,7 @@ public class Code {
 		int num2 = rand.nextInt(10);
 		Scanner sc = new Scanner(System.in);
 		
-		while(true){
+		while (true){
 			try{
 				System.out.println("What is " + num1 + "+" + num2 + "?");
 				System.out.print("> ");
