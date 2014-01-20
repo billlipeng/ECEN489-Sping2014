@@ -9,14 +9,15 @@ import java.util.Scanner;
 
 public class Client {
 	public static void main(String []args){
+		
 		Random rand = new Random();
 		int num1 = rand.nextInt(10);
 		int num2 = rand.nextInt(10);
 		int sum = 0;
 		
 		try{
-			System.out.println("Client connecting...");
-			Socket connection = new Socket(InetAddress.getByName("127.0.0.1"), 2015);
+			System.out.println("Client waiting...");
+			Socket connection = new Socket(InetAddress.getByName("127.0.0.1"), 2015);;
 			System.out.println("Client connected!");
 			
 			ObjectOutputStream output = new ObjectOutputStream(connection.getOutputStream());
@@ -54,5 +55,5 @@ public class Client {
 			}
 		}
 		sc.close();
-	}
+	}	
 }
