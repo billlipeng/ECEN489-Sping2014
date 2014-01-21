@@ -1,0 +1,19 @@
+= List of Tutorials =
+
+Eclipse
+by Jeff Terrell
+Jan 15, 2014
+
+Git
+by Zachary Partal
+Jan 15, 2014
+
+SQLite
+by Miguel Alvarez
+Jan 22, 2014
+
+Java Database Connectivity (JDBC)
+by  Clayton Crawford
+Jan 22, 2014
+
+
