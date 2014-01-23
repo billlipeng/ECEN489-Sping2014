@@ -1,1 +1,0 @@
-INDEX VERSION 1.126+C:\Users\Colin Brasher\git\ECEN489-Spring2014\cbrasher\.metadata\.plugins\org.eclipse.jdt.core
