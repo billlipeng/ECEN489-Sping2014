@@ -1,53 +1,51 @@
 package assignment2;
-import java.applet.Applet;
-import java.awt.*;
+
+import java.applet.Applet; //importing Applet
+import java.awt.*; 
 import java.awt.event.*;
-import java.net.*;
-import java.io.*;
+import java.net.*; //importing for server
+import java.io.*; //importing for server
 
-public class Java2Client extends Applet implements ActionListener
+public class Java2Client extends Applet implements ActionListener //So Applet can read values and send them
 {
-	TextField numbField;
+	TextField numbField; //Creating fields to insert integer
 	TextField numbField1;
-	Label display;
-	Label display1;
-	Socket socket;
+	Label display; //Creating label for sum value to return
+	Socket socket; 
 	  public void init() {
-
+		  System.out.print( "Limit number entries to six integers.\n" );
+		  System.out.print( "You may need to expand the applet after sending your integers.\nThis will reformat the applet and allow you to see your sum.\n");
+		  System.out.print("You may resubmit numbers for new sums as long as the applet is open'\nHowever avoid opening mulitple isntances as this can cause an error.");
 	        try {
 	            socket = new Socket("localhost",4444); //establishing port number
 	        } catch (UnknownHostException e) {
-	            System.out.println("Unknown host"); //
+	            System.out.println("Unknown host"); //If host unknown catch exception
 	        } catch (IOException e) {
-	            System.out.println("IO Exception");
+	            System.out.println("IO Exception"); //For IO exception
 	            return;
 	        }
 
-	        numbField = new TextField(6); //setting up the applet
+	        numbField = new TextField(6); //setting numbfield for 6 chars
 	        add(numbField);
-	        numbField1 = new TextField(6);
+	        numbField1 = new TextField(6); 
 	        add(numbField1);
 
-	        Button button = new Button("Send");
+	        Button button = new Button("Send"); //Creating Button to send data
 	        add(button);
 	    button.addActionListener(this);
-	        Button button1 = new Button("Send");
-		button1.addActionListener(this);
 
-		display = new Label("No Number");
+		display = new Label("No Number"); //Initial Message to establish baseline
 		add(display);
-		display1 = new Label("No Number");
-		add(display1);
+		
 
 	        validate();
 	    }
 
 	    public void actionPerformed(ActionEvent e)
 	    {
-	        int numb1 = 0;
+	        int numb1 = 0; //create int for user to place integers in
 	        int numb2 = 0;
 		String numbStr = null;
-		String numbStr1 = null;
 		BufferedReader fromServer = null;
 		PrintWriter toServer = null;
 
@@ -83,11 +81,10 @@ public class Java2Client extends Applet implements ActionListener
 	        	try 
 			{
 	            		numbStr = fromServer.readLine();
-	            		numbStr1 = fromServer.readLine();
 	        	} 
 			catch (IOException ex) 
 			{
-	            		System.out.println("Applet receive failed:");
+	            		System.out.println("The Applet recieved no info");
 	        	}
 
 	        	display.setText(numbStr);
