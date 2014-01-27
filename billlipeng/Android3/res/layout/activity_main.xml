@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+android:id="@+id/widget0"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+xmlns:android="http://schemas.android.com/apk/res/android"
+>
+
+<Button
+    android:id="@+id/check_answer"
+    android:layout_width="149dp"
+    android:layout_height="wrap_content"
+    android:layout_x="260dp"
+    android:layout_y="454dp"
+    android:text="Check Answer" />
+
+<Button
+    android:id="@+id/new_question"
+    android:layout_width="149dp"
+    android:layout_height="wrap_content"
+    android:layout_x="62dp"
+    android:layout_y="454dp"
+    android:text="New Question" />
+
+<TextView
+    android:id="@+id/t2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_x="100dp"
+    android:layout_y="320dp"
+    android:text=" "
+    android:textColor="#ffff0066"
+    android:textSize="25sp"
+    android:textStyle="bold" />
+
+<TextView
+    android:id="@+id/t1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_x="145dp"
+    android:layout_y="180dp"
+    android:text=" "
+    android:textColor="#ffff0066"
+    android:textSize="25sp"
+    android:textStyle="bold" />
+
+<EditText
+    android:id="@+id/user_answer"
+    android:layout_width="100dp"
+    android:layout_height="50dp"
+    android:layout_x="200dp"
+    android:layout_y="250dp"
+    android:ems="10"
+    android:textSize="25sp" >
+
+    <requestFocus />
+</EditText>
+
+</AbsoluteLayout>
