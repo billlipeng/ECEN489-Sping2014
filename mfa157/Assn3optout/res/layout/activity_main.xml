@@ -27,4 +27,24 @@
         android:text="Current Data: Disabled"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <Button
+        android:id="@+id/bData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/bClear"
+        android:layout_alignRight="@+id/bStart"
+        android:layout_below="@+id/bStart"
+        android:layout_marginTop="22dp"
+        android:text="View Data" />
+
+    <Button
+        android:id="@+id/bClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/bStart"
+        android:layout_alignRight="@+id/bStart"
+        android:layout_below="@+id/bData"
+        android:layout_marginTop="24dp"
+        android:text="Clear Data" />
+
 </RelativeLayout>

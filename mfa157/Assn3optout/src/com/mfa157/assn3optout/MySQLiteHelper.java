@@ -7,15 +7,15 @@ import android.util.Log;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
-  public static final String TABLE_RSSI = "RSSI data";
-  public static final String COLUMN_ID = "_id";
+  public static final String TABLE_RSSI = "RSSI_data";
+  public static final String COLUMN_ID = "ID";
   public static final String COLUMN_RSSI = "RSSI";
 
   private static final String DATABASE_NAME = "Assn3optout.db";
   private static final int DATABASE_VERSION = 1;
 
   // Database creation sql statement
-  private static final String DATABASE_CREATE = "create table "
+  private static final String TABLE_CREATE = "CREATE TABLE "
       + TABLE_RSSI + "(" + COLUMN_ID
       + " integer primary key autoincrement, " + COLUMN_RSSI
       + " int not null);";
@@ -26,7 +26,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
   @Override
   public void onCreate(SQLiteDatabase database) {
-    database.execSQL(DATABASE_CREATE);
+    database.execSQL(TABLE_CREATE);
   }
 
   @Override
