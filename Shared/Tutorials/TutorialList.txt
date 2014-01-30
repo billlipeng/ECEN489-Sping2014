@@ -13,7 +13,44 @@ by Miguel Alvarez
 Jan 22, 2014
 
 Java Database Connectivity (JDBC)
-by  Clayton Crawford
+by Clayton Crawford
 Jan 22, 2014
+
+Bluetooth
+by Joseph Binder
+Jan 27, 2014
+
+Android Bundle
+by Jason Moore
+Jan 27, 2014
+
+Google Fusion Tables
+by Jeff Terrell
+Jan 31, 2014
+
+Android Layouts
+by Samuel Carey
+Jan 31, 2014
+
+Qt Visualization
+by Cameron Shaw
+Feb 3, 2014
+
+QCustomPlot
+by Alexandre Ribeiro Lopes
+Feb 3, 2014
+
+Speech Recognition Service on Android
+by Mark Hardiman
+Feb 5, 2014
+
+
+= List of Potential Tutorials =
+
+Eclipse RCP
+
+Firefox SQlite Extension
+
+Wireless Bluetooth TTL Transceiver Module
 
 
