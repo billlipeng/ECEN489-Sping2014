@@ -34,3 +34,4 @@ proguard/
 # Added
 .DS_Store
 *.db
+gitpull.bat
