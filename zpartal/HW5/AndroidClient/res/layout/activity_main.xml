@@ -1,16 +1,86 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="5dp"
+    android:orientation="vertical" >
+   
+    <EditText
+        android:id="@+id/ETClientID"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/ClientID" />
+    
+    <EditText
+        android:id="@+id/ETIP"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:hint="@string/IP" />
+   
+    <EditText
+        android:id="@+id/ETPort"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number" 
+        android:hint="@string/Port" />    
+     
+    <Button
+        android:id="@+id/ButtonConnect"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:onClick="connectClient"
+        android:text="@string/Connect" />
+    
+    <View
+		 android:layout_width="match_parent"
+		 android:layout_height="1dp"
+		 android:layout_marginTop="15dp"
+		 android:layout_marginBottom="15dp"
+		 android:background="@android:color/darker_gray" />
 
-    <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+       <EditText
+            android:id="@+id/editTextInt1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="numberSigned"
+            android:enabled="false"
+            android:hint="@string/int1" />
+
+        <EditText
+            android:id="@+id/editTextIn2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="numberSigned" 
+            android:enabled="false"
+            android:hint="@string/int2" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonSend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_gravity="right"
+        android:enabled="false"
+        android:onClick="sendRequest"
+        android:text="@string/Send" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/TVResponse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Response"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+</LinearLayout>

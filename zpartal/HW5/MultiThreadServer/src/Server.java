@@ -25,6 +25,7 @@ public class Server {
 			while(true) {
 				Worker worker;
 				worker = new Worker(server.accept());
+				System.out.println("New Connection...");
 				Thread t = new Thread(worker);
 				t.start();				
 			}

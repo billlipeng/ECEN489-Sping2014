@@ -1,5 +1,6 @@
-	import java.io.*;
-	import java.net.*;
+import java.io.*;
+import java.net.*;
+import com.zpartal.commpackets.*;
 
 public class Client {
 		static private ObjectInputStream ois;

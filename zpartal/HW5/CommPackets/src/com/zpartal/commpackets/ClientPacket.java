@@ -1,5 +1,6 @@
-import java.io.Serializable;
+package com.zpartal.commpackets;
 
+import java.io.Serializable;
 
 public class ClientPacket implements Serializable {
 	private String clientID;

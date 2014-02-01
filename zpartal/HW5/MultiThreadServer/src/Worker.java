@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-
+import com.zpartal.commpackets.*;
 
 public class Worker implements Runnable {
 	
@@ -24,10 +24,11 @@ public class Worker implements Runnable {
 			while(true) {
 				ClientPacket cp = (ClientPacket) ois.readObject();
 				System.out.print("Request from: " + cp.getClientID());
-				System.out.print("; Data: " + cp.getNum1() + ", " + cp.getNum2());
+				System.out.println("; Data: " + cp.getNum1() + ", " + cp.getNum2());
 				ServerPacket response = new ServerPacket("zpartal", cp.getNum1() + cp.getNum2());
-				oos.writeObject(response);
 				oos.flush();
+				oos.writeObject(response);
+				
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
