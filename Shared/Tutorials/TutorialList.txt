@@ -1,38 +1,9 @@
 = List of Tutorials =
 
-Eclipse
-by Jeff Terrell
-Jan 15, 2014
 
-Git
-by Zachary Partal
-Jan 15, 2014
+== Scheduled Tutorials ==
 
-SQLite
-by Miguel Alvarez
-Jan 22, 2014
-
-Java Database Connectivity (JDBC)
-by Clayton Crawford
-Jan 22, 2014
-
-Bluetooth
-by Joseph Binder
-Jan 27, 2014
-
-Android Bundle
-by Jason Moore
-Jan 27, 2014
-
-Google Fusion Tables
-by Jeff Terrell
-Jan 31, 2014
-
-Android Layouts
-by Samuel Carey
-Jan 31, 2014
-
-Qt Visualization
+Qt Data Visualization
 by Cameron Shaw
 Feb 3, 2014
 
@@ -44,14 +15,55 @@ Speech Recognition Service on Android
 by Mark Hardiman
 Feb 5, 2014
 
+Java Threads
+by Yuanxing Yin
+Feb 5, 2014
 
-= List of Potential Tutorials =
+Wireless Bluetooth TTL Transceiver Module and Amarino
+by Peng Li
+Feb 7, 2014
+
+
+== Past Tutorials ==
+
+Google Fusion Tables
+by Jeff Terrell
+Jan 31, 2014
+
+Android Layouts
+by Samuel Carey
+Jan 31, 2014
+
+Bluetooth
+by Joseph Binder
+Jan 27, 2014
+
+Android Bundle
+by Jason Moore
+Jan 27, 2014
+
+SQLite
+by Miguel Alvarez
+Jan 22, 2014
+
+Java Database Connectivity (JDBC)
+by Clayton Crawford
+Jan 22, 2014
+
+Eclipse
+by Jeff Terrell
+Jan 15, 2014
+
+Git
+by Zachary Partal
+Jan 15, 2014
+
+
+= Potential Tutorial Topics =
 
 Eclipse RCP
+Apache Commons [Math]
+Debian GNU/Linux and Intel NUC
+OpenCV
 
-Firefox SQlite Extension
-
-Wireless Bluetooth TTL Transceiver Module
-
-Java Threads
 
