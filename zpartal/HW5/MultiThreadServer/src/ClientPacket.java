@@ -1,5 +1,7 @@
+import java.io.Serializable;
 
-public class ClientPacket {
+
+public class ClientPacket implements Serializable {
 	private String clientID;
 	private int num1;
 	private int num2;

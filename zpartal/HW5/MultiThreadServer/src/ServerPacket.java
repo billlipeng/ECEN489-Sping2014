@@ -1,5 +1,7 @@
+import java.io.Serializable;
 
-public class ServerPacket {
+
+public class ServerPacket implements Serializable {
 	private String serverID;
 	private int result;
 	

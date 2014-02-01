@@ -3,6 +3,8 @@ import java.io.*;
 import java.net.*;
 
 public class Server {
+	static private ServerSocket server;
+	
 	public static void main(String[] args) throws Exception {
 		int port = 5555;
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
@@ -14,34 +16,20 @@ public class Server {
 			port = Integer.parseInt(input);
 		}
 		
-		System.out.println("Configureing server on port " + Integer.toString(port));
-		
-		ServerSocket server = null;
-		Socket client = null;
-		PrintWriter out = null;
-		BufferedReader in = null;
+		System.out.println("Configureing server on port " + Integer.toString(port) + "...");
 		
 		try {
 			server = new ServerSocket(port);
-			client = server.accept();
-			out = new PrintWriter(client.getOutputStream(), true);
-			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-			String serverinput;
-			while ((serverinput = in.readLine()) != null) {
-				out.println(serverinput);
-				System.out.println("Server echo'd: " + serverinput);
-			}			
-			
+			while(true) {
+				Worker worker;
+				worker = new Worker(server.accept());
+				Thread t = new Thread(worker);
+				t.start();				
+			}
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
-		
-		out.close();
-        in.close();
-        client.close();
-
 	}
-
 }

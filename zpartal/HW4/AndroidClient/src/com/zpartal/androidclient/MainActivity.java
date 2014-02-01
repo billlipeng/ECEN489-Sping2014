@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
 			if (mBtAdapter.isDiscovering() == true) {
                 mBtAdapter.cancelDiscovery();
                 break;
-            }
+			}
 		}
 		mDevice = mBtAdapter.getRemoteDevice("00:19:15:66:9E:A2");
 		UUID uuid = UUID.fromString("b0d042fe-8a3c-11e3-b91b-d231feb1dc81");

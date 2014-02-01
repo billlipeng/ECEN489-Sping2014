@@ -24,7 +24,7 @@ public class Client {
 				port = Integer.parseInt(input);
 			}
 			
-			System.out.println("Connecting to host " + host + " on port " + Integer.toString(port));
+			System.out.println("Connecting to host " + host + " on port " + Integer.toString(port) + "...");
 			
 			
 			try {
@@ -38,20 +38,10 @@ public class Client {
 				
 				ServerPacket response = (ServerPacket) ois.readObject();
 				System.out.println("ServerID: " + response.getServerID());
-				System.out.println("Result: " + response.getResult());				
+				System.out.println("Result: " + response.getResult());	
 				
-//				String clientInput;
-//				System.out.print(">>");
-//				while ((clientInput = stdIn.readLine()) != null) {
-//					long startTime = System.currentTimeMillis();
-//					out.println(clientInput);
-//					String response = in.readLine();
-//					long endTime = System.currentTimeMillis();
-//					long duration = endTime - startTime;
-//	                System.out.println("echo (" + duration + " ms): " + response);
-//	                System.out.print(">>");
-//				}			
-				
+				while(true) {}
+							
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
