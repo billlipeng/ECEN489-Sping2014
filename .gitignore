@@ -33,7 +33,8 @@ local.properties
 proguard/
 
 # Ignore IDEA Project user sepcific files
-*/.idea/workspace.xml
+.idea/workspace.xml
+**/.idea/workspace.xml
 */.idea/tasks.xml
 
 # Added
