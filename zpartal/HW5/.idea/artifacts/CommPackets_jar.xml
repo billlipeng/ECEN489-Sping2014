@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="CommPackets:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/CommPackets_jar</output-path>
+    <root id="archive" name="CommPackets.jar">
+      <element id="module-output" name="CommPackets" />
+    </root>
+  </artifact>
+</component>
