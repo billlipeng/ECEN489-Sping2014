@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Android2</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Summing Machine (Client)</string>
+    <string name="network">Check Network</string>
+    <string name="networkstate">Unknown</string>
+    <string name="generatenums">New Question</string>
+    <string name="numbers">Pending</string>
+    <string name="addip">Connect</string>
+    <string name="ipaddress">Enter IP address</string>
+    <string name="connectionstatus">Status: Not Connected</string>
+    <string name="answerreceived">Awaiting answer..</string>
+    <string name="send">Send</string>
+    <string name="answerhere">Enter Guess Here</string>
+
+</resources>

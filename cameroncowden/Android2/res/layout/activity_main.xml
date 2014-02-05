@@ -1,0 +1,118 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="fill_horizontal"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/hello_world"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/checknetwork"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_below="@+id/textView1"
+        android:text="@string/network" />
+
+    <TextView
+        android:id="@+id/networkstate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/checknetwork"
+        android:layout_alignBottom="@+id/checknetwork"
+        android:layout_alignParentRight="true"
+        android:text="@string/networkstate" />
+
+    <Button
+        android:id="@+id/generatenums"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/checknetwork"
+        android:layout_alignRight="@+id/checknetwork"
+        android:layout_below="@+id/checknetwork"
+        android:text="@string/generatenums" />
+
+    <TextView
+        android:id="@+id/numberdisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/generatenums"
+        android:layout_alignBottom="@+id/generatenums"
+        android:layout_alignLeft="@+id/networkstate"
+        android:text="@string/numbers" />
+
+    <Button
+        android:id="@+id/saveip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/generatenums"
+        android:layout_below="@+id/generatenums"
+        android:text="@string/addip" />
+
+    <EditText
+        android:id="@+id/ipaddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/saveip"
+        android:layout_alignBottom="@+id/saveip"
+        android:layout_toRightOf="@+id/saveip"
+        android:inputType="text"
+        android:hint="@string/ipaddress" />
+
+    <TextView
+        android:id="@+id/connectionstatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/saveip"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/connectionstatus"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/answerreceived"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/answerreceived"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/sendanswer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/saveip"
+        android:layout_below="@+id/connectionstatus"
+        android:text="@string/send" />
+
+    <EditText
+        android:id="@+id/userinput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/sendanswer"
+        android:layout_alignBottom="@+id/sendanswer"
+        android:layout_alignRight="@+id/ipaddress"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="@string/answerhere" >
+
+        <requestFocus />
+    </EditText>
+
+</RelativeLayout>
