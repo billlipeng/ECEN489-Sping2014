@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="fill_parent"
+     android:layout_height="fill_parent"
+     android:orientation="vertical" >
+ 
+     
+     <EditText 
+         android:id="@+id/ip"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:hint="Host IP Address"/>
+     
+      <Button
+         android:id="@+id/connectbutton"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:onClick="connect"
+         android:text="Connect" 
+         />
+      
+       <Button
+         android:id="@+id/discon"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:onClick="Close"
+         android:text="Disconnect" 
+         />
+   
+ 	 
+ 	 <EditText 
+         android:id="@+id/num1"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:hint="Num1"
+         />
+ 	  <EditText 
+         android:id="@+id/num2"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:hint="Num2"
+         />
+ 	  
+ 	  <EditText 
+         android:id="@+id/ans"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:hint="Guess"
+         />
+    
+     
+     <Button 
+         android:id="@+id/sendbutton"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:onClick="MessageProcess"
+         android:text="Send"
+         />
+     <TextView 
+          android:id="@+id/display"
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent"
+          
+         
+         />
+        
+     
+</LinearLayout>
