@@ -8,16 +8,16 @@ public class Java2Sever {
 	ObjectOutputStream oos;
 
 	public Java2Sever() throws IOException{
-		ServerSocket server = null;
+		ServerSocket client = null;
 		Socket socket = null;
 		
 		try {
-			server = new ServerSocket(5555);
+			client = new ServerSocket(5555);
 			ClientPacket packet;
 			ServerPacket response;
 			while(true){
 				System.out.println("Server established...");
-				socket = server.accept();
+				socket = client.accept();
 				ois = new ObjectInputStream(socket.getInputStream());
 				oos = new ObjectOutputStream(socket.getOutputStream());
 				while (true) {
@@ -31,6 +31,8 @@ public class Java2Sever {
 				}
 			}
 		} catch (Exception e) {
+			System.out.println("Error in Server...");					
+
 			//e.printStackTrace();
 		} 
 	}
