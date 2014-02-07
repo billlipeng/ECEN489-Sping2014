@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,77 +10,90 @@
     tools:context=".MainActivity" >
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/ipadr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText1"
-        android:layout_below="@+id/editText1"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:inputType="number" />
-
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText2"
-        android:layout_below="@+id/editText2"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:inputType="number" />
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText1"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="16dp"
-        android:onClick="connect"
-        android:text="@string/connect"/>"
-
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/button1"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp"
         android:ems="10"
-        android:inputType="number" >
+        android:text="@string/address" >
 
         <requestFocus />
     </EditText>
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText3"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="65dp" 
-        android:onClick="generate"
-        android:text="@string/generate"/>
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button2"
-        android:layout_alignBottom="@+id/button2"
-        android:layout_alignRight="@+id/editText3"
-        android:layout_marginRight="26dp"
-        android:onClick="compute"
-        android:text="@string/Check" />
-
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button3"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_centerVertical="true"
         android:ems="10" />
 
+    <EditText
+        android:id="@+id/num1"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ipadr"
+        android:layout_below="@+id/ipadr"
+        android:layout_marginTop="26dp"
+        android:ems="10"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/num2"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/num1"
+        android:layout_alignBottom="@+id/num1"
+        android:layout_alignRight="@+id/ipadr"
+        android:ems="10"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/plus"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/num2"
+        android:layout_alignBottom="@+id/num2"
+        android:layout_centerHorizontal="true"
+        android:ems="10" 
+        android:text="	 +"/>
+
+    <EditText
+        android:id="@+id/sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/num1"
+        android:layout_below="@+id/num1"
+        android:layout_marginTop="18dp"
+        android:ems="10"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/generate"
+        android:layout_alignLeft="@+id/num2"
+        android:text="Check" >
+	</Button>
+    <Button
+        android:id="@+id/send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="44dp"
+        android:text="Send IP" >
+	</Button>
+    <Button
+        android:id="@+id/generate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/send"
+        android:layout_alignLeft="@+id/sum"
+        android:layout_marginBottom="24dp"
+        android:text="Generate" >
+		</Button>
 </RelativeLayout>

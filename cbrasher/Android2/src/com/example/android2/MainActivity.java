@@ -1,110 +1,132 @@
 package com.example.android2;
 
-import java.net.*;
-import java.io.*;
-import java.nio.ByteBuffer;
-import java.util.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Random;
 
+import com.zpartal.commpackets.*;
+
+import android.net.*;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
-import android.view.*;
+import android.view.View;
 import android.widget.*;
 
 public class MainActivity extends Activity {
-	
-	EditText num1;
-	EditText num2;
-	EditText sum;
-	EditText message;
-	Button generate;
-	Button compute;
-	Button connect;
 
+
+	TextView message;
+	EditText sum;
+	Button check;
+	Button send;
+	int a;
+	int b;
+	int total;
+	int x;
+	int c = 15; //test input for message output
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		num1 = (EditText) findViewById(R.id.editText1);
-		num2 = (EditText) findViewById(R.id.editText2);
-		sum  = (EditText) findViewById(R.id.editText3);
-		message = (EditText) findViewById(R.id.editText4);
-		generate = (Button) findViewById(R.id.button2);
-		compute = (Button) findViewById(R.id.button3);
-		connect = (Button) findViewById(R.id.button1);
+		sum  = (EditText) findViewById(R.id.sum);
 		
-		generate.setOnClickListener(new ClickButton());
-		compute.setOnClickListener(new ClickButton1());
-		connect.setOnClickListener(new ClickButton2());
+		Random random = new Random();
+		a = random.nextInt(9);
+		b = random.nextInt(9);
+		
+		EditText int1 = (EditText) findViewById(R.id.num1);
+		int1.setText(Integer.toString(a));
+		EditText int2 = (EditText) findViewById(R.id.num2);
+		int2.setText(Integer.toString(b));
+		
+		check = (Button)findViewById(R.id.check);
+		send = (Button)findViewById(R.id.send);
+		
+		//check.setOnClickListener(new ClickButton());
+		//send.setOnClickListener(new ClickButton1());
 		
 	}
-	Random random = new Random();
-	int a = random.nextInt(9);
-	int b = random.nextInt(9);
-	public int total;
-	ByteBuffer integers = ByteBuffer.allocate(8).putInt(a).putInt(b);
-	public byte[] byte_int = integers.array();
+
+	public void connect(View view)
+	{
+		EditText address = (EditText) findViewById(R.id.ipadr);
+		String ipaddress = address.getText().toString();
+		new talkToServer().execute(ipaddress);
+	}
 	
-private class ClickButton implements Button.OnClickListener{
-			
-			public void onClick(View v){
-				
-			num1.setText(Integer.toString(a));		
-			num2.setText(Integer.toString(b));
-			
-			}
-		}
-private class ClickButton1 implements Button.OnClickListener
-		{
-			
-			public void onClick(View v){
-			
-			int x = Integer.parseInt(sum.getText().toString());
-			int total1 = a+b;
-			try {
-				if (x == total1)
-					message.setText("Correct");
-				else
-					message.setText("Incorrect");
-
-				}
-			finally{
-				
-					}
-			}
-		}
-public class ClickButton2 implements Button.OnClickListener 
-{
 	
-	public void onClick(View v){
-		Socket connection;
-		System.out.print("Connection to the Swarm.\n");
-		try {
-			connection = new Socket("10.0.2.2", 5559);	
-			if (connection.isConnected())
-				System.out.print("Hive Mind Located: Awaiting to send orders\n");
-
-			DataOutputStream output = new DataOutputStream(connection.getOutputStream());
-			DataInputStream input = new DataInputStream(connection.getInputStream());
+	 private class talkToServer extends AsyncTask<String,Void,Integer>
+	{
+		@SuppressWarnings("unused")
+		protected void onPreExectue(){
 			
-			output.write(byte_int);
-			
-			int total = input.readInt();
-			System.out.print(total);
-			
-			output.close();
-			input.close();
-			connection.close();
 		}
-		 catch (UnknownHostException e) {
-
-				e.printStackTrace();
-			 }
-			 catch (IOException e) {
-				 
-				e.printStackTrace();
-			}
 		
+		protected Integer doInBackground(String... ipaddress) {
+			Socket connection = null;
+
+			try {
+				connection = new Socket(ipaddress[0], 6123);	//192.168.0.100
+				if (connection.isConnected())
+					System.out.print("Connection established \n");
+				
+				ObjectOutputStream output = new ObjectOutputStream(connection.getOutputStream());
+				ObjectInputStream input = new ObjectInputStream(connection.getInputStream());	
+				
+				ClientPacket cp = new ClientPacket("cp", a, b);
+				
+				cp.setNum1(a);
+				cp.setNum2(b);
+				output.writeObject(cp);
+				//output.write(byte_array);
+				output.writeInt(a);
+				output.writeInt(b);
+				
+				ServerPacket sp = (ServerPacket) input.readObject();
+				
+				total = sp.getResult();
+				
+				
+				output.close();
+				input.close();
+				
+				connection.close();
+				
+			} 
+			catch (UnknownHostException e ) 
+			{
+				e.printStackTrace();
+			} 
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			} catch (ClassNotFoundException e)
+			{
+				e.printStackTrace();
 			}
-		}
+			return total;
+		 }
+		
+		
+		 @Override
+	        protected void onPostExecute(Integer result) {
+
+			 message = (TextView) findViewById(R.id.message);
+			x = Integer.parseInt(sum.getText().toString());
+							
+			if	(x == total){
+			message.setText("The Force is Strong with this One");
+				        	}
+			else{
+			message.setText("All your Bases Belong to Me");
+				}
+			 
+					}
+	}
 }

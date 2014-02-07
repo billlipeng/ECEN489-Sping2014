@@ -15,7 +15,7 @@ public class primary {
 		// TODO Auto-generated method stub
 Scanner sc = new Scanner(System.in);
 InetAddress ipaddress = null;
-int port= 5555;
+int port= 5558;
 System.out.println("Enter first number");
 int firstnum= sc.nextInt();
 System.out.println("Enter second number");

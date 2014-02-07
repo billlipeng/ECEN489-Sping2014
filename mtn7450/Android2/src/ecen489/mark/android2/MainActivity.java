@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
 			//System.out.print(ip_addr);
 			try {
 				System.out.println("opening socket...");
-				connection = new Socket(ip_addr[0], 5555);	//10.201.193.83
+				connection = new Socket(ip_addr[0], 6123);	//10.201.193.83
 				if (connection.isConnected())
 					System.out.print("Socket found.\n");
 				
