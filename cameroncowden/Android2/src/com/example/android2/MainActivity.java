@@ -153,10 +153,27 @@ class connect implements Runnable {
 		        int correctanswer = sp.getResult();
 		        
 		        if (Integer.parseInt(userinput.getText().toString()) == correctanswer)
-					AnswerReceived.setText("CORRECT!");
-				else
-					AnswerReceived.setText("WRONG!");
+		        	runOnUiThread(new Runnable() {
+			            @Override
+			            public void run() {
+
+			       //stuff that updates ui
+			            	AnswerReceived.setText("CORRECT!");
+			           }
+			       });
 					
+				else
+					runOnUiThread(new Runnable() {
+			            @Override
+			            public void run() {
+
+			       //stuff that updates ui
+			            	AnswerReceived.setText("WRONG!");
+			           }
+			       });
+							
+		        
+		
 					
 				} 
 				

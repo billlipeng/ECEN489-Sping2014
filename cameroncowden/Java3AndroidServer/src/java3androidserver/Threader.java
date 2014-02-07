@@ -31,13 +31,15 @@ public class Threader extends Thread {
 		while(true){
 			try{
 			//listening for packets and sending back the answer
-				Object received =  receiver.readObject();
-				cp = (ClientPacket) received;
-				int n1 = cp.getNum1();
-				int n2 = cp.getNum2();
-				int sum = n1 + n2;
-				sp.setServerID("Cameron");
-				sp.setResult(sum);
+				//Object received =  receiver.readObject();
+				//cp = (ClientPacket) received;
+				ClientPacket cp = (ClientPacket) receiver.readObject();
+				sp = new ServerPacket("Cameron", cp.getNum1()+cp.getNum2());
+				//int n1 = cp.getNum1();
+				//int n2 = cp.getNum2();
+				//int sum = n1 + n2;
+				//sp.setServerID("Cameron");
+				//sp.setResult(sum);
 				sender.writeObject(sp);
 				System.out.println("Correct answer sent to user!");
 			}
