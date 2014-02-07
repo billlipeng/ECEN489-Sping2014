@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AndroidClient</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="IP">IP</string>
+    <string name="Port">Port</string>
+    <string name="Connect">Connect</string>
+    <string name="ClientID">ClientID</string>
+    <string name="int1">int 1</string>
+    <string name="int2">int 2</string>
+    <string name="Send">Send</string>
+    <string name="Response">Response: </string>
+
+</resources>

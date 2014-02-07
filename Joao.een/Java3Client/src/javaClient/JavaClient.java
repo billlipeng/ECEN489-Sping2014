@@ -44,20 +44,20 @@ public class JavaClient {
 			DataInputStream input =  new DataInputStream( connection.getInputStream() );
 			// Setting integer to a byte array of 8 positions
 			byte [] buffer_out = new byte[] {
-					(byte)(b >>> 54),
+					(byte)(b >>> 56),
 		            (byte)(b >>> 48),
 		            (byte)(b >>> 40),
 		            (byte)(b >>> 32),
 					(byte)(a >>> 24),
 		            (byte)(a >>> 16),
 		            (byte)(a >>> 8),
-		            (byte)a};
+		            (byte) a};
 			output.write(buffer_out);
 			output.flush();
 			// Receiving answer
-			byte[] buffer_in = new byte[4];
-			input.read(buffer_in);
-			c = ByteBuffer.wrap(buffer_in).getInt();
+			//byte[] buffer_in = new byte[4];
+			//input.read(buffer_in);
+			c = input.readInt();
 			System.out.printf("%d + %d = %d\n" ,a,b,c);
 			if ( c == guess)
 				System.out.printf("Correct Answer!!");

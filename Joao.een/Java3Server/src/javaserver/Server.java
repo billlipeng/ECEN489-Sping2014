@@ -86,7 +86,8 @@ public class Server {
 	            (byte)(c >>> 8),
 	            (byte)c
 	            };
-		output.write(buffer_out);		
+		output.write(buffer_out);
+		output.flush();
 	} // End of process method
 	
 	

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">BasicBT</string>
+    <string name="action_settings">Settings</string>
+    <string name="headline">Look, no wires</string>
+    <string name="BTbutton">Click me to BT</string>
+	<string name="editTXT">Type stuff in here</string>
+	<string name="BTget">What we get from BT</string>
+	
+</resources>
