@@ -40,14 +40,15 @@ public class Java3AndroidServer {
 			System.out.println("A client has connected.");	
 			}
 			catch (IOException e) {
+				server.close();
                 System.err.println("I/O error: " + e);
             }
 			new Threader(connection).start();			
 			}
-							    		    
+				    		    
 		    
 		}
-		
+		System.out.println("Server closed.");			
 }
 }
 			

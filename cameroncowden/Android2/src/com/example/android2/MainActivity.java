@@ -144,7 +144,7 @@ class connect implements Runnable {
 				ObjectOutputStream sender = new ObjectOutputStream(connection.getOutputStream());
 				ObjectInputStream receiver = new ObjectInputStream(connection.getInputStream());
 		        
-		        ClientPacket cp = new ClientPacket("Test",n1,n2);
+		        ClientPacket cp = new ClientPacket("Cameron",n1,n2);
 		        ServerPacket sp;
 		        sender.writeObject(cp);      
 		        
