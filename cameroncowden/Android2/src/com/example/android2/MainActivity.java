@@ -8,7 +8,6 @@ import android.content.Context;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
-import android.util.*;
 
 import java.net.*;
 import java.io.*;
@@ -151,7 +150,7 @@ class connect implements Runnable {
 		        Object received =  receiver.readObject();
 		        sp = (ServerPacket) received;
 		        int correctanswer = sp.getResult();
-		        
+		        connection.close();
 		        if (Integer.parseInt(userinput.getText().toString()) == correctanswer)
 		        	runOnUiThread(new Runnable() {
 			            @Override

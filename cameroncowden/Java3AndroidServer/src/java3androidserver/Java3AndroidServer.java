@@ -3,8 +3,7 @@ package java3androidserver;
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
-import java.nio.*;
-import com.zpartal.commpackets.*;
+
 
 public class Java3AndroidServer {
 
@@ -48,7 +47,8 @@ public class Java3AndroidServer {
 				    		    
 		    
 		}
-		System.out.println("Server closed.");			
+		System.out.println("Server closed.");	
+		userinput.close();
 }
 }
 			
