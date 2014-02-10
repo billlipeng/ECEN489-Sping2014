@@ -2,6 +2,7 @@ package assignment5;
 
 import java.io.*;
 import java.net.*;
+import java.lang.*;
 
 import com.zpartal.commpackets.*;
 
@@ -11,11 +12,13 @@ public class Threader extends Thread{
 	protected Socket socket;
 	ClientPacket clientpac;
 	ServerPacket serverpac;
+	int a = 0;
+	int b = 0;
 	public Threader(Socket clientsocket){
 		this.socket = clientsocket;
 	}
 	
-	public void start() {
+	public void run() {
 	
 		ObjectInputStream input = null;
 		ObjectOutputStream output = null;
@@ -30,22 +33,34 @@ public class Threader extends Thread{
 			System.out.println(e);
 			System.exit(1);
 		}
+		try{
 		while(true){
-			try{
-				Object num = input.readObject();
-				clientpac = (ClientPacket) num;
-				int num1 = clientpac.getNum1();
-				int num2 = clientpac.getNum2();
-				int sum = num1 + num2;
-				serverpac.setServerID("Destoroyah");
-				serverpac.setResult(sum);
+			    clientpac = (ClientPacket) input.readObject();
+			    a = clientpac.getNum1();
+			    b = clientpac.getNum2();
+			    String clientID = clientpac.getClientID();
+				System.out.println("Client ID: " +clientID);
+				System.out.println("Number1: " + a + " " + "Number2: " + b);
+				System.out.println("Sending Answer");
+				serverpac = new ServerPacket("Destoroyah", clientpac.getNum1()+clientpac.getNum2());
 				output.writeObject(serverpac);
-			}
-			catch(IOException | ClassNotFoundException e){
-				System.out.println(e);
-				System.exit(2);
+				System.out.println("Answer Sent:" + (a+b) );
 			}
 		}
+			catch(IOException e){
+				System.out.println(e);
+			}
+			catch(ClassNotFoundException e){
+				System.out.println(e);
+				System.exit(2);
+		}
+		try{
+			input.close();
+			output.close();
+			socket.close();
+		}
+		catch(IOException e){
+			System.out.println(e);
+		}
 	}
-
 }

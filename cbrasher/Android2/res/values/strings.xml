@@ -3,6 +3,13 @@
 
     <string name="app_name">Android2</string>
     <string name="action_settings">Settings</string>
-    <string name="address">IPaddress</string>
+    <string name="hello_world">Android Sum Client</string>
+    <string name="generatenums">Sum Question:</string>
+    <string name="numbers">Queued</string>
+    <string name="addip">Connect</string>
+    <string name="ipaddress">Enter IP address</string>
+    <string name="answerreceived">Answer Queued</string>
+    <string name="send">Send</string>
+    <string name="answerhere">Enter Answer Here</string>
 
 </resources>

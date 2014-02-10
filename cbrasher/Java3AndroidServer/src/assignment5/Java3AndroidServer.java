@@ -5,17 +5,19 @@ import java.nio.*;
 import java.util.Scanner;
 import java.io.*;
 
-import com.zpartal.commpackets.*;
-
 public class Java3AndroidServer {
+	
+	static ObjectInputStream input;
+	static ObjectOutputStream output;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		System.out.println("Awakening Hive Mind\n");
 		
 		Scanner user = new Scanner(System.in);
 		ServerSocket server = null;
 		Socket clientSocket = null;
+	
 		System.out.println("Enter port number: \n");
 		int port = user.nextInt();
 		try{
@@ -29,12 +31,11 @@ public class Java3AndroidServer {
 		while(true){
 			try{
 				clientSocket = server.accept();
-				System.out.println("Connected to the Hive mind/n");
-				if (user.nextLine() == "quit"){
-				server.close();
+				System.out.println("Connected to the Hive mind\n");
+
 				}
-			}
 			catch(IOException e){
+				server.close();
 			System.out.print(e);
 			System.exit(2);
 			}

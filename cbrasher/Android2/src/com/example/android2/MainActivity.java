@@ -3,130 +3,145 @@ package com.example.android2;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Random;
 
-import com.zpartal.commpackets.*;
-
-import android.net.*;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.View;
-import android.widget.*;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.zpartal.commpackets.ClientPacket;
+import com.zpartal.commpackets.ServerPacket;
 
 public class MainActivity extends Activity {
-
-
-	TextView message;
-	EditText sum;
+	Button generate;
+	TextView CurrentQuestion;
+	Button Connect;
+	EditText IPaddress;
 	Button check;
-	Button send;
-	int a;
-	int b;
-	int total;
-	int x;
-	int c = 15; //test input for message output
-	
+	EditText userinput;
+	TextView AnswerReceived;
+
+	public static String ipaddress;
+	public int myanswer;
+	public int n1,n2;
+
+	private static final int port = 5555;
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		sum  = (EditText) findViewById(R.id.sum);
-		
-		Random random = new Random();
-		a = random.nextInt(9);
-		b = random.nextInt(9);
-		
-		EditText int1 = (EditText) findViewById(R.id.num1);
-		int1.setText(Integer.toString(a));
-		EditText int2 = (EditText) findViewById(R.id.num2);
-		int2.setText(Integer.toString(b));
-		
-		check = (Button)findViewById(R.id.check);
-		send = (Button)findViewById(R.id.send);
-		
-		//check.setOnClickListener(new ClickButton());
-		//send.setOnClickListener(new ClickButton1());
-		
+
+		Toast.makeText(this, "Landed in onCreate", Toast.LENGTH_LONG).show();
+
+		generate = (Button) findViewById(R.id.generatenums);
+		CurrentQuestion = (TextView) findViewById(R.id.numberdisplay);
+
+		Connect = (Button) findViewById(R.id.saveip);
+		IPaddress = (EditText) findViewById(R.id.ipaddress);
+
+		userinput = (EditText) findViewById(R.id.userinput);
+
+		AnswerReceived = (TextView) findViewById(R.id.answerreceived);
+
+		generate.setOnClickListener(NewQuestionClickListener);
+		Connect.setOnClickListener(ConnectClickListener);
+	
+
 	}
 
-	public void connect(View view)
-	{
-		EditText address = (EditText) findViewById(R.id.ipadr);
-		String ipaddress = address.getText().toString();
-		new talkToServer().execute(ipaddress);
+
+
+public OnClickListener NewQuestionClickListener = new OnClickListener(){
+	@Override
+	public void onClick(View v) {
+
+		Random R = new Random();
+		int a = R.nextInt(10);
+		int b = R.nextInt(10);
+		n1 = a;
+		n2 = b;
+		CurrentQuestion.setText(Integer.toString(a) + " + " + Integer.toString(b));
+
 	}
-	
-	
-	 private class talkToServer extends AsyncTask<String,Void,Integer>
-	{
-		@SuppressWarnings("unused")
-		protected void onPreExectue(){
-			
-		}
-		
-		protected Integer doInBackground(String... ipaddress) {
-			Socket connection = null;
+};
+public OnClickListener ConnectClickListener = new OnClickListener(){
 
-			try {
-				connection = new Socket(ipaddress[0], 6123);	//192.168.0.100
-				if (connection.isConnected())
-					System.out.print("Connection established \n");
-				
-				ObjectOutputStream output = new ObjectOutputStream(connection.getOutputStream());
-				ObjectInputStream input = new ObjectInputStream(connection.getInputStream());	
-				
-				ClientPacket cp = new ClientPacket("cp", a, b);
-				
-				cp.setNum1(a);
-				cp.setNum2(b);
-				output.writeObject(cp);
-				//output.write(byte_array);
-				output.writeInt(a);
-				output.writeInt(b);
-				
-				ServerPacket sp = (ServerPacket) input.readObject();
-				
-				total = sp.getResult();
-				
-				
-				output.close();
-				input.close();
-				
-				connection.close();
-				
-			} 
-			catch (UnknownHostException e ) 
-			{
-				e.printStackTrace();
-			} 
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			} catch (ClassNotFoundException e)
-			{
-				e.printStackTrace();
-			}
-			return total;
-		 }
-		
-		
-		 @Override
-	        protected void onPostExecute(Integer result) {
 
-			 message = (TextView) findViewById(R.id.message);
-			x = Integer.parseInt(sum.getText().toString());
-							
-			if	(x == total){
-			message.setText("The Force is Strong with this One");
-				        	}
-			else{
-			message.setText("All your Bases Belong to Me");
+	@Override
+	public void onClick(View v) {
+
+		ipaddress = IPaddress.getText().toString();
+		new Thread(new connect()).start();
+
+	}
+
+};
+
+
+class connect implements Runnable {
+
+		@Override
+		public void run() {
+
+			try{
+				InetAddress ip = InetAddress.getByName(ipaddress);
+				Socket connection = new Socket(ip,port);
+				ObjectOutputStream sender = 
+						new ObjectOutputStream(connection.getOutputStream());
+				ObjectInputStream receiver = 
+						new ObjectInputStream(connection.getInputStream());
+
+		        ClientPacket cp = new ClientPacket("Destoroyah",n1,n2);
+		        ServerPacket sp;
+		        sender.writeObject(cp);      
+
+		        Object received =  receiver.readObject();
+		        sp = (ServerPacket) received;
+		        int correctanswer = sp.getResult();
+		        connection.close();
+		        if (Integer.parseInt(userinput.getText().toString()) == correctanswer)
+		        	runOnUiThread(new Runnable() {
+			            @Override
+			            public void run() {
+
+			     
+			            	AnswerReceived.setText("Correct");
+			           }
+			       });
+
+				else
+					runOnUiThread(new Runnable() {
+			            @Override
+			            public void run() {
+
+			     
+			            	AnswerReceived.setText("You Died");
+			           }
+			       });
+
+
+
+
+				} 
+
+				catch (IOException e){
+					e.printStackTrace();
 				}
-			 
-					}
-	}
+				catch(ClassNotFoundException e){
+					e.printStackTrace();
+				}
+
+		}
+}
+
+
 }
