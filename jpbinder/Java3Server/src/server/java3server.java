@@ -1,76 +1,84 @@
 package server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
+import com.zpartal.commpackets.*;
 
 
 public class java3server {
-	//to parse the input
-	static int fromByteArray(byte[] bytes) {
-	     return bytes[0] << 24 | (bytes[1] & 0xFF) << 16 | (bytes[2] & 0xFF) << 8 | (bytes[3] & 0xFF);
-	}
 	
-	public static void main(String[] args) { try {
-		byte[] a = new byte[8];
+	
+	public static void main(String[] args) { 
+		
 		
 		int ans;
 		ServerSocket server;
-		server = new ServerSocket(5555,1);
+		try {
+		server = new ServerSocket(5555);
 		while(true) {
 			
+				
 			Socket connection = server.accept();
+//			if (connection != null)
+//				System.out.println("connection achieved");
+			System.out.println("Connection Established");
+			ObjectInputStream ois = new ObjectInputStream(connection.getInputStream());
 			
-			DataInputStream dis = new DataInputStream(connection.getInputStream());
-			DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
 			
-			//make ints out of
-			int sum = 0;
-			int[] ia = {0,0};
-			dis.read(a);
+			
+//make ints out of
 
-			byte temp;
-			byte[] xbyte = new byte[4]; 
-			for (int i = 0; i < 4; i++)
-			  {
-			     temp = a[i];
-			     xbyte[i] = temp;
-			  }
+			
+			int x = 0;
+			int y = 0;
+			
+				ClientPacket cp = new ClientPacket("jpbinder",2,2);
+				cp = (ClientPacket) ois.readObject();
+				x = cp.getNum1();
+
+				y = cp.getNum2();
+				String Client = cp.getClientID();
+
+				System.out.println("Received");
+				System.out.println(Client);
+				System.out.println(x);
+				System.out.println("+");
+				System.out.println(y);
+			
+			ObjectOutputStream oos = new ObjectOutputStream(connection.getOutputStream());
 			
 			
-			int x = fromByteArray(xbyte);
 			
-			byte[] ybyte = new byte[4];
-			for (int i = 4; i < 8; i++)
-			  {
-			     temp = a[i];
-			     ybyte[i-4] = temp;
-			  }
-			int y = fromByteArray(ybyte);
+			
+			
+			
+			oos.flush();
+			
+			
 			
 			
 			ans = x + y;
+			System.out.println("=");
+			System.out.println(ans);
+			ServerPacket sp = new ServerPacket("jpbinder",ans);
 			
-			
-			System.out.println("Received");
-			System.out.println(x);
-			System.out.println(y);
-			
-			dos.writeInt(ans);
+			oos.writeObject(sp);
 			
 		}
 		}
-		catch ( IOException e ) {
-			
+	
+		catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
 		
+		}//
 		
 
-		
 	}
 }
