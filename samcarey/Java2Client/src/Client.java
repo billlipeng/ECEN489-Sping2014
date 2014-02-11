@@ -17,7 +17,8 @@ public class Client {
 		
 		try{
 			System.out.println("Client waiting...");
-			Socket connection = new Socket(InetAddress.getByName("127.0.0.1"), 2015);;
+			Socket connection = new Socket("172.20.2.152", 2015);
+			//Socket connection = new Socket(InetAddress.getByName("127.0.0.1"), 2015);
 			System.out.println("Client connected!");
 			
 			ObjectOutputStream output = new ObjectOutputStream(connection.getOutputStream());

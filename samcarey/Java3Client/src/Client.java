@@ -1,7 +1,6 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.InputMismatchException;
@@ -37,9 +36,10 @@ public class Client {
 		ip = sc.nextLine();
 		if (ip == "0") ip = "127.0.0.1";
 		
+		
 		try{
 			System.out.println(id + "waiting...");
-			Socket connection = new Socket(InetAddress.getByName(ip), 5555);;
+			Socket connection = new Socket(ip, 5555);;
 			System.out.println(id + "connected!");
 			
 			DataOutputStream output = new DataOutputStream(connection.getOutputStream());
