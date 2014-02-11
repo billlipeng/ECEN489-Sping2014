@@ -3,6 +3,30 @@
 
 == Scheduled Tutorials ==
 
+
+
+== Past Tutorials ==
+
+JSON and GSON
+by Zachary Partal
+Feb 10, 2014
+
+Amarino Demonstration
+by Joao Marcos De Aguiar
+Feb 10, 2014
+
+Wireless Bluetooth TTL Transceiver Module and Amarino
+by Peng Li
+Feb 10, 2014
+
+Speech Recognition Service on Android
+by Mark Hardiman
+Feb 7, 2014
+
+Java Threads
+by Yuanxing Yin
+Feb 7, 2014
+
 Qt Data Visualization
 by Cameron Shaw
 Feb 3, 2014
@@ -10,21 +34,6 @@ Feb 3, 2014
 QCustomPlot
 by Alexandre Ribeiro Lopes
 Feb 3, 2014
-
-Speech Recognition Service on Android
-by Mark Hardiman
-Feb 5, 2014
-
-Java Threads
-by Yuanxing Yin
-Feb 5, 2014
-
-Wireless Bluetooth TTL Transceiver Module and Amarino
-by Peng Li
-Feb 7, 2014
-
-
-== Past Tutorials ==
 
 Google Fusion Tables
 by Jeff Terrell
