@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Android2</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="list">List</string>
+    <string name="conect">Desired IP</string>
+    <string name="button0">Cancel</string>
+    <string name="button1">Set Numbers</string>
+    <string name="button2">Result</string>
+    <string name="value0">Choose IP</string>
+    <string name="value1">Choose Number 1</string>
+    <string name="value2">Choose Number 2</string>
+    
+    
+
+</resources>

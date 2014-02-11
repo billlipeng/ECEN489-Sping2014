@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+android:id="@+id/widget0"
+android:orientation="vertical"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+xmlns:android="http://schemas.android.com/apk/res/android"
+>
+
+<Button
+    android:id="@+id/check_answer"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/check_answer" />
+
+<Button
+    android:id="@+id/new_question"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/new_question" />
+
+<TextView
+    android:id="@+id/t2"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/empty" 
+    android:textColor="#ffff0066"
+    android:textSize="25sp"
+    android:textStyle="bold" />
+
+<TextView
+    android:id="@+id/t1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/empty" 
+    android:textColor="#ffff0066"
+    android:textSize="25sp"
+    android:textStyle="bold" />
+
+<TextView
+    android:id="@+id/t0"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/empty" 
+    android:textColor="#ffff0066"
+    android:textSize="25sp"
+    android:textStyle="bold" />
+
+<EditText
+    android:id="@+id/ip_address"
+    android:inputType="text"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:hint="@string/ip_addr"
+    android:ems="10"
+    android:textSize="25sp" />
+
+<EditText
+    android:id="@+id/user_answer"
+    android:inputType="text"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:hint="@string/user_answer"    
+    android:ems="10"
+    android:textSize="25sp" >
+
+    <requestFocus />
+</EditText>
+
+
+</LinearLayout>

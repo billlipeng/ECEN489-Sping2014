@@ -3,8 +3,7 @@ package java3androidserver;
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
-import java.nio.*;
-import com.zpartal.commpackets.*;
+
 
 public class Java3AndroidServer {
 
@@ -40,14 +39,16 @@ public class Java3AndroidServer {
 			System.out.println("A client has connected.");	
 			}
 			catch (IOException e) {
+				server.close();
                 System.err.println("I/O error: " + e);
             }
 			new Threader(connection).start();			
 			}
-							    		    
+				    		    
 		    
 		}
-		
+		System.out.println("Server closed.");	
+		userinput.close();
 }
 }
 			

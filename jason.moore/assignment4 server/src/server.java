@@ -15,7 +15,7 @@ public class server {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
-		ServerSocket serversocket = new ServerSocket(5555);
+		ServerSocket serversocket = new ServerSocket(5558);
 		 
         Socket ss= serversocket.accept();
         DataInputStream DIS= (DataInputStream) ss.getInputStream();

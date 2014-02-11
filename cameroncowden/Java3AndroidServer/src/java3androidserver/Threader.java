@@ -25,40 +25,43 @@ public class Threader extends Thread {
 			receiver = new ObjectInputStream(socket.getInputStream());					
 		}
 		catch(IOException e){
-			System.err.println("Something done goofed in the thread.");
+			System.err.println("Could not create I/O Streams..!");
 		}
 		
-		while(true){
+		
 			try{
+				while(true){
 			//listening for packets and sending back the answer
-				//Object received =  receiver.readObject();
-				//cp = (ClientPacket) received;
+				
 				ClientPacket cp = (ClientPacket) receiver.readObject();
 				sp = new ServerPacket("Cameron", cp.getNum1()+cp.getNum2());
-				//int n1 = cp.getNum1();
-				//int n2 = cp.getNum2();
-				//int sum = n1 + n2;
-				//sp.setServerID("Cameron");
-				//sp.setResult(sum);
 				sender.writeObject(sp);
 				System.out.println("Correct answer sent to user!");
+				
+				//System.exit(0);
+			}
 			}
 			catch(ClassNotFoundException e){
 				System.err.println("Class not found...");
 			}
 			catch(IOException e){
-				System.err.println("IO exception here..");
+				
+				System.out.println("A client disconnected!");
+			}
+			try{
+				socket.close();
+				System.out.println("Socket terminated.");
+			}
+			catch(IOException e){
+				System.err.println("Couldn't close the socket!");
 			}
 			
 		}
 		
 	
 	
-	}
-	
+	}	
 
-
-}
 
 
 
