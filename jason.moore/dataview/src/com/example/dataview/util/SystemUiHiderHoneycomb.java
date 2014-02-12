@@ -1,4 +1,4 @@
-package com.example.assignment3.util;
+package com.example.dataview.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
