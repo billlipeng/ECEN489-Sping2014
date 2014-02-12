@@ -1,20 +1,24 @@
 package javaserver;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.*;
+
+import com.zpartal.commpackets.ClientPacket;
+import com.zpartal.commpackets.ServerPacket;
 
 public class Server {
 		
-		private DataOutputStream output; // Output stream
-		private DataInputStream input; // Output stream
+		private ObjectOutputStream output; // Output stream
+		private ObjectInputStream input; // Output stream
 		private ServerSocket server; // Server Socket
 		private Socket connection; // Connection to Client
 		private int count = 1; // Number of connections
+		private ClientPacket cp;
+		private ServerPacket sp;
 		private int a;
 		private int b;
 		private int c;
@@ -61,33 +65,35 @@ public class Server {
 	public void createStreams() throws IOException
 	{
 		// Creating the output stream variable
-		output =	new DataOutputStream( connection.getOutputStream() );
+		output =	new ObjectOutputStream( connection.getOutputStream() );
 		output.flush(); // flushing the buffer to send header information
 		// Creating the input stream variable
-		input = new DataInputStream(connection.getInputStream()); 
+		input = new ObjectInputStream(connection.getInputStream()); 
 	} // End createStreams
 	
 	public void process() throws IOException
 	{
+		while(true){
 		// buffer will store the values coming from the client
-		byte [] buffer_in = new byte[8];
-		
+		cp =  new ClientPacket("client", 0, 0);
+		try
+		{
 		// Receiving data
-		input.read(buffer_in);
-		a = ByteBuffer.wrap(buffer_in).getInt();
-		b = ByteBuffer.wrap(buffer_in, 4, 4).getInt();
+		cp = (ClientPacket) input.readObject();
+		a = cp.getNum1();
+		b = cp.getNum2();
 		// Calculating response
 		c = a + b;
 		// Sending response back
-		byte [] buffer_out = new byte []
-				{ 
-				(byte)(c >>> 24),
-	            (byte)(c >>> 16),
-	            (byte)(c >>> 8),
-	            (byte)c
-	            };
-		output.write(buffer_out);
+		sp = new ServerPacket("Joao Server", c);
+		output.writeObject(sp);
 		output.flush();
+		}
+		catch (ClassNotFoundException e)
+		{
+			System.out.println("Class not found.");
+		}
+		}
 	} // End of process method
 	
 	
