@@ -19,12 +19,12 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
-        android:id="@+id/getGPS"
+        android:id="@+id/startStop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:onClick="getCoordinates"
-        android:text="Get GPS" />
+        android:onClick="toggle"
+        android:text="Start" />
 
 </RelativeLayout>

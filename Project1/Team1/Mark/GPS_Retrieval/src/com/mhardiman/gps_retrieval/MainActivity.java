@@ -1,11 +1,13 @@
 package com.mhardiman.gps_retrieval;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.location.*;
@@ -16,6 +18,16 @@ public class MainActivity extends Activity implements LocationListener{
 	LocationManager lm;
 	String provider;
 	Location loc;
+	Handler timerHandler = new Handler();
+    Runnable timerRunnable = new Runnable() 
+    {
+    	 @Override
+         public void run() {
+             getCoordinates();
+             timerHandler.postDelayed(this, 5000);
+    	 }
+    };
+    	 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -28,17 +40,27 @@ public class MainActivity extends Activity implements LocationListener{
 		if (loc != null)
 		{
 			System.out.println("GPS connected\n");
-			//onLocationChanged(loc);
 		}
 		else
 			System.out.println("null\n");
 
 	}
 	
-	@SuppressLint("NewApi")
-	public void getCoordinates(View view)
+	public void toggle(View view)
 	{
-		//System.out.println("test\n");
+		  Button toggleBtn = (Button)view;
+	      if (toggleBtn.getText().equals("Stop")) {
+	          timerHandler.removeCallbacks(timerRunnable);
+	          toggleBtn.setText("Start");
+	      } else {
+	          timerHandler.postDelayed(timerRunnable, 0);
+	          toggleBtn.setText("Stop");
+	      }
+	}
+	
+	@SuppressLint("NewApi")
+	public void getCoordinates()
+	{
 	  	lm.requestSingleUpdate(provider, this, null);
 	}
 	
@@ -58,10 +80,10 @@ public class MainActivity extends Activity implements LocationListener{
 
 	@Override
 	  public void onLocationChanged(Location loc) {
-
-			double latitude = loc.getLatitude();
-			double longitude = loc.getLongitude();
-			coordsText.setText(String.valueOf(latitude) + ", " + String.valueOf(longitude));
+		double latitude = loc.getLatitude();
+		double longitude = loc.getLongitude();
+		coordsText.setText(String.valueOf(latitude) + ", " + String.valueOf(longitude));
+		System.out.print("onLocationChanged");
 	  }
 
 	  @Override
