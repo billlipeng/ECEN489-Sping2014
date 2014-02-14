@@ -17,6 +17,16 @@ double r2 = 9800.0;
 
 MeetAndroid ma;
 
+void setup()  {
+  Serial.begin(9600);
+  Serial1.begin(9600);
+  ma.registerFunction(sendSensorVal, 's');
+}
+
+void loop()  {
+  ma.receive();
+}
+
 long photoRes() {
   double vin = analogRead(sensorPin);
   double Va = vin * (vdc/1023.0);
@@ -54,8 +64,10 @@ double lux_conversion() {
 // }
 String create_json() {
 	double res = readPhotoRes();
+  char buffer[6];
+  // Serial.println(dtostrf(res, 3, 2, buffer));
 	String blah = "10";
-	String json = "{ \"sensor-id\": \"team3_sensor1\", \"sensor-type\": \"light\", \"sensor-value\": " + blah + " }";
+	String json = "{ \"sensor-id\": \"team3_sensor1\", \"sensor-type\": \"light\", \"sensor-value\": " + String(dtostrf(res, 3, 1, buffer)) + " }";
 	return json;
 }
 
@@ -63,17 +75,6 @@ void sendSensorVal(byte flag, byte numOfValues) {
   char message[100];
   create_json().toCharArray(message, 100);
   ma.send(message);
-  Serial1.println("hello");
 }
 
-void setup()  {
-	Serial.begin(9600);
-  Serial1.begin(9600);
-	ma.registerFunction(sendSensorVal, 's');
-}
 
-void loop()  {
-	ma.receive();
-	// Serial1.println("create_json()");
-	// delay(500);
-}
