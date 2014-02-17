@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 
-public class MainClient {
+public class MainClient2 {
 	public static String IP_ADDRESS = "192.168.169.132"; //just go to the loopback
 	public static int port = 3333; //this needs to match the port of the server
 	public static String fromServer = "";
