@@ -1,12 +1,14 @@
 package com.zpartal.project1.datapackets;
 
+import java.io.Serializable;
+
 // DataPoint class
 /*
     Created using "builde" pattern, http://www.javaspecialists.eu/archive/Issue163.html
   DataPoint dp = new DataPoint.Builder().client_id("id").run_id("rid").build();
  */
 
-public class DataPoint {
+public class DataPoint implements Serializable {
     // Required
     private final String client_id;
     private final String run_id; // teamid_yyyymmdd_hhmmss

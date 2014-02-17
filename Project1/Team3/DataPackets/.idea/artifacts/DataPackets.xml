@@ -3,6 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/DataPackets</output-path>
     <root id="archive" name="DataPackets.jar">
       <element id="module-output" name="DataPackets" />
+      <element id="dir-copy" path="$PROJECT_DIR$/src" />
     </root>
   </artifact>
 </component>

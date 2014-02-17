@@ -1,5 +1,5 @@
 {
-	"DB_PATH": "C:/Users/Zachary/Desktop/projone.db",
+	"DB_PATH": "projone.db",
 	"TABLE_NAME": "ecen489_project1_data",
 	"PORT": 5555,
 	"COLUMN_NAMES": ["date", "time", "client_id", "run_id", "latitude", "longitude", "bearing",

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/DataPackets/DataPackets.iml" filepath="$PROJECT_DIR$/DataPackets/DataPackets.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Team3Server/Team3Server.iml" filepath="$PROJECT_DIR$/Team3Server/Team3Server.iml" />
+    </modules>
+  </component>
+</project>
+
