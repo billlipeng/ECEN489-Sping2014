@@ -3,8 +3,13 @@ import java.util.ArrayList;
 
 import com.zpartal.project1.datapackets.*;
 
+/*
+    The DatabaseHandler class is a thread that is created by passing in an array list of datapoints.
+    The databasehandler thread will connect to the database and add every point from the dataset
+ */
+
 public class DatabaseHandler implements Runnable {
-    private Properties properties = new Properties();
+    private Config config = new Config();
     private Connection connection = null;
     private ArrayList<DataPoint> dataset = null;
 
@@ -19,12 +24,14 @@ public class DatabaseHandler implements Runnable {
         try
         {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:"+properties.DB_PATH);
+            connection = DriverManager.getConnection("jdbc:sqlite:"+ config.DB_PATH);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
-
-            statement.executeUpdate("insert into person values(2, 'yui')");
+            // Add all datapoints from the data set array
+            for (DataPoint dp : dataset) {
+                statement.executeUpdate(createInsertSQL(dp));
+            }
         }
         catch(SQLException e)
         {
@@ -45,15 +52,16 @@ public class DatabaseHandler implements Runnable {
         }
     }
 
+    // Helper function to generate sql for adding a datapoint to the db
     public String createInsertSQL(DataPoint dp) {
         //  INSERT INTO Customers (CustomerName, ContactName, Address, City, PostalCode, Country)
         //  VALUES ('Cardinal','Tom B. Erichsen','Skagen 21','Stavanger','4006','Norway');
         StringBuilder sql = new StringBuilder();
         sql.append("INSERT INTO ");
-        sql.append(properties.TABLE_NAME);
+        sql.append(config.TABLE_NAME);
         sql.append(" (");
         String sep = "";
-        for (String s : properties.COLUMN_NAMES) {
+        for (String s : config.COLUMN_NAMES) {
             sql.append(sep);
             sql.append(s);
             sep = ",";

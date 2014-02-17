@@ -1,0 +1,7 @@
+{
+	"DB_PATH": "C:/Users/Zachary/Desktop/projone.db",
+	"TABLE_NAME": "ecen489_project1_data",
+	"PORT": 5555,
+	"COLUMN_NAMES": ["date", "time", "client_id", "run_id", "latitude", "longitude", "bearing",
+					"speed", "altitude","sensor_id", "sensor_type", "sensor_value", "attribute"]
+}

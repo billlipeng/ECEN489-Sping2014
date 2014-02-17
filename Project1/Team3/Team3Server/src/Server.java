@@ -6,25 +6,17 @@ public class Server {
 	private static ServerSocket server;
     private static int port = 5555;
 
-	private static Properties properties = new Properties();
+	private static Config config;
+    private static ConfigLoader pl;
 
 	public static void main(String[] args) throws Exception {
-/*		// Port configuration
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-		String input = "";
-		
-		System.out.print("Enter Port or leave blank for default (5555): ");
-		input = bufferedReader.readLine();
-		if (input.length() > 0) {
-			port = Integer.parseInt(input);
-		}
-		
-		System.out.println("Configureing server on port " + Integer.toString(port) + "...");
-*/
-        System.out.println("Configureing server on port " + Integer.toString(properties.PORT) + "...");
-		
+        // Load config
+        config = new Config();
+        pl = new ConfigLoader(config);
+
+        System.out.println("Configureing server on port " + Integer.toString(config.PORT) + "...");
 		try {
-			server = new ServerSocket(properties.PORT);
+			server = new ServerSocket(config.PORT);
 			// Worker threads are launched upon acceptance of client connection
 			while(true) {
 				Worker worker;
