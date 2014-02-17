@@ -181,4 +181,23 @@ public class DataPoint {
     public double getAltitude() {
         return altitude;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\"" + date + "\"" +",");
+        sb.append("\"" + time + "\"" +",");
+        sb.append("\"" + client_id + "\"" +",");
+        sb.append("\"" + run_id + "\"" +",");
+        sb.append(latitude+",");
+        sb.append(longitude+",");
+        sb.append(bearing+",");
+        sb.append(speed+",");
+        sb.append(altitude+",");
+        sb.append("\"" + sensor_id + "\"" +",");
+        sb.append("\"" + sensor_type + "\"" +",");
+        sb.append(sensor_value+",");
+        sb.append("\"" + attribute + "\"");
+        return sb.toString();
+    }
 }

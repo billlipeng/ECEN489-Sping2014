@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="DataPackets">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/DataPackets.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

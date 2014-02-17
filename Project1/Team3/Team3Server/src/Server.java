@@ -3,11 +3,13 @@ import java.io.*;
 import java.net.*;
 
 public class Server {
-	static private ServerSocket server;
-	
+	private static ServerSocket server;
+    private static int port = 5555;
+
+	private static Properties properties = new Properties();
+
 	public static void main(String[] args) throws Exception {
-		// Port configuration
-		int port = 5555;
+/*		// Port configuration
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 		String input = "";
 		
@@ -18,9 +20,11 @@ public class Server {
 		}
 		
 		System.out.println("Configureing server on port " + Integer.toString(port) + "...");
+*/
+        System.out.println("Configureing server on port " + Integer.toString(properties.PORT) + "...");
 		
 		try {
-			server = new ServerSocket(port);
+			server = new ServerSocket(properties.PORT);
 			// Worker threads are launched upon acceptance of client connection
 			while(true) {
 				Worker worker;
@@ -33,6 +37,6 @@ public class Server {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
+		}
 	}
 }

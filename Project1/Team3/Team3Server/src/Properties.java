@@ -1,11 +1,18 @@
-/**
- * Created by Zachary on 2/16/14.
- */
+import com.google.gson.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Properties {
-    private String configFile = "config.ini";
-    private String dbLocation = "C:/projone.db";
-    private int port = 5555;
+    public static String CONFIG_FILE = "config.ini";
+    public static int PORT = 5555;
+    public static String DB_PATH = "C:/projone.db";
+    public static String TABLE_NAME = "ecen489_project1_data";
+    public ArrayList<String> COLUMN_NAMES = new ArrayList(Arrays.asList("date", "time",
+            "client_id", "run_id", "latitude", "longitude", "bearing", "speed", "altitude",
+            "sensor_id", "sensor_type", "sensor_value", "attribute"));
 
     public Properties() {
+
     }
 }
