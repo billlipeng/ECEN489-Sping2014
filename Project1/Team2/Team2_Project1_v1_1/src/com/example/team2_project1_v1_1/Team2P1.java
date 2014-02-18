@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.google.gson.Gson;
+import com.mfa157.project1packet.Project1Packet;
 
 import android.location.Location;
 import android.location.LocationListener;
@@ -36,22 +37,26 @@ public class Team2P1 extends Activity {
 	ObjectInputStream is;
 	private Button btnRec, btnEnd, btnGPS, btnSend;
 	private String DEVICE_ADDRESS = "00:15:FF:F2:10:0F";
+
 	private LocationManager locationManager;
-	private TextView show;
+	private EditText etIP;
+	private EditText etPort;
 	boolean GPS_status = true;
 	boolean receive_status = false;
 	boolean sensor_flag = false;
 	double lat, lng;
-	String v1,v2,v3;
+	String v1,v2;
+	double v3;
 	int i = 0;
 	LocationListener locationListener;
-	int port;
+	
+	int port = 5555;
 	String hostip;
-	Socket clientsocket;
+	Socket clientSocket;
 	
 	
 	 ArduinoReceiver arduinoReceiver = new ArduinoReceiver();
-	ArrayList<String> sensorValue = new ArrayList<String>();
+	ArrayList<Double> sensorValue = new ArrayList<Double>();
 	ArrayList<String> sensorType = new ArrayList<String>();
 	ArrayList<String> sensorID = new ArrayList<String>();
 	ArrayList<String> time_stamp = new ArrayList<String>();
@@ -69,7 +74,8 @@ public class Team2P1 extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_team2_p1);
-		show = (TextView) findViewById(R.id.text);
+		etIP = (EditText) findViewById(R.id.etIP);
+		etPort = (EditText) findViewById(R.id.etPort);
 	}
 
 	protected void onStart() {
@@ -232,7 +238,7 @@ public class Team2P1 extends Activity {
 						JsonData obj = gson.fromJson(data, JsonData.class);
 						v1 = obj.sensor_id;
 						v2 = obj.sensor_type;
-						v3 = String.valueOf(obj.sensor_value);
+						v3 = obj.sensor_value;
 //						v1="hi";
 //						v2="hello";
 //						v3= "haha";
@@ -263,25 +269,47 @@ public class Team2P1 extends Activity {
 //	
 	public void send(View v){
 		btnSend = (Button) findViewById(R.id.send);
-		int size_lat = latitude.size();
-		int size_lng = longitude.size();
-		int size_sensorType = sensorType.size();
-		int size_sensorID = sensorID.size();
-		int size_sensorValue = sensorValue.size();
-		int size_ts = time_stamp.size();
-		int size_dt = time_date.size();
-		String[] lat_array = (String[])latitude.toArray(new String[size_lat]);
-		String[] lng_array = (String[])longitude.toArray(new String[size_lng]);
-		String[] sensorType_array = (String[])sensorType.toArray(new String[size_sensorType]);
-		String[] sensorID_array = (String[])sensorID.toArray(new String[size_sensorID]);
-		String[] sensorValue_array = (String[])sensorValue.toArray(new String[size_sensorValue]);
-		String[] ts_array = (String[])time_stamp.toArray(new String[size_ts]);
-		String[] dt_array = (String[])time_date.toArray(new String[size_dt]);
+		hostip = etIP.getText().toString();
+		//String[] lat_array = (String[])latitude.toArray(new String[size_lat]);
+		//String[] lng_array = (String[])longitude.toArray(new String[size_lng]);
+		//String[] sensorType_array = (String[])sensorType.toArray(new String[size_sensorType]);
+		//String[] sensorID_array = (String[])sensorID.toArray(new String[size_sensorID]);
+		//Double[] sensorValue_array = (Double[])sensorValue.toArray(new Double[size_sensorValue]);
+		//String[] ts_array = (String[])time_stamp.toArray(new String[size_ts]);
+		//String[] dt_array = (String[])time_date.toArray(new String[size_dt]);
+		
+		
 		 new AsyncTask<Void, Void, Void> (){
 			 protected Void doInBackground(Void... params) {
 			    try {
-					clientsocket = new Socket(hostip,port);
-				} catch (UnknownHostException e) {
+			    	
+			    	int size_lat = latitude.size();
+					int size_lng = longitude.size();
+					int size_sensorType = sensorType.size();
+					int size_sensorID = sensorID.size();
+					int size_sensorValue = sensorValue.size();
+					int size_ts = time_stamp.size();
+					int size_dt = time_date.size();
+					
+			    	String[] lat_array = (String[])latitude.toArray(new String[size_lat]);
+					String[] lng_array = (String[])longitude.toArray(new String[size_lng]);
+					String[] sensorType_array = (String[])sensorType.toArray(new String[size_sensorType]);
+					String[] sensorID_array = (String[])sensorID.toArray(new String[size_sensorID]);
+					Double[] sensorValue_array = (Double[])sensorValue.toArray(new Double[size_sensorValue]);
+					String[] ts_array = (String[])time_stamp.toArray(new String[size_ts]);
+					String[] dt_array = (String[])time_date.toArray(new String[size_dt]);
+					
+					Log.i(TAG,"Connecting");
+					clientSocket = new Socket(hostip,port);
+					os = new ObjectOutputStream(clientSocket.getOutputStream());
+					Project1Packet Send = new Project1Packet(sensorValue_array, sensorID_array, sensorType_array, lat_array, lng_array, ts_array, dt_array);
+					os.writeObject(Send);
+					Log.i(TAG, "Data Sent!");
+					os.flush();
+					os.close();
+					clientSocket.close();
+			    
+			    } catch (UnknownHostException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {

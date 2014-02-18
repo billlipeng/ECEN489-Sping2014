@@ -5,13 +5,26 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:id="@+id/text"
+    <EditText
+        android:id="@+id/etPort"
         android:layout_width="match_parent"
-        android:layout_height="305dp"
+        android:layout_height="wrap_content"
         android:layout_weight="0.73"
-         />
-    
+        android:ems="10"
+        android:hint="Port" />
+
+    <EditText
+        android:id="@+id/etIP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.73"
+        android:ems="10"
+        android:hint="IP" >
+
+        <requestFocus />
+    </EditText>
+
+
     <Button
         android:id="@+id/start"
         android:layout_width="match_parent"
