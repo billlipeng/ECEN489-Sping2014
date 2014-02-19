@@ -21,9 +21,12 @@ public class Tester {
 
         ArrayList<DataPoint> dataset = new ArrayList<DataPoint>();
         dataset.add(dp);
-        DatabaseHandler dbh = new DatabaseHandler(dataset);
-        new Thread(new DatabaseHandler(dataset)).start();
-        System.out.println(dbh.createInsertSQL(dp));
+//        DatabaseHandler dbh = new DatabaseHandler(dataset);
+//        new Thread(new DatabaseHandler(dataset)).start();
+//        System.out.println(dbh.createInsertSQL(dp));
+//        FusionTableHandler fth = new FusionTableHandler(dataset);
+//        System.out.println(fth.createInsertSQL(dp));
+        new Thread(new FusionTableHandler(dataset)).start();
 
     }
 }
