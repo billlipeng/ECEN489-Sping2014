@@ -11,15 +11,11 @@ import com.example.samcarey.*;
 
 // here's our beautiful adapter
 public class ArrayAdapterItem extends ArrayAdapter<ObjectItem> {
-
     Context mContext;
     int layoutResourceId;
     ObjectItem data[] = null;
-
     public ArrayAdapterItem(Context mContext, int layoutResourceId, ObjectItem[] data) {
-
         super(mContext, layoutResourceId, data);
-
         this.layoutResourceId = layoutResourceId;
         this.mContext = mContext;
         this.data = data;
@@ -42,7 +38,6 @@ public class ArrayAdapterItem extends ArrayAdapter<ObjectItem> {
 
         // object item based on the position
         ObjectItem objectItem = data[position];
-
         // get the TextView and then set the text (item name) and tag (item ID) values
         TextView textViewItem = (TextView) convertView.findViewById(R.id.textViewItem);
         String text = objectItem.latitude.toString()+", "+objectItem.longitude.toString();

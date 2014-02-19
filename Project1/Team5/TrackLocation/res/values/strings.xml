@@ -8,5 +8,6 @@
     <string name="item_place_holder">Item name here</string>
     <string name="Locate">Locate</string>
     <string name="sendMessage">Send</string>
+    <string name="Begin">Begin Collection</string>
 
 </resources>

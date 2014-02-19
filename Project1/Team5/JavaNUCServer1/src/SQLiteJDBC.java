@@ -18,78 +18,40 @@ public class SQLiteJDBC
 		
 		
 		try{
-			//Receive Locations
 			System.out.println("Server initializing...");
-			ArrayList<ObjectItem> locations;
 			ServerSocket server = new ServerSocket(5555, 1);
 			System.out.println("Server waiting...");
 			Socket connection = server.accept();
 			System.out.println("Server connected!");
-			
 			ObjectInputStream input = new ObjectInputStream(connection.getInputStream());
 			System.out.println("Working?");
-
-			
-			//ArrayList<ObjectItem> locations;
-			//ObjectItem location = (ObjectItem) input.readObject();
-			locations = (ArrayList<ObjectItem>) input.readObject();
+			ArrayList<AndroidPacket1> data = (ArrayList<AndroidPacket1>) input.readObject();
 			System.out.println("Data Received");
-
 			input.close();
 			server.close();
 			
-		
 			//Store in DataBase
 		    DBconnection = null;
-		    
 		    Class.forName("org.sqlite.JDBC");
 		    String path = "/Users/samcarey/Desktop/Spring 2014/489/SQLite/test.db";
 		    DBconnection = DriverManager.getConnection("jdbc:sqlite:" + path);
 		    System.out.println("Opened database successfully");
-		    createTable();
-		    storeData(locations);
+		    createTable();		//No problem if table already exists
+		    storeData(data);
 		    DBconnection.close();
 	    }catch(Exception e){
 	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 	      System.exit(0);
 	    }
 	}
-
-	public static void storeData2(ArrayList<ObjectItem> locations){
-		try {
-			
-			Statement statement = DBconnection.createStatement();
-			
-			for (int i = 0 ; i < locations.size() ; i++){
-				String command = "INSERT INTO TEAM5 (" +
-			    					 "ID, " +
-				                 	 "LATITUDE, " + 
-				                 	 "LONGITUDE) " +
-			                 	 
-			                 	 "VALUES (" +
-			                 	 	 "NULL, " +
-			                 	   	 locations.get(i).latitude + ", " +
-			                 	 	 locations.get(i).longitude + ") ";
-			    
-			    statement.executeUpdate(command);
-			    System.out.println("Entry successful");
-			}
-		    statement.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			//System.out.println("Table already exists");
-		}
-	}
 	
 	@SuppressWarnings("static-access")
 	public static void storeData(ArrayList<AndroidPacket1> data){
 		try {
-			
 			Statement statement = DBconnection.createStatement();
-			
 			for (int i = 0 ; i < data.size() ; i++){
-				String command = "INSERT INTO ecen489_project1_data (" +
-			                 	 "(date, " +
+				String command = "INSERT INTO ecen489_project1_data(" +
+			                 	 " date, " +
 			                 	 " time, " + 
 			                 	 " client_id, " + 
 			                 	 " run_id, " + 
@@ -103,21 +65,21 @@ public class SQLiteJDBC
 			                 	 " sensor_value, " + 
 			                 	 " attribute)" +
 			                 	 
-			                 	 "VALUES (" +
-			                 	 	data.get(i).date + ", " +
-			                 	 	data.get(i).timestamp + ", " +
-			                 	 	data.get(i).client_id + ", " +
-			                 	 	data.get(i).run_id + ", " +
-			                 	 	data.get(i).latitude + ", " +
-			                 	 	data.get(i).longitude + ", " +
-			                 	 	data.get(i).bearing + ", " +
-			                 	 	data.get(i).speed + ", " +
-			                 	 	data.get(i).altitude + ", " +
-			                 	 	data.get(i).sensor_id + ", " +
-			                 	 	data.get(i).sensor_type + ", " +
-			                 	 	data.get(i).sensor_value + ", " +
-			                 	 	data.get(i).longitude + ") ";
-			    
+			                 	 " VALUES(" +
+			                 	 	"'" + data.get(i).date + "', " +
+			                 	 	"'" + data.get(i).timestamp + "', " +
+			                 	 	"'" + data.get(i).client_id + "', " +
+			                 	 	"'" + data.get(i).run_id + "', " +
+			                 	 		  data.get(i).latitude + ", " +
+			                 	 		  data.get(i).longitude + ", " +
+			                 	 		  data.get(i).bearing + ", " +
+			                 	 		  data.get(i).speed + ", " +
+			                 	 		  data.get(i).altitude + ", " +
+			                 	 	"'" + data.get(i).sensor_id + "', " +
+			                 	 	"'" + data.get(i).sensor_type + "', " +
+			                 	 		  data.get(i).sensor_value + ", " +
+			                 	 	"'" + data.get(i).attribute + "') ";
+				System.out.println(command);
 			    statement.executeUpdate(command);
 			}
 		    statement.close();
@@ -131,8 +93,8 @@ public class SQLiteJDBC
 	private static void createTable(){
 		try {
 			Statement statement = DBconnection.createStatement();
-		    String command = "CREATE TABLE ecen489_project1_data " +
-		                 	 "(date 		TEXT 	NOT NULL, " +
+		    String command = "CREATE TABLE ecen489_project1_data( " +
+		                 	 " date 		TEXT 	NOT NULL, " +
 		                 	 " time 		TEXT    NOT NULL, " + 
 		                 	 " client_id 	TEXT    NOT NULL, " + 
 		                 	 " run_id 		TEXT    NOT NULL, " + 
@@ -146,24 +108,6 @@ public class SQLiteJDBC
 		                 	 " sensor_value	REAL, " + 
 		                 	 " attribute	TEXT    NOT NULL)" ;
 		    statement.executeUpdate(command);
-		    statement.close();
-		    System.out.println("Table created successfully");
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.out.println("Table already exists");
-		}
-	}
-	
-	private static void createTable2(){
-		try {
-			Statement statement = DBconnection.createStatement();
-		    String command = "CREATE TABLE TEAM5 " +
-		                 	 "(ID INTEGER PRIMARY KEY , " +
-		                 	 " LATITUDE   REAL    NOT NULL, " + 
-		                 	 " LONGITUDE  REAL    NOT NULL)" ;
-		    
-		    statement.executeUpdate(command);
-		    
 		    statement.close();
 		    System.out.println("Table created successfully");
 		} catch (SQLException e) {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,6 +17,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -24,28 +26,35 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.samcarey.AndroidPacket1;
+import com.example.samcarey.ObjectItem;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 
-import com.example.samcarey.*;
-
 public class MainActivity extends FragmentActivity implements
 	GooglePlayServicesClient.ConnectionCallbacks,
 	GooglePlayServicesClient.OnConnectionFailedListener {
 	
-	//Server info
+	//Info
 	private int port = 5555;
-	private String ip = "10.200.210.215";
+	private String ip = "10.201.201.182";
+	String teamid = "team5";
+	String run_id;
+	
+	private final static int INTERVAL = 1000 * 5; // 5 seconds
 	
 	public final static String EXTRA_MESSAGE = "com.example.tracklocation.MESSAGE";
 	
 	AlertDialog alertDialogStores;
 	LocationClient locationClient;
 	ArrayList<ObjectItem> locations;
+	ArrayList<AndroidPacket1> data;
 	int count = 1;
 	boolean first = true;
+	Handler handler;
+	Boolean begun = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +66,10 @@ public class MainActivity extends FragmentActivity implements
 		}else{
 			display("GPS OFFLINE");
 		}
+		
 		if (first){
-			locations = new ArrayList<ObjectItem>();
+			handler = new Handler();
+			data = new ArrayList<AndroidPacket1>();
 			locationClient = new LocationClient(this, this, this);
 			locationClient.connect();
 			first = false;
@@ -66,41 +77,147 @@ public class MainActivity extends FragmentActivity implements
 		
 		 View.OnClickListener handler = new View.OnClickListener(){
 			 public void onClick(View v) {
-				 switch (v.getId()) {
-				 case R.id.button1:
+				 //switch (v.getId()) {
+				 if (R.id.button1 == v.getId()){
 					 showPopUp();
-					 break;
 				 }
 			 }
 		 };
 		 findViewById(R.id.button1).setOnClickListener(handler);
+		 
 	}
 	
+	public void beginCollection(View view){
+		display("Beginning");
+		data = new ArrayList<AndroidPacket1>();
+		run_id = run_id();
+		LogLoop.run();
+		begun = true;
+	}
+
 	
+	Runnable LogLoop = new Runnable(){
+		@Override 
+	     public void run() {
+	          logData();
+	          handler.postDelayed(this, INTERVAL);
+	     }
+	};
 	
-	public void showPopUp(){
+	public String attribute(){
+		return "sensor";
+	}
+	
+	public String sensor_id(){
+		return "1";
+	}
+	
+	public String sensor_type(){
+		return "temp";
+	}
+	
+	public Double sensor_value(){
+		return 1.0;
+	}
+	
+	public Double bearing(){
+		return 1.0;
+	}
+	
+	public Double speed(){
+		return 1.0;
+	}
+	
+	public Double altitude(){
+		return null;
+	}
+	
+	public String run_id(){
+		Calendar calendar = Calendar.getInstance();
+		String run_id = teamid + "_" + 
+				calendar.get(Calendar.YEAR) +
+				format(calendar.get(Calendar.MONTH)) +
+				format(calendar.get(Calendar.DAY_OF_MONTH)) + "_" +
+				format(calendar.get(Calendar.HOUR_OF_DAY)) +
+				format(calendar.get(Calendar.MINUTE)) +
+				format(calendar.get(Calendar.SECOND));
+		return run_id;
+	}
+	
+	public String timestamp(){
+		Calendar calendar = Calendar.getInstance();
+		String timestamp =	format(calendar.get(Calendar.HOUR_OF_DAY)) + "-" +
+						  	format(calendar.get(Calendar.MINUTE)) + "-" +
+						  	format(calendar.get(Calendar.SECOND));
+		return timestamp;
+	}
+	
+	public String date(){
+		Calendar calendar = Calendar.getInstance();
+		String date =	format(calendar.get(Calendar.YEAR)) + "-" +
+						format(calendar.get(Calendar.MONTH)) + "-" +
+						format(calendar.get(Calendar.DAY_OF_MONTH));
+		return date;
+	}
+	
+	public String format(Integer num){
+		if (num < 10) return ("0"+ num);
+		else return num.toString();
+	}
+	
+	public void logData(){
+		
 		Location currentLocation = locationClient.getLastLocation();
 		
-		locations.add(new ObjectItem(count, currentLocation.getLatitude(),currentLocation.getLongitude()));
-		count++;
-		ObjectItem[] location = new ObjectItem[1];
+		AndroidPacket1 packet = 
+				new AndroidPacket1(
+						run_id(),
+						timestamp(),
+						date(),
+						attribute(),
+						currentLocation.getLatitude(),
+						currentLocation.getLongitude(),
+						sensor_id(),
+						sensor_type(),
+						sensor_value(),
+						bearing(),
+						speed(),
+						altitude());
 		
-		ArrayAdapterItem adapter = new ArrayAdapterItem(this, R.layout.list_view_row_item, locations.toArray(location) );
-		ListView listViewItems = new ListView(this);
-		listViewItems.setAdapter(adapter);
-		listViewItems.setOnItemClickListener(new OnItemClickListenerListViewItem());
-		alertDialogStores = new AlertDialog.Builder(MainActivity.this)
-			.setView(listViewItems)
-			.setTitle("Location")
-			.show();
+		data.add(packet);
+	}
+	
+	public void showPopUp(){
+		if (begun){
+			locations = new ArrayList<ObjectItem>();
+			
+			for (int i = 0 ; i < data.size(); ++i){
+				locations.add(new ObjectItem(count, data.get(i).latitude,data.get(i).longitude));
+				count++;
+			}
+			
+			ObjectItem[] location = new ObjectItem[1];
+			
+			ArrayAdapterItem adapter = new ArrayAdapterItem(this, R.layout.list_view_row_item, locations.toArray(location) );
+			ListView listViewItems = new ListView(this);
+			listViewItems.setAdapter(adapter);
+			listViewItems.setOnItemClickListener(new OnItemClickListenerListViewItem());
+			alertDialogStores = new AlertDialog.Builder(MainActivity.this)
+				.setView(listViewItems)
+				.setTitle("Location")
+				.show();
+		}
 	}
 
 	public void sendMessage(View view) {
-		if (netCheck()){
-			display("Client waiting...");
-			new Send().execute();
-		}else{
-			display("Error");
+		if (begun){
+			handler.removeCallbacks(LogLoop);
+			if (netCheck()){
+				display("Client waiting...");
+				new Send().execute();
+			}else{
+				display("Error");
+			}
 		}
 	}
 	
@@ -123,13 +240,12 @@ public class MainActivity extends FragmentActivity implements
         		display("Client connected!");
     			
     			ObjectOutputStream output = new ObjectOutputStream(connection.getOutputStream());
-    			//ObjectItem bam = locations;
-    			output.writeObject(locations);
+    			output.writeObject(data);
     			output.flush();
     			
     			output.close();
     			connection.close();
-    			display("Locations sent");
+    			display("Data sent");
     		} catch(IOException e){
     		}finally{}
 			return null;
