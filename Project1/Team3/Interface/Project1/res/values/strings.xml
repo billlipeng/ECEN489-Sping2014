@@ -12,6 +12,8 @@
     <string name="ButtonTeam4">Team4</string>
     <string name="ButtonTeam5">Team5</string>
     <string name="SendServer">Send</string>
+    <string name="Interval">Timer Interval</string>
+    <string name="Start">Start</string>
         
 
 </resources>

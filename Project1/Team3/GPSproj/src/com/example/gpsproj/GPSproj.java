@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import com.example.gpsproj.R;
+
 import android.app.Activity;
 import android.content.Context;
 import android.location.Criteria;
