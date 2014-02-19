@@ -15,7 +15,6 @@ import com.google.api.services.fusiontables.model.Column;
 import com.google.api.services.fusiontables.model.Table;
 import com.google.api.services.fusiontables.model.TableList;
 
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;

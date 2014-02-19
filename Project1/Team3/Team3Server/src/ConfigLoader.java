@@ -14,6 +14,7 @@ public class ConfigLoader {
         _config.setPORT(propHold.PORT);
         _config.setDB_PATH(propHold.DB_PATH);
         _config.setTABLE_NAME(propHold.TABLE_NAME);
+        _config.setFUSION_TABLE_NAME(propHold.FUSION_TABLE_NAME);
         _config.setCOLUMN_NAMES(propHold.COLUMN_NAMES);
     }
 
@@ -21,6 +22,7 @@ public class ConfigLoader {
         public int PORT;
         public String DB_PATH;
         public String TABLE_NAME;
+        public String FUSION_TABLE_NAME;
         public ArrayList<String> COLUMN_NAMES;
     }
 }

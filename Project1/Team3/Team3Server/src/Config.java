@@ -8,6 +8,7 @@ public class Config {
     public static int PORT;
     public static String DB_PATH;
     public static String TABLE_NAME;
+    public static String FUSION_TABLE_NAME;
     public static ArrayList<String> COLUMN_NAMES;
 
     public static void setPORT(int PORT) {
@@ -20,6 +21,10 @@ public class Config {
 
     public static void setTABLE_NAME(String TABLE_NAME) {
         Config.TABLE_NAME = TABLE_NAME;
+    }
+
+    public static void setFUSION_TABLE_NAME(String FUSION_TABLE_NAME) {
+        Config.FUSION_TABLE_NAME = FUSION_TABLE_NAME;
     }
 
     public static void setCOLUMN_NAMES(ArrayList<String> COLUMN_NAMES) {

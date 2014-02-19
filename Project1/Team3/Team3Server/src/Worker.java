@@ -30,8 +30,10 @@ public class Worker implements Runnable {
             // Fusion Table
 //            new Thread(new FusionTable(dataset)).start();
 
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-	}
+    }
 }
