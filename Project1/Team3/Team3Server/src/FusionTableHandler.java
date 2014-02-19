@@ -73,12 +73,25 @@ public class FusionTableHandler implements Runnable {
     public void run() {
         Fusiontables.Query.Sql sql = null;
         try {
-            for (DataPoint dp : dataset) {
-                sql = client.query().sql(createInsertSQL(dp));
-                sql = client.query().sql(createInsertSQL(dp));
-                sql = client.query().sql(createInsertSQL(dp));
+            if (dataset.size() <= 500) {
+                sql = client.query().sql(createMultipleInsertSQL(dataset));
+                sql.execute();
             }
-            sql.execute();
+            else {
+                ArrayList<ArrayList<DataPoint>> listolists = new ArrayList<ArrayList<DataPoint>>();
+                int binSize = 500;
+                int numBins = (dataset.size() + binSize - 1) / binSize;
+                for (int i = 0; i < numBins; i++) {
+                    int start = i*binSize;
+                    int end = Math.min(start + binSize, dataset.size());
+                    listolists.add((ArrayList<DataPoint>) dataset.subList(start, end));
+                }
+                for (ArrayList<DataPoint> dps : listolists) {
+                    sql = client.query().sql(createMultipleInsertSQL(dps));
+                    sql.execute();
+                }
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -100,7 +113,16 @@ public class FusionTableHandler implements Runnable {
         }
         query.append(") VALUES (");
         query.append(dp.toString());
-        query.append(")");
+        query.append(");");
+        return query.toString();
+    }
+
+    // Helper function to generate sql for adding a datapoint to the db
+    public String createMultipleInsertSQL(ArrayList<DataPoint> dps) {
+        StringBuilder query = new StringBuilder();
+        for (DataPoint dp : dps) {
+            query.append(createInsertSQL(dp));
+        }
         return query.toString();
     }
 }
