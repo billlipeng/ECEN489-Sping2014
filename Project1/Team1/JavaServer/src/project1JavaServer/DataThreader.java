@@ -13,7 +13,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
-import project1JavaServer.dataRow;
+
+import com.mhardian.gps_retrieval.dataRow;
 
 public class DataThreader extends Thread{
 
@@ -44,12 +45,23 @@ public class DataThreader extends Thread{
 				try{
 					while(true){
 				//listening for packets
-					connection = DriverManager.getConnection("jdbc:sqlite:DataReadings.db");
-					dataRow row = (dataRow) receiver.readObject();					
-				
+					//connection = DriverManager.getConnection("jdbc:sqlite:DataReadings.db");
+					dataRow row;
+					System.out.println("4");
+					
+					row = (dataRow) receiver.readObject();	
+					//System.out.println(test);
+
+					//dataRow[] dataCatch = (dataRow[]) row;
+					
+					System.out.println(row.sensorType);
+					System.out.println(row.latitude);
+
+					System.out.println(row.longitude);
+
 					System.out.println("Attempting connection to SQL server.");
 					
-					try {
+					/*try {
 						connection.setAutoCommit(false);
 						String insert = "INSERT INTO Data(sensorID, teamID, runID, latitude, longitude, date, time, sensorValue, sensorType, attribute) VALUES(?,?,?,?,?,?,?,?,?,?)";
 						PreparedStatement insertData = connection.prepareStatement(insert);
@@ -62,7 +74,7 @@ public class DataThreader extends Thread{
 						insertData.setString(7, row.time);
 						insertData.setFloat(8, row.sensorValue);
 						insertData.setString(9, row.sensorType);
-						insertData.setString(10, row.attribute);
+						insertData.setString(10, row.attribute); 
 						insertData.executeUpdate();
 						connection.commit();
 						connection.setAutoCommit(true);
@@ -72,38 +84,39 @@ public class DataThreader extends Thread{
 					}
 					
 					//System.exit(0);
-				}
+				*/}
 					
 					//Now has data read into row[].
 				}
-				catch(ClassNotFoundException e){
+			/*	catch(ClassNotFoundException e){
 					System.err.println("Class not found...");
-				}
+				}*/
 				catch(IOException e){
 					
 					System.out.println("A client disconnected!");
+					System.err.println(e);
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				catch(SQLException e){
+				/*catch(SQLException e){
 					System.out.println("SQL Exception!");
 					System.err.println(e.getMessage());
-				}
+				 }*/
 				try{
 					socket.close();
 					System.out.println("Socket terminated.");
-					connection.close();
+					//connection.close();
 					
 				}
 				catch(IOException e){
 					System.err.println("Couldn't close the socket!");
 				}
-				catch(SQLException e){
+				/*catch(SQLException e){
 					System.out.println("SQL Exception failed trying to close!");
 					System.err.println(e.getMessage());
-				}
+				}*/
 				
 			}
-			
-
+					
 	}
-
-

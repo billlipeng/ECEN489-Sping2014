@@ -1,5 +1,6 @@
 package com.mhardiman.gps_retrieval;
-public class dataRow
+import java.io.Serializable;
+public class dataRow implements Serializable
 {
 	public String sensorID;
 	public static String teamID = "Team1";
