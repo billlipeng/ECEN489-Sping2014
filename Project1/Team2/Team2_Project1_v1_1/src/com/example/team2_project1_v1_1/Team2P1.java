@@ -278,7 +278,7 @@ public class Team2P1 extends Activity {
 		//String[] ts_array = (String[])time_stamp.toArray(new String[size_ts]);
 		//String[] dt_array = (String[])time_date.toArray(new String[size_dt]);
 		
-		
+		Log.i(TAG,"Sending");
 		 new AsyncTask<Void, Void, Void> (){
 			 protected Void doInBackground(Void... params) {
 			    try {
