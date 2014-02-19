@@ -39,7 +39,7 @@ public class MainActivity extends FragmentActivity implements
 	
 	//Info
 	private int port = 5555;
-	private String ip = "10.201.201.182";
+	private String ip = "10.200.210.215";
 	String teamid = "team5";
 	String run_id;
 	
@@ -218,6 +218,7 @@ public class MainActivity extends FragmentActivity implements
 			}else{
 				display("Error");
 			}
+			data = new ArrayList<AndroidPacket1>();
 		}
 	}
 	

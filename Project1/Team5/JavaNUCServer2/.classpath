@@ -6,5 +6,7 @@
 	<classpathentry kind="lib" path="/Users/samcarey/Desktop/Spring 2014/489/ObjectItem.jar"/>
 	<classpathentry kind="lib" path="/Users/samcarey/Desktop/Spring 2014/489/AndroidPacket1.jar"/>
 	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/fusiontables-v1r41lv1.16.0-rc"/>
+	<classpathentry kind="lib" path="/Users/samcarey/Desktop/Spring 2014/489/Project 1/google-oauth-client-java6/1.17.0-rc/google-oauth-client-java6-1.17.0-rc.jar"/>
+	<classpathentry kind="lib" path="/Users/samcarey/Desktop/Spring 2014/489/Project 1/google-oauth-client-jetty/1.17.0-rc/google-oauth-client-jetty-1.17.0-rc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
