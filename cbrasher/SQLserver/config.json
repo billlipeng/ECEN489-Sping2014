@@ -1,6 +1,0 @@
-{
- "path": "C:/Users/Colin Brasher/Desktop/project1.db",
- "table": "ecen489_project1_data",
- "column": ["date", "time", "client_id", "run_id", "latitude", "longitude", "bearing",
-		"speed", "altitude","sensor_id", "sensor_type", "sensor_value", "attribute"]
-}
