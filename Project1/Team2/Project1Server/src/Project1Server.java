@@ -3,7 +3,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 
 
@@ -25,7 +28,7 @@ public class Project1Server {
 			server = new ServerSocket(5555);
 			
 			while(true){
-				Connection connection = new Connection(server.accept());
+				ConnectionHandler connection = new ConnectionHandler(server.accept());
 				Thread t = new Thread(connection);
 				t.start();	
 				System.out.println("New Connection");
