@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class FusionTableHandler implements Runnable {
@@ -78,17 +79,17 @@ public class FusionTableHandler implements Runnable {
                 sql.execute();
             }
             else {
-                ArrayList<ArrayList<DataPoint>> listolists = new ArrayList<ArrayList<DataPoint>>();
+                ArrayList<List<DataPoint>> listolists = new ArrayList<List<DataPoint>>();
                 int binSize = 500;
                 int numBins = (dataset.size() + binSize - 1) / binSize;
                 for (int i = 0; i < numBins; i++) {
                     int start = i*binSize;
                     int end = Math.min(start + binSize, dataset.size());
-                    listolists.add((ArrayList<DataPoint>) dataset.subList(start, end));
+                    listolists.add(dataset.subList(start, end));
                 }
-                for (ArrayList<DataPoint> dps : listolists) {
-                    sql = client.query().sql(createMultipleInsertSQL(dps));
-                    sql.execute();
+                for (List<DataPoint> dps : listolists) {
+//                    sql = client.query().sql(createMultipleInsertSQL(dps));
+//                    sql.execute();
                 }
             }
 

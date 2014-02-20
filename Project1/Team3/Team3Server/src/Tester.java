@@ -6,8 +6,8 @@ import java.util.ArrayList;
  */
 public class Tester {
     public static void main(String[] args) throws Exception {
-//        Config props = new Config();
-//        new ConfigLoader(props);
+        Config props = new Config();
+        new ConfigLoader(props);
 //        System.out.println(props.toString());
 //
 //        DataPoint dp = new DataPoint.Builder()
@@ -28,25 +28,22 @@ public class Tester {
 //        System.out.println(dbh.createInsertSQL(dp));
 //        FusionTableHandler fth = new FusionTableHandler(dataset);
 //        System.out.println(fth.createMultipleInsertSQL(dataset));
-//        new Thread(new FusionTableHandler(dataset)).start();
+        ArrayList<DataPoint> dataset = new ArrayList<DataPoint>();
+        int num = 10;
+        for (int i = 0; i < num; i++) {
+            dataset.add(new DataPoint.Builder()
+                .time("12:45:00").date("2014-2-16").client_id("zpartal")
+                .run_id("run1").latitude(1234.1234).longitude(4342.2323)
+                .bearing(23.42).speed(23.2).altitude(554).sensor_id("S1")
+                .sensor_type("temp").sensor_value(112.3).attribute("sensor")
+                .build());
+        }
 
-        ArrayList<Integer> listtest = new ArrayList<Integer>();
-        listtest.add(1);
-        listtest.add(2);
-        listtest.add(3);
-        listtest.add(4);
-        listtest.add(5);
-        listtest.add(6);
-        listtest.add(7);
-        listtest.add(8);
-        listtest.add(9);
-        listtest.add(10);
-        listtest.add(11);
-        listtest.add(12);
+//        FusionTableHandler fth = new FusionTableHandler(dataset);
+//        System.out.println(fth.createMultipleInsertSQL(dataset));
 
-        int binSize = 3;
-        int numBins = (listtest.size() + binSize - 1) / binSize;
-//        System.out.println(bins);
+        new Thread(new FusionTableHandler(dataset)).start();
+
 
     }
 }

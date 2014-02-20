@@ -28,7 +28,7 @@ public class Worker implements Runnable {
             new Thread(new DatabaseHandler(dataset)).start();
 
             // Fusion Table
-//            new Thread(new FusionTable(dataset)).start();
+            new Thread(new FusionTableHandler(dataset)).start();
 
         } catch (IOException e) {
             e.printStackTrace();
