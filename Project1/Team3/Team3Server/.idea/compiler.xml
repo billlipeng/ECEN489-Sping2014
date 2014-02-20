@@ -25,9 +25,6 @@
         <module name="Team3Server" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Team3Server" target="1.6" />
-    </bytecodeTargetLevel>
   </component>
 </project>
 
