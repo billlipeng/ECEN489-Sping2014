@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.Vector;
 
 import com.google.gson.Gson;
@@ -15,12 +16,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.speech.SpeechRecognizer;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,16 +37,18 @@ import at.abraxas.amarino.AmarinoIntent;
 
 public class MainActivity extends Activity{
 
-	
+	final static int PICK_ADDRESS_REQUEST = 1;
+	BluetoothDevice blueArray[];
 	public dataRow currentData;
 	boolean waitingOnGPS=false;
 	TextView ipText;
 	TextView portText;
 	Button sendText;
+	Button readSensor;
 	myLocationListener myLL;
-	private static final String DEVICE_ADDRESS =  "00:12:09:13:99:42"; //"00:06:66:03:73:7B";
+	String DEVICE_ADDRESS = "";// =  "00:12:09:13:99:42"; 
 	ArduinoReceiver arduinoReceiver = new ArduinoReceiver();
-	ArduinoReceiver deviceReceiver = new ArduinoReceiver();
+	BluetoothAdapter adapter;
 	Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() 
     {
@@ -59,9 +65,11 @@ public class MainActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		readSensor = (Button)findViewById(R.id.getReading);
 		ipText = (TextView)findViewById(R.id.ipText);
 		portText = (TextView)findViewById(R.id.portText);
 		myLL = new myLocationListener(this, (ListView)findViewById(R.id.dataText));
+		adapter = BluetoothAdapter.getDefaultAdapter();
 	}
 	
 	public void toggle(View view)
@@ -86,16 +94,41 @@ public class MainActivity extends Activity{
 		  Button toggleBtn = (Button)view;
 	      if (toggleBtn.getText().equals("Connect")) 
 	      {
-	          toggleBtn.setText("Read\nsensor");
-	          Intent intent = new Intent(AmarinoIntent.ACTION_CONNECTED_DEVICES);
-	          sendBroadcast(intent);
+	    	  Set<BluetoothDevice> blueSet = adapter.getBondedDevices();
+	    	  blueArray = blueSet.toArray(new BluetoothDevice[blueSet.size()]);
+	    	  String deviceNames[] = new String[blueArray.length];
+	    	  for (int i=0; i<blueArray.length; i++)
+	    	  {
+	    		  deviceNames[i] = blueArray[i].getName();
+	    	  }
+	    	  Intent intent = new Intent(this, ChooseBluetooth.class);
+	    	  intent.putExtra("deviceList", deviceNames);
+	    	  startActivityForResult(intent, PICK_ADDRESS_REQUEST);
+	    	  
 	      } 
 	      else 
 	      {
 		myLL.getCoordinates(true);
-		Amarino.connect(this, DEVICE_ADDRESS);
+		//Amarino.connect(this, DEVICE_ADDRESS);
 		Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 's', 's');
 	      }
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode==1 & resultCode==RESULT_OK)
+		{
+			int index = data.getIntExtra("deviceIndex",0);
+			DEVICE_ADDRESS = blueArray[index].getAddress();
+			Amarino.connect(this, DEVICE_ADDRESS);
+	        readSensor.setText("Read from\n" + blueArray[index].getName());
+		}
+	}
+	
+	public void disconnect(View view)
+	{
+		Amarino.disconnect(this, DEVICE_ADDRESS);
+		readSensor.setText("Connect");
 	}
 	
 	@Override
@@ -103,7 +136,6 @@ public class MainActivity extends Activity{
 		super.onStart();
 		// in order to receive broadcasted intents we need to register our receiver
 		registerReceiver(arduinoReceiver, new IntentFilter(AmarinoIntent.ACTION_RECEIVED));
-		registerReceiver(deviceReceiver, new IntentFilter(AmarinoIntent.ACTION_GET_CONNECTED_DEVICES));
 	}
 	
 	@Override
@@ -111,14 +143,12 @@ public class MainActivity extends Activity{
 		super.onStop();
 		
 		// if you connect in onStart() you must not forget to disconnect when your app is closed
-		Amarino.disconnect(this, DEVICE_ADDRESS);
+		//Amarino.disconnect(this, DEVICE_ADDRESS);
 		
 		// do never forget to unregister a registered receiver
 		unregisterReceiver(arduinoReceiver);
-		unregisterReceiver(deviceReceiver);
 	}
 	
-
 	
 	public class ArduinoReceiver extends BroadcastReceiver {
 
@@ -131,8 +161,8 @@ public class MainActivity extends Activity{
 			
 			// the type of data which is added to the intent
 			final int dataType = intent.getIntExtra(AmarinoIntent.EXTRA_DATA_TYPE, -1);
-			String devices = intent.getStringExtra(AmarinoIntent.EXTRA_CONNECTED_DEVICE_ADDRESSES);
-			System.out.println(devices);
+			//String devices = intent.getStringExtra(AmarinoIntent.EXTRA_CONNECTED_DEVICE_ADDRESSES);
+			//System.out.println(devices);
 			
 			if (dataType == AmarinoIntent.STRING_EXTRA){
 				data = intent.getStringExtra(AmarinoIntent.EXTRA_DATA);
@@ -267,13 +297,13 @@ class myLocationListener implements LocationListener{
 					
 					ObjectOutputStream output = new ObjectOutputStream(connection.getOutputStream());
 					//output.writeInt(1);
-					output.writeObject(rowArray.get(0));//toArray());
+					output.writeObject(rowArray);
 					output.flush();
 					
-					//output.close();
+					output.close();
 					//input.close();
 					
-					//connection.close();
+					connection.close();
 					
 				} catch (UnknownHostException e ) {
 					// TODO Auto-generated catch block
