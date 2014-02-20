@@ -3,6 +3,7 @@ package project1JavaServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
 import java.net.Socket;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,8 +14,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 
-import com.mhardian.gps_retrieval.dataRow;
+import com.mhardiman.gps_retrieval.*;
 
 public class DataThreader extends Thread{
 
@@ -46,18 +48,27 @@ public class DataThreader extends Thread{
 					while(true){
 				//listening for packets
 					//connection = DriverManager.getConnection("jdbc:sqlite:DataReadings.db");
-					dataRow row;
+						ArrayList<dataRow> row = new ArrayList<dataRow>();
+					//dataRow row[];
 					System.out.println("4");
 					
-					row = (dataRow) receiver.readObject();	
+					//row = (dataRow[]) receiver.readObject();	
+					//try{
+					row = (ArrayList<dataRow>) receiver.readObject();
+					//}
+					//catch(ClassNotFoundException e){
+				//		System.out.print(e.getStackTrace());
+					//}
 					//System.out.println(test);
 
 					//dataRow[] dataCatch = (dataRow[]) row;
+					//Array r = row.toArray();
+					System.out.println(row.get(0).sensorType);
 					
-					System.out.println(row.sensorType);
-					System.out.println(row.latitude);
+					System.out.println(row.get(0).latitude);
 
-					System.out.println(row.longitude);
+					System.out.println(row.get(1).longitude);
+					System.out.println(row.get(2).longitude);
 
 					System.out.println("Attempting connection to SQL server.");
 					
