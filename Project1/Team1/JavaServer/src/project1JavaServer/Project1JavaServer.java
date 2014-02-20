@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 import project1JavaServer.DataThreader;
+import com.mhardiman.gps_retrieval.*;
 
 public class Project1JavaServer {
 
