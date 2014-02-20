@@ -4,12 +4,14 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.*;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.testing.http.HttpTesting;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.fusiontables.Fusiontables;
 import com.google.api.services.fusiontables.FusiontablesScopes;
+import com.google.api.client.googleapis.*;
 import com.zpartal.project1.datapackets.DataPoint;
 
 import java.io.IOException;
@@ -18,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static com.google.api.services.fusiontables.Fusiontables.*;
 
 public class FusionTableHandler implements Runnable {
     private static final String APPLICATION_NAME = "ECEN 489 Project One";
@@ -72,11 +76,15 @@ public class FusionTableHandler implements Runnable {
 
     @Override
     public void run() {
-        Fusiontables.Query.Sql sql = null;
+//        Fusiontables.Query.Sql sql = null;
+//                sql = client.query().sql(createMultipleInsertSQL(dataset));
+//                sql.execute();
         try {
             if (dataset.size() <= 500) {
-                sql = client.query().sql(createMultipleInsertSQL(dataset));
-                sql.execute();
+                String sql = createMultipleInsertSQL(dataset);
+                HttpContent content = ByteArrayContent.fromString(null, "sql=" + sql);
+                HttpRequest httpRequest = client.getRequestFactory().buildPostRequest(new GenericUrl("https://www.googleapis.com/fusiontables/v1/query"), content);
+                httpRequest.execute();
             }
             else {
                 ArrayList<List<DataPoint>> listolists = new ArrayList<List<DataPoint>>();
@@ -88,12 +96,16 @@ public class FusionTableHandler implements Runnable {
                     listolists.add(dataset.subList(start, end));
                 }
                 for (List<DataPoint> dps : listolists) {
-//                    sql = client.query().sql(createMultipleInsertSQL(dps));
-//                    sql.execute();
+                    String sql = createMultipleInsertSQL((new ArrayList<DataPoint>(dps)));
+                    HttpContent content = ByteArrayContent.fromString(null, "sql=" + sql);
+                    HttpRequest httpRequest = client.getRequestFactory().buildPostRequest(new GenericUrl("https://www.googleapis.com/fusiontables/v1/query"), content);
+                    httpRequest.execute();
+                    Thread.sleep(1);
                 }
             }
-
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
