@@ -29,7 +29,7 @@ public class Tester {
 //        FusionTableHandler fth = new FusionTableHandler(dataset);
 //        System.out.println(fth.createMultipleInsertSQL(dataset));
         ArrayList<DataPoint> dataset = new ArrayList<DataPoint>();
-        int num = 10;
+        int num = 1100;
         for (int i = 0; i < num; i++) {
             dataset.add(new DataPoint.Builder()
                 .time("12:45:00").date("2014-2-16").client_id("zpartal")
