@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
@@ -33,32 +32,33 @@ import com.example.samcarey.ObjectItem;;
 
 public class MainActivity extends Activity {
 	
+	//Need Amarino Library in Build Path 
+	//http://www.amarino-toolkit.net/index.php/download.html
+	
 	ArrayList<AndroidPacket1> dp = new ArrayList<AndroidPacket1>();
 	
-	//private static final String TEAM1 =  "00:12:09:13:99:42";
-	//private static final String TEAM2 =  "00:12:09::";
-	//private static final String TEAM3 =  "00:12:09:";
-	//private static final String TEAM4 =  "00:12:09::;
-	private static final String TEAM5 =  "00:12:09:25:92:";
-	
-	//const
-	private static final String id = "Team 5";
-	private static final String Tag = "Project 1";
+	private static final String TEAM1 =  "00:12:09:13:99:42";
+	private static final String TEAM2 =  "00:15:FF:F2:10:0F";
+	private static final String TEAM3 =  "00:12:09:25:92:95";
+	private static final String TEAM4 =  "00:12:09:25:92:92";
+	private static final String TEAM5 =  "00:12:09:25:96:92"; //address of device connecting to 
+	// need this from the teensy
+	/*private static final String id = "Team 5";
+	private static final String Tag = "Project 1";*/
 
-	boolean flag = false;
 	boolean receive = false;
-	
+
 	private static final char function = 'f';
 	
-	Socket connect;
+	/*Socket connect;
 	ObjectOutputStream output;
 	ObjectInputStream input;
 	String ipaddress;
-	int port;
+	int port;*/
 	
 	
-	private ArduinoConnected arduinoconn = new ArduinoConnected();
-	private ArduinoReciever arduinorec = new ArduinoReciever();
+	private ArduinoConnected arduinoconn = new ArduinoConnected(); //need this
+	private ArduinoReciever arduinorec = new ArduinoReciever(); //need this
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
 	}
 	
 	@Override
-	protected void onStart(){
+	protected void onStart(){ //need this 
 		super.onStart();
 		registerReceiver(arduinorec, new IntentFilter(AmarinoIntent.ACTION_RECEIVED));
 		registerReceiver(arduinoconn, new IntentFilter(AmarinoIntent.ACTION_CONNECTED));
@@ -81,14 +81,14 @@ public class MainActivity extends Activity {
 	}
 	
 	@Override
-	public void onStop(){
+	public void onStop(){ //need this
 		super.onStop();
 		unregisterReceiver(arduinorec);
 		unregisterReceiver(arduinoconn);
 	}
 	
-	//timer
-	/*public void connectT1(View v)
+	//Connect the address of the device it sees
+	public void connectT1(View v) //ignore other teams for now
 	{
 		Amarino.connect(this, TEAM1);
 	}public void connectT2(View v)
@@ -101,7 +101,7 @@ public class MainActivity extends Activity {
 	public void connectT4(View v)
 	{
 		Amarino.connect(this, TEAM4);
-	}*/
+	}
 	public void connectT5(View v)
 	{
 		Amarino.connect(this, TEAM5);
@@ -116,11 +116,8 @@ public class MainActivity extends Activity {
 	}
 	
 	
-	public class ArduinoReciever extends BroadcastReceiver{
-		private Object time;
-		private Object date;
-		private Object lat;
-		private Object lng;
+	public class ArduinoReciever extends BroadcastReceiver{ //need this
+	
 
 		@Override
 		public void onReceive(Context context, Intent intent){
@@ -137,22 +134,21 @@ public class MainActivity extends Activity {
 				data = intent.getStringExtra(AmarinoIntent.EXTRA_DATA);
 				
 				if (data != null){
-				flag = true;
-				Gson gson = new Gson(); //Confirmation whether androidpacket or objectitem
-				AndroidPacket1 sensordata = gson.fromJson(data, AndroidPacket1.class);
-				sensordata = new AndroidPacket1.sensor_id(sensordata.getsensor_id())
-						.sensor_type(sensordata.getSensor_type())
-						.sensor_value(sensordata.getSensor_value());
-				disconnect(addr);
+			
+				receive = true;
+				Gson gson = new Gson();
+				
+				AndroidPacket1 sensordata = gson.fromJson(data, AndroidPacket1.class); //
+				sensordata = sensordata.getsensor_id().getsensor_type().getsensor_value(); //sensordata parse data into respective fields here
 				dp.add(sensordata);	
-				flag = true;
+			
 				receive = false;
 				}
 				}
 			}
 		}
 
-	public class ArduinoConnected extends BroadcastReceiver{
+	public class ArduinoConnected extends BroadcastReceiver{ //need this
 		@Override
 		public void onReceive(Context context, Intent intent){
 			final String addr = intent.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
@@ -160,50 +156,5 @@ public class MainActivity extends Activity {
 			senddata(addr);
 		}
 	}
-	
-	/*Already in the gps 
-	public boolean network(){
-		ConnectivityManager manger = (ConnectivityManager) 
-					getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo network = manger.getNetworkInfo(ConnectivityManager.TYPE_BLUETOOTH);
-		boolean blueconn = network.isConnectedOrConnecting();
-		if (blueconn == true)
-			PlaceholderTextview.setText("BlueTooth is Connecting");
-		else
-			PlaceholderTextview.setText("BlueTooth is Disconnected");
-		
-		//NetworkInfo network_e = manger.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-		//boolean wificonn = network.isConnected();
-	}
-	
-
-	public void connection(){
-		if(network())
-		{
-			
-		}
-	}
-	
-	
-	 public class Server extends AsyncTask<...>{
-     	@Override
-     	protected void doInBackground(String ... values){
-     		try{
-     			connect = new Socket(ipaddress, port);
-     			//some data packet might be assigned here
-     			output = 
-     					 ObjectOutputStream(connect.getOutputStream());
-     			output.flush();
-     			output.writeObject(ObjectItem);
-     			output.flush();
-     			output.close();
-     			
-     			connect.close();
-     		}
-     		catch(Exception e){
-     			Log.e("Android Applicatoin","Async broke down =(");
-     		}
-     	}
-     }*/
 
 }
