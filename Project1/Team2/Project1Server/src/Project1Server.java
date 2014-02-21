@@ -2,11 +2,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+
 
 
 
@@ -25,7 +21,7 @@ public class Project1Server {
 		
 		try{
 			
-			server = new ServerSocket(5555);
+			server = new ServerSocket(4445);
 			
 			while(true){
 				ConnectionHandler connection = new ConnectionHandler(server.accept());

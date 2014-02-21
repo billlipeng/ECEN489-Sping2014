@@ -38,6 +38,9 @@ public class ConnectionHandler implements Runnable{
     String longitude[];
     String time[];
     String date[];
+    String client_id[];
+    String run_id[];
+    String attribute[];
 
 	Project1Packet receive;
 
@@ -53,9 +56,9 @@ public class ConnectionHandler implements Runnable{
 
 	            input  = new ObjectInputStream( clientSocket.getInputStream() );
 	            Class.forName("org.sqlite.JDBC");
-	  	      	c = DriverManager.getConnection("jdbc:sqlite:projone.db");
+	  	      	c = DriverManager.getConnection("jdbc:sqlite:C:/projone.db");
 	  	      	c.setAutoCommit(false);
-	  	      	
+	  	      	uploadfusion uf = new uploadfusion();
 	  	      	String sql=null;
 
 	          //num1 = input.readInt();
@@ -67,6 +70,9 @@ public class ConnectionHandler implements Runnable{
 				longitude = receive.getLongitude();
 				time = receive.getTime();
 				date = receive.getDate();
+				client_id = receive.getClient_id();
+				run_id = receive.getRun_id();
+				attribute = receive.getAttribute();
 				
 				System.out.println(sensor_id.length);
 				System.out.println(latitude.length);
@@ -74,13 +80,16 @@ public class ConnectionHandler implements Runnable{
 				System.out.println(sensor_type.length);
 				System.out.println(time.length);
 				for(int i=0; i<sensor_id.length; i++){
+					System.out.print("ClientID: " + client_id[i] +"  ");
+					System.out.print("RunID: " + run_id[i] +"  ");
 					System.out.print("Latitude: " + latitude[i] +"  ");
 					System.out.print("Longitude: " + longitude[i] +"  ");
 					System.out.print("SensorID: " + sensor_id[i] +"  ");
 					System.out.print("SensorType: " + sensor_type[i] +"  ");
 					System.out.print("SensorValue: " + sensor_value[i] +"  ");
 					System.out.print("Time: " + time[i] +"  ");
-					System.out.println("Date: " + date[i] +"  ");
+					System.out.print("Date: " + date[i] +"  ");
+					System.out.println("Attribute: " + attribute[i] +"  ");
 					
 					//System.out.println("Creating Statement ");
 					stmt = c.createStatement();
@@ -97,7 +106,7 @@ public class ConnectionHandler implements Runnable{
 							+ ", date"
 							+ ", time"
 							+ ", client_id"
-						//	+ ", run_id"
+							+ ", run_id"
 							+ ", latitude"
 							+ ", longitude"
 						//	+ ", bearing"
@@ -106,14 +115,14 @@ public class ConnectionHandler implements Runnable{
 							+ ", sensor_id"
 							+ ", sensor_type"
 							+ ", sensor_value"
-						//	+ ", attribute"
+							+ ", attribute"
 							+ ") " +
 	    	 				"VALUES ("
 	    	 						+ ""+maxid+""						//id
 	    	 						+ ", '" + date[i] +"'"				//date
 	 								+ ", '" + time[i] +"'"				//time
-									+ ", 'Team2Client'"					//client_id
-						//			+ ", 'NULL'"						//run_id
+									+ ", '"+client_id[i]+"'"					//client_id
+									+ ", '"+run_id[i]+"'"						//run_id
 									+ ", " + latitude[i] +""			//latitude
 									+ ", " + longitude[i] +""			//longitude
 						//			+ ", bearing"						//bearing
@@ -122,7 +131,7 @@ public class ConnectionHandler implements Runnable{
 									+ ", '" + sensor_id[i] +"'"			//sensor_id
 									+ ", '" + sensor_type[i] +"'"		//sensor_type
 									+ ", " + sensor_value[i] +" "		//sensor value
-						//			+ ", 'attribute' "					//attribute
+									+ ", '"+attribute[i]+"' "					//attribute
 									+ ");"; 				
 					//System.out.println("Executing statement "+sql+"");
 					stmt.executeUpdate(sql);
@@ -130,9 +139,11 @@ public class ConnectionHandler implements Runnable{
 			        stmt.close();
 			        System.out.println("i= "+i);
 				}
+				
 				System.out.println("committing data ");
 				c.commit();
 			    c.close();
+			   uf.update(client_id, run_id, time,date,latitude,longitude,sensor_id,sensor_type,sensor_value, attribute);
 				
 	         
         } catch (IOException | ClassNotFoundException | SQLException e) {
@@ -141,7 +152,6 @@ public class ConnectionHandler implements Runnable{
         } 
         
         try {
-			output.close();
 			input.close();
 			System.out.println("Connection Closed");
 		} catch (IOException e) {
