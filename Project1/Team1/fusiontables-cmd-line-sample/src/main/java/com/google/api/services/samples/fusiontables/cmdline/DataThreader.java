@@ -66,7 +66,7 @@ public class DataThreader extends Thread{
 					//SQL DATA ENTRY
 					try { 
 						Class.forName("org.sqlite.JDBC");
-					  	Connection connection = DriverManager.getConnection("jdbc:sqlite:/Users/zerocraft/Desktop/projone.db");
+					  	Connection connection = DriverManager.getConnection("jdbc:sqlite: C:\\projone.db");
 
 						
 						dataRow row;
