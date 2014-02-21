@@ -1,13 +1,11 @@
 package com.mhardiman.gps_retrieval;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.Vector;
 
 import com.google.gson.Gson;
 	
@@ -19,12 +17,10 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.speech.SpeechRecognizer;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -86,7 +82,14 @@ public class MainActivity extends Activity{
 	
 	public void sendDataPress(View view)
 	{
-		myLL.sendData(ipText.getText().toString(), portText.getText().toString());
+		String ip = ipText.getText().toString();
+		String port = portText.getText().toString();
+		if (ip.length()<=7 | port.length() < 4)
+			Toast.makeText(this, "Please enter IP and port information.", Toast.LENGTH_SHORT).show();
+		else
+			myLL.sendData(ipText.getText().toString(), portText.getText().toString());
+		
+			
 	}
 
 	public void getReading(View view)
@@ -109,7 +112,6 @@ public class MainActivity extends Activity{
 	      else 
 	      {
 		myLL.getCoordinates(true);
-		//Amarino.connect(this, DEVICE_ADDRESS);
 		Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 's', 's');
 	      }
 	}
@@ -251,8 +253,7 @@ class myLocationListener implements LocationListener{
 			//add to vector
 			makeEntry();
 		}
-		//add reading
-		//System.out.print("onLocationChanged");
+
 	  }
 	
 	private void makeEntry()
@@ -260,7 +261,7 @@ class myLocationListener implements LocationListener{
 
 		now = new Time();
 		now.setToNow();
-		currentData.date = Integer.toString(now.month) + "/" 
+		currentData.date = Integer.toString(now.month + 1 ) + "/" 
 				+ Integer.toString(now.monthDay) + "/" 
 				+ Integer.toString(now.year);
 		currentData.time = Integer.toString(now.hour) + ":" 
@@ -268,18 +269,34 @@ class myLocationListener implements LocationListener{
 				+ Integer.toString(now.second);
 		gotGPS = false;
 		gotSensorValue = false;
+		if (rowArray.size()==0)
+			currentData.attribute = "Start";
 		rowArray.add(currentData);
-		displayData.add(Double.toString(currentData.latitude) + ", " + Double.toString(currentData.longitude)
-					+ "; " + currentData.sensorType + ": " + Float.toString(currentData.sensorValue));
-        dataText.setAdapter(new ArrayAdapter<String>(mainContext, android.R.layout.simple_list_item_1, displayData));
+		displayList();
         currentData = new dataRow();
+	}
+	
+	public void displayList()
+	{
+		displayData.add(Double.toString(currentData.latitude) + ", " + Double.toString(currentData.longitude)
+				+ "; " + currentData.sensorType + ": " + Float.toString(currentData.sensorValue));
+    dataText.setAdapter(new ArrayAdapter<String>(mainContext, android.R.layout.simple_list_item_1, displayData));
 	}
 	
 	public void sendData(String ip, String port)
 	{
 		//disable buttons while sending data
-		
-		new talkToServer().execute(ip, port);
+		int rowSize = rowArray.size();
+		if (rowSize != 0)
+		{
+			dataRow lastRow = rowArray.get(rowSize-1);
+			lastRow.attribute = "Stop";
+			rowArray.remove(rowSize-1);
+			rowArray.add(lastRow);
+			new talkToServer().execute(ip, port);
+		}
+		else
+			Toast.makeText(mainContext, "No data to send.", Toast.LENGTH_SHORT).show();
 		
 	}
 	
@@ -292,16 +309,12 @@ class myLocationListener implements LocationListener{
 					System.out.println("opening socket...");
 					
 					connection = new Socket(ip_addr[0], Integer.valueOf(ip_addr[1]));
-					//if (connection.isConnected())
-						//System.out.print("Socket found.\n");
 					
 					ObjectOutputStream output = new ObjectOutputStream(connection.getOutputStream());
-					//output.writeInt(1);
 					output.writeObject(rowArray);
 					output.flush();
 					
 					output.close();
-					//input.close();
 					
 					connection.close();
 					
@@ -318,21 +331,6 @@ class myLocationListener implements LocationListener{
 			 }
 		}
 		
-
-	//resume and pause
-	/*@Override
-	  protected void onResume() {
-	    super.onResume();
-	    //lm.requestLocationUpdates(provider, 400, 1, this);
-	  }
-
-	  // Remove the locationlistener updates when Activity is paused 
-	  @Override
-	  protected void onPause() {
-	    super.onPause();
-	    lm.removeUpdates(this);
-	  }*/
-	  
 
 	  @Override
 	  public void onStatusChanged(String provider, int status, Bundle extras) {

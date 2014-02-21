@@ -36,7 +36,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="IP Address">
+        android:hint="IP Address"
+        android:text="10.201.220.5" >
+
         <requestFocus />
     </EditText>
 
@@ -45,8 +47,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Port" 
-        />
+        android:hint="Port"
+        android:text="5555" />
     
     <Button
         android:id="@+id/sendText"

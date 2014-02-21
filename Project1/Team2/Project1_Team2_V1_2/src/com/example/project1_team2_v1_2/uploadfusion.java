@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.Collections;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
@@ -72,7 +73,7 @@ public class uploadfusion {
 		String tableId= "1qTs6ydcfsj1nnYZy9oKKaPnIXZLstaJCH-yhIFE";
 		
 		try {
-		      httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+		      httpTransport =  AndroidHttp.newCompatibleTransport();
 		      dataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR);
 		      Credential credential = authorize();
 		      fusiontables = new Fusiontables.Builder(
