@@ -159,8 +159,7 @@ public class MainActivity extends FragmentActivity implements
 
 
 		/**
-		 * @author Joao Marcos
-		 * Connection feedback
+		 * @author
 		 */
 		public class ArduinoConnected extends BroadcastReceiver {
 			@Override
@@ -173,9 +172,27 @@ public class MainActivity extends FragmentActivity implements
 
 		}
 
-		public void readSensor(View view){
+		public void readSensor1(View view){
+			send(TEAM1_ADDRESS);
+		}
+		
+		public void readSensor2(View view){
+			send(TEAM2_ADDRESS);
+		}
+		
+		public void readSensor3(View view){
+			send(TEAM3_ADDRESS);
+		}
+		
+		public void readSensor4(View view){
+			send(TEAM4_ADDRESS);
+		}
+		
+		public void readSensor5(View view){
 			send(TEAM5_ADDRESS);
 		}
+		
+		
 	
 	
 	
@@ -201,6 +218,8 @@ public class MainActivity extends FragmentActivity implements
 	Boolean newSensorData = false;
 	SensorData sensorData;
 	String addr;
+	Boolean startPoint = false;
+	Boolean endPoint = false;
 	
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
@@ -365,6 +384,7 @@ public class MainActivity extends FragmentActivity implements
 	
 	public void beginCollection(View view){
 		//display("Beginning");
+		startPoint = true;
 		data = new ArrayList<AndroidPacket1>();
 		begun = true;
 		run_id = run_id();
@@ -382,7 +402,17 @@ public class MainActivity extends FragmentActivity implements
 	};
 	
 	public String attribute(){
-		return "sensor";
+		if (startPoint){
+			startPoint = false;
+			return "start";
+		}else if(endPoint){
+			endPoint = false;
+			return "end";
+		}else if (newSensorData){
+			return "sensor";
+		}else{
+			return "point";
+		}
 	}
 	
 	public String sensor_id(){
@@ -502,6 +532,9 @@ public class MainActivity extends FragmentActivity implements
 			handler.removeCallbacks(LogLoop);
 			if (netCheck()){
 				//display("Client waiting...");
+				endPoint = true;
+				logData();
+				endPoint = false;
 				new Send().execute();
 			}else{
 				display("Error");
