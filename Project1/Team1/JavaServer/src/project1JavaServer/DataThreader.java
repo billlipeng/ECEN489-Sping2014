@@ -2,17 +2,10 @@ package project1JavaServer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
 import java.net.Socket;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
@@ -44,6 +37,12 @@ public class DataThreader extends Thread{
 				//listening for data object					
 					ArrayList<dataRow> row = new ArrayList<dataRow>();						
 					row = (ArrayList<dataRow>) receiver.readObject();
+					//Testing SQL Connectivity:
+					//dataRow r1 = new dataRow("sensor1team1", "team1", 0001, 30.1945, 90.342, "02/20/2014", "4:41:00PM", 202.11, "Light","Update");
+					//r1.sensorID = "team1-sensor1";
+					
+					
+					
 					//Test Output
 					System.out.println(row.get(0).sensorType);					
 					System.out.println(row.get(0).latitude);
@@ -55,6 +54,7 @@ public class DataThreader extends Thread{
 					
 					//SQL DATA ENTRY
 					try { 
+						Class.forName("org.sqlite.JDBC");
 					  	Connection connection = DriverManager.getConnection("jdbc:sqlite:C:/SQLite/DB1.db");
 
 						connection.setAutoCommit(false);
