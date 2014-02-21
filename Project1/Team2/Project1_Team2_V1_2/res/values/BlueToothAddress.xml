@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <string-array name="BlueToothAddress">
+        <item>Team1_Address</item>
+        <item>Team2_Address</item>
+        <item>Team3_Address</item>
+        <item>Team4_Address</item>
+        <item>Team5_Address</item>
+    </string-array>
+</resources>
