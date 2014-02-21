@@ -41,8 +41,8 @@ public class MainActivity extends Activity {
 	private static final String TEAM2 =  "00:15:FF:F2:10:0F";
 	private static final String TEAM3 =  "00:12:09:25:92:95";
 	private static final String TEAM4 =  "00:12:09:25:92:92";
-	private static final String TEAM5 =  "00:12:09:25:96:92"; //address of device connecting to 
-	// need this from the teensy
+	private static final String TEAM5 =  "00:12:09:25:96:92";  
+	
 	/*private static final String id = "Team 5";
 	private static final String Tag = "Project 1";*/
 
