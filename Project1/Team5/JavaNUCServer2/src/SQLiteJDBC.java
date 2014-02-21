@@ -13,12 +13,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Scanner;
 import java.util.UUID;
 
 import com.example.samcarey.AndroidPacket1;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -64,6 +64,8 @@ public class SQLiteJDBC
 		@SuppressWarnings("unchecked")
 		public static void main( String args[] )
 		{
+			int defaultPort = 5555;
+			
 	      try {
 	    	  httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 	    	  dataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR);
@@ -75,16 +77,24 @@ public class SQLiteJDBC
 			      fusiontables = new Fusiontables.Builder(
 			          httpTransport, JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
 			      
-			    
-			     
+			      ArrayList<AndroidPacket1> data;
+			      
+			    System.out.print("Enter Port (0 for default " + defaultPort + "): ");
+			    Scanner sc = new Scanner(System.in);
+			    int port = sc.nextInt();
+			    if (port == 0) port = 5555;
+			    sc.close();
+			      
+			      
+			     while(true){
 				System.out.println("Server initializing...");
-				ServerSocket server = new ServerSocket(5555, 1);
+				ServerSocket server = new ServerSocket(port, 1);
 				System.out.println("Server waiting...");
 				Socket connection = server.accept();
 				System.out.println("Server connected!");
 				ObjectInputStream input = new ObjectInputStream(connection.getInputStream());
 				System.out.println("Working?");
-				ArrayList<AndroidPacket1> data = (ArrayList<AndroidPacket1>) input.readObject();
+				data = (ArrayList<AndroidPacket1>) input.readObject();
 				System.out.println("Data Received");
 				input.close();
 				server.close();
@@ -98,12 +108,12 @@ public class SQLiteJDBC
 			    createTable();		//No problem if table already exists
 			    storeDatabase(data);
 			    DBconnection.close();
-			 // run commands
-			    System.out.print("Test1");
-			      String tableId = createFusionTable();     //create a table
-				    System.out.print("Test2");
-			      insertData(tableId, data);                //insert data into table
-				    System.out.print("Test3");
+			    
+			    // Fusion Tables
+		        String tableId = createFusionTable();     //create a table
+		        insertData(tableId, data);                //insert data into table
+		      }
+		      
 		    }catch(Exception e){
 		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		      System.exit(0);
@@ -132,11 +142,11 @@ public class SQLiteJDBC
 	        Collections.singleton(FusiontablesScopes.FUSIONTABLES)).setDataStoreFactory(
 	        dataStoreFactory).build();
 	    // authorize
-	    return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+	    return null;//new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
 	  }
 	
 	  /** Create a table for the authenticated user. */
-	  private static String createFusionTable() throws IOException {
+	  private static String createFusionTable() {
 
 	    // Create a new table
 	    Table table = new Table();
@@ -162,63 +172,67 @@ public class SQLiteJDBC
 	   
 
 	    // Adds a new column to the table.
-	    Fusiontables.Table.Insert t = fusiontables.table().insert(table);
-	    System.out.print("Test5");
-	    Table r = t.execute();
-	    System.out.print("Test6");
-	   
-
-	    return r.getTableId();
+	    Fusiontables.Table.Insert t;
+		try {
+			t = fusiontables.table().insert(table);
+			Table r = t.execute();
+		    return r.getTableId();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			System.out.print("Error creating Fusion Table");
+			return null;
+		}
 	  }
 	  
 	  /** Inserts a row in the newly created table for the authenticated user. */
 	  @SuppressWarnings("static-access")
-	private static void insertData(String tableId, ArrayList<AndroidPacket1> data) throws IOException {
+	private static void insertData(String tableId, ArrayList<AndroidPacket1> data) {
 		  try{
-		  for (int i = 0 ; i < data.size() ; i++){
-	    System.out.print("Inserting Location 1...");
-	    Sql sql = fusiontables.query().sql("INSERT INTO " + tableId
-			+ " (" +
-			" date, " +
-			" time, " +
-			" client_id, " + 
-			" run_id, " + 
-		    " latitude, " + 
-			" longitude, " + 
-			" bearing, " + 
-			" speed, " + 
-			" altitude, " + 
-			" sensor_id, " + 
-			" sensor_type, " + 
-			" sensor_value, " + 
-			" attribute)" +
+			  for (int i = 0 ; i < data.size() ; i++){
+				  Sql sql;
+				  sql = fusiontables.query().sql("INSERT INTO " + tableId
+					+ " (" +
+					" date, " +
+					" time, " +
+					" client_id, " + 
+					" run_id, " + 
+				    " latitude, " + 
+					" longitude, " + 
+					" bearing, " + 
+					" speed, " + 
+					" altitude, " + 
+					" sensor_id, " + 
+					" sensor_type, " + 
+					" sensor_value, " + 
+					" attribute)" +
+					
+				" VALUES(" +
+					"'" + data.get(i).date + "', " +
+					"'" + data.get(i).timestamp + "', " +
+					"'" + data.get(i).client_id + "', " +
+					"'" + data.get(i).run_id + "', " +
+						  data.get(i).latitude + ", " +
+						  data.get(i).longitude + ", " +
+						  data.get(i).bearing + ", " +
+						  data.get(i).speed + ", " +
+						  data.get(i).altitude + ", " +
+					"'" + data.get(i).sensor_id + "', " +
+					"'" + data.get(i).sensor_type + "', " +
+						  data.get(i).sensor_value + ", " +
+					"'" + data.get(i).attribute + "') ");
 			
-		" VALUES(" +
-			"'" + data.get(i).date + "', " +
-			"'" + data.get(i).timestamp + "', " +
-			"'" + data.get(i).client_id + "', " +
-			"'" + data.get(i).run_id + "', " +
-				  data.get(i).latitude + ", " +
-				  data.get(i).longitude + ", " +
-				  data.get(i).bearing + ", " +
-				  data.get(i).speed + ", " +
-				  data.get(i).altitude + ", " +
-			"'" + data.get(i).sensor_id + "', " +
-			"'" + data.get(i).sensor_type + "', " +
-				  data.get(i).sensor_value + ", " +
-			"'" + data.get(i).attribute + "') ");
-	    
-	    	sql.execute();
-	    	System.out.println("Entry to Fusion Successful!");
+				  sql.execute();
+			  }
+			  System.out.println("Entry to Fusion Successful!");
+		  } catch (IOException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				System.out.println("Error: Entries to Fusion unsuccessful");
 		  }
-	    
-	        
-	    } catch (IllegalArgumentException e) {
-	    }
+		  
 	  }
 	  
-	
-	
 	@SuppressWarnings("static-access")
 	public static void storeDatabase(ArrayList<AndroidPacket1> data){
 		try {

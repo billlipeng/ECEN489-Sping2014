@@ -10,7 +10,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.location.Location;
 import android.net.ConnectivityManager;
@@ -23,25 +25,166 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.samcarey.AndroidPacket1;
 import com.example.samcarey.ObjectItem;
+import com.example.samcarey.SensorData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 
+import com.google.gson.*;
+import at.abraxas.amarino.*;
+
 public class MainActivity extends FragmentActivity implements
 	GooglePlayServicesClient.ConnectionCallbacks,
 	GooglePlayServicesClient.OnConnectionFailedListener {
-	
+
 	//Info
-	private int port = 5555;
-	private String ip = "10.201.40.194";
+	private Integer port = 5555;
+	private String ip = "10.200.213.22";
 	String teamid = "team5";
 	String run_id;
+	
+	
+	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	// gson objects
+		private Gson gson = new Gson();
+	
+	private static final char FUNCTION = 's';
+	// Setting the bluetooth address of each team 
+		private static final String TEAM1_ADDRESS =  "00:12:09:13:99:42";
+		private static final String TEAM2_ADDRESS =  "00:15:FF:F2:10:0F";
+		private static final String TEAM3_ADDRESS =  "00:12:09:25:92:95";
+		private static final String TEAM4_ADDRESS =  "00:12:09:25:92:92";
+		private static final String TEAM5_ADDRESS =  "00:12:09:25:96:92";
+
+		// Broadcast receivers
+		private ArduinoReceiver arduinoReceiver = new ArduinoReceiver();
+		private ArduinoConnected arduinoConnected = new ArduinoConnected();
+		
+		@Override
+		protected void onStart() {
+			super.onStart();
+			// in order to receive broadcasted intents we need to register our receiver
+			registerReceiver(arduinoReceiver, new IntentFilter(AmarinoIntent.ACTION_RECEIVED));
+			registerReceiver(arduinoConnected, new IntentFilter(AmarinoIntent.ACTION_CONNECTED));
+		}
+		@Override
+		public void onStop(){
+			super.onStop();
+			// unregistering the registered receiver
+			unregisterReceiver(arduinoReceiver);
+			unregisterReceiver(arduinoConnected);
+		}
+		
+		/**
+		 * Bluetooth connection functions
+		 * 
+		 */
+/*
+		public void connectTeam1(View v)
+		{
+			// Connecting with team 1 arduino
+			Amarino.connect(this, TEAM1_ADDRESS);
+		}
+
+		public void connectTeam2(View v)
+		{
+			// Connecting with team 2 arduino
+			Amarino.connect(this, TEAM2_ADDRESS);
+		}
+
+		public void connectTeam3(View v)
+		{
+			// Connecting with team 3 arduino
+			Amarino.connect(this, TEAM3_ADDRESS);
+		}
+
+		public void connectTeam4(View v)
+		{
+			// Connecting with team 3 arduino
+			Amarino.connect(this, TEAM4_ADDRESS);
+		}
+*/
+		public void connectTeam5(View v)
+		{
+			// Connecting with team 3 arduino
+			Amarino.connect(this, TEAM5_ADDRESS);
+		}
+
+		public void send(String address)
+		{
+			//Amarino.connect(this, TEAM5_ADDRESS);
+			Amarino.sendDataToArduino(this, address, FUNCTION, "");
+		}
+
+		public void disconnect(String address)
+		{
+			Amarino.disconnect(this, address);
+		}
+
+
+		/**
+		 * @author
+		 * setting the broadcast receiver to receive data from the arduino
+		 */
+		public class ArduinoReceiver extends BroadcastReceiver {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				String data = null;
+
+				// the device address from which the data was sent, we don't need it here but to demonstrate how you retrieve it
+				final String address = intent.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
+
+				// the type of data which is added to the intent
+				final int dataType = intent.getIntExtra(AmarinoIntent.EXTRA_DATA_TYPE, -1);
+
+				// Receiving the string from Amarino
+				if (dataType == AmarinoIntent.STRING_EXTRA){
+					// Receiving in the respective object, one for each sensor
+					data = intent.getStringExtra(AmarinoIntent.EXTRA_DATA);
+					sensorData = gson.fromJson(data, SensorData.class);
+					disconnect(address);
+					newSensorData = true;
+				}
+			}
+		}
+
+
+		/**
+		 * @author Joao Marcos
+		 * Connection feedback
+		 */
+		public class ArduinoConnected extends BroadcastReceiver {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				// the device address from connected
+				final String address = intent.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
+
+				send(address);
+			}
+
+		}
+
+		public void readSensor(View view){
+			send(TEAM5_ADDRESS);
+		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	private final static int INTERVAL = 1000 * 5; // 5 seconds
 	
@@ -55,6 +198,30 @@ public class MainActivity extends FragmentActivity implements
 	boolean first = true;
 	Handler handler;
 	Boolean begun = false;
+	Boolean newSensorData = false;
+	SensorData sensorData;
+	String addr;
+	
+	///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
+	/*
+	private static final String TEAM1 =  "00:12:09:13:99:42";
+	private static final String TEAM2 =  "00:15:FF:F2:10:0F";
+	private static final String TEAM3 =  "00:12:09:25:92:95";
+	private static final String TEAM4 =  "00:12:09:25:92:92";
+	private static final String TEAM5 =  "00:12:09:25:96:92";  
+	*/
+	/*private static final String id = "Team 5";
+	private static final String Tag = "Project 1";*/
+
+	boolean receive = false;
+	//private static final char function = 's';
+	/*
+	private ArduinoConnected arduinoconn = new ArduinoConnected(); //need this
+	private ArduinoReciever arduinorec = new ArduinoReciever(); //need this
+	*/
+	///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +237,7 @@ public class MainActivity extends FragmentActivity implements
 		if (first){
 			handler = new Handler();
 			data = new ArrayList<AndroidPacket1>();
+			begun = false;
 			locationClient = new LocationClient(this, this, this);
 			locationClient.connect();
 			first = false;
@@ -86,13 +254,122 @@ public class MainActivity extends FragmentActivity implements
 		 findViewById(R.id.button1).setOnClickListener(handler);
 		 
 	}
+	/*
+	@Override
+	protected void onStart(){ //need this 
+		super.onStart();
+		registerReceiver(arduinorec, new IntentFilter(AmarinoIntent.ACTION_RECEIVED));
+		registerReceiver(arduinoconn, new IntentFilter(AmarinoIntent.ACTION_CONNECTED));
+		Amarino.connect(this, "00:12:09:25:96:92");
+		//display("startingAmarino...");
+	}
+	
+	@Override
+	public void onStop(){ //need this
+		super.onStop();
+		unregisterReceiver(arduinorec);
+		unregisterReceiver(arduinoconn);
+		Amarino.disconnect(this, "00:12:09:25:96:92");
+	}
+	
+	//Connect the address of the device it sees
+	public void connectT1(View v) //ignore other teams for now
+	{
+		Amarino.connect(this, TEAM1);
+	}public void connectT2(View v)
+	{
+		Amarino.connect(this, TEAM2);
+	}public void connectT3(View v)
+	{
+		Amarino.connect(this, TEAM3);
+	}
+	public void connectT4(View v)
+	{
+		Amarino.connect(this, TEAM4);
+	}
+	public void connectT5(View v)
+	{
+		Amarino.connect(this, TEAM5);
+	}
+	public void senddata(String address)
+	{
+		Amarino.sendDataToArduino(this, "00:12:09:25:96:92", function, "");
+	}
+	public void disconnect(String address)
+	{
+		Amarino.disconnect(this, address);
+	}
+	
+	public class ArduinoReciever extends BroadcastReceiver { //need this
+		@Override
+		public void onReceive(Context context, Intent intent){
+			final String action = intent.getAction();
+			final String addr = intent.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
+			
+			display("0");
+			if (AmarinoIntent.ACTION_CONNECTED.equals(action)){ 
+				// connection has been established 
+				display("1");
+				} 
+				else if (AmarinoIntent.ACTION_DISCONNECTED.equals(action)){ 
+				// disconnected from a device
+					display("2");
+				} 
+				else if (AmarinoIntent.ACTION_CONNECTION_FAILED.equals(action)){ 
+				// connection attempt was not successful 
+					display("3");
+				} 
+				else if (AmarinoIntent.ACTION_PAIRING_REQUESTED.equals(action)){ 
+				// a notification message to pair the device has popped up 
+					display("4");
+				}
+			
+			
+			
+			//display("Sensor Data?");
+			String jsonString = null;
+			//String result = null;
+			
+			//final String addr = intent.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
+			
+			final int dataType = intent.getIntExtra(AmarinoIntent.EXTRA_DATA_TYPE,-1);	
+			
+			if (dataType == AmarinoIntent.STRING_EXTRA){
+			
+				jsonString = intent.getStringExtra(AmarinoIntent.EXTRA_DATA);
+				
+				if (jsonString != null){
+					//display("Sensor Data!");
+					receive = true;
+					Gson gson = new Gson();
+					sensorData = gson.fromJson(jsonString, SensorData.class);
+					//AndroidPacket1 sensordata = gson.fromJson(data, AndroidPacket1.class); //
+					//sensordata = sensordata.getsensor_id().getsensor_type().getsensor_value(); //sensordata parse data into respective fields here
+					//dp.add(sensordata);	
+					newSensorData = true;
+					receive = false;
+				}
+			}
+		}
+	}
+
+	public class ArduinoConnected extends BroadcastReceiver{ //need this
+		@Override
+		public void onReceive(Context context, Intent intent){
+			addr = intent.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
+			senddata(addr);
+		}
+	}
+*/
+	
 	
 	public void beginCollection(View view){
-		display("Beginning");
+		//display("Beginning");
 		data = new ArrayList<AndroidPacket1>();
+		begun = true;
 		run_id = run_id();
 		LogLoop.run();
-		begun = true;
+		//display("OH NOES!");
 	}
 
 	
@@ -109,23 +386,32 @@ public class MainActivity extends FragmentActivity implements
 	}
 	
 	public String sensor_id(){
-		return "1";
+		if (newSensorData)
+			return sensorData.sensor_id;
+		else
+			return null;
 	}
 	
 	public String sensor_type(){
-		return "temp";
+		if (newSensorData)
+			return sensorData.sensor_type;
+		else
+			return null;
 	}
 	
 	public Double sensor_value(){
-		return 1.0;
+		if (newSensorData)
+			return sensorData.sensor_value;
+		else
+			return null;
 	}
 	
 	public Double bearing(){
-		return 1.0;
+		return null;
 	}
 	
 	public Double speed(){
-		return 1.0;
+		return null;
 	}
 	
 	public Double altitude(){
@@ -166,7 +452,6 @@ public class MainActivity extends FragmentActivity implements
 	}
 	
 	public void logData(){
-		
 		Location currentLocation = locationClient.getLastLocation();
 		
 		AndroidPacket1 packet = 
@@ -183,8 +468,11 @@ public class MainActivity extends FragmentActivity implements
 						bearing(),
 						speed(),
 						altitude());
-		
+		if (newSensorData) newSensorData = false;
 		data.add(packet);
+		begun = true;
+		//Integer integer = data.size();
+		//(integer.toString());
 	}
 	
 	public void showPopUp(){
@@ -213,12 +501,11 @@ public class MainActivity extends FragmentActivity implements
 		if (begun){
 			handler.removeCallbacks(LogLoop);
 			if (netCheck()){
-				display("Client waiting...");
+				//display("Client waiting...");
 				new Send().execute();
 			}else{
 				display("Error");
 			}
-			data = new ArrayList<AndroidPacket1>();
 		}
 	}
 	
@@ -237,16 +524,27 @@ public class MainActivity extends FragmentActivity implements
 		@Override
 		protected Void doInBackground(String... args) {
         	try{
+        		EditText editText = (EditText) findViewById(R.id.editText1);
+        		String text = editText.getText().toString();
+        		if (text == "Server Port") text = port.toString();
+        	    port = Integer.parseInt(text);
+        		editText = (EditText) findViewById(R.id.editText2);
+        		text = editText.getText().toString();
+        		if (text == "Server IP") text = ip;
+        		ip = text;
         		Socket connection = new Socket(ip, port);
-        		display("Client connected!");
+        		//display("Client connected!");
     			
     			ObjectOutputStream output = new ObjectOutputStream(connection.getOutputStream());
     			output.writeObject(data);
     			output.flush();
-    			
+    			//Integer integer = data.size();
+    			//display(integer.toString());
     			output.close();
     			connection.close();
-    			display("Data sent");
+    			//display("Data sent");
+    			data = new ArrayList<AndroidPacket1>();
+    			begun = false;
     		} catch(IOException e){
     		}finally{}
 			return null;
@@ -352,7 +650,7 @@ public class MainActivity extends FragmentActivity implements
      */
     @Override
     protected void onActivityResult(
-            int requestCode, int resultCode, Intent data) {
+            int requestCode, int resultCode, Intent data2) {
         // Decide what to do based on the original request code
         switch (requestCode) {
             case CONNECTION_FAILURE_RESOLUTION_REQUEST :

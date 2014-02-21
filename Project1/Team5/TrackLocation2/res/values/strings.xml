@@ -9,5 +9,9 @@
     <string name="Locate">Locate</string>
     <string name="sendMessage">Send</string>
     <string name="Begin">Begin Collection</string>
+    <string name="readSensor">Read Sensor</string>
+    <string name="List">List</string>
+    <string name="port">Server Port</string>
+    <string name="ip">Server IP</string>
 
 </resources>
