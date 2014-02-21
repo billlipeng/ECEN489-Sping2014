@@ -16,19 +16,6 @@ import com.mfa157.project1packet.Project1Packet;
 
 
 
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.services.fusiontables.Fusiontables;
-import com.google.api.services.fusiontables.Fusiontables.Query.Sql;
-import com.google.api.services.fusiontables.FusiontablesScopes;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -86,16 +73,6 @@ public class Team2Proj extends Activity {
 	// ArrayList <String> sensor_value = new ArrayList<String>();
 	// ArrayList <String> sensor_value = new ArrayList<String>();
 	// ArrayList <String> sensor_value = new ArrayList<String>();
-	
-	
-	public static final String APPLICATION_NAME = "ecen-489-team-2";
-	public static final String SERVICE_URL = "https://www.google.com/fusiontables/api/query";
-	public static FileDataStoreFactory dataStoreFactory;
-	public static HttpTransport httpTransport;
-	public static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-	public static Fusiontables fusiontables;
-	public static final java.io.File DATA_STORE_DIR =
-		      new java.io.File(System.getProperty("user.home"),".store/fusiontable");
 	
 	private static final String TAG = "Team2P1";
 
@@ -329,7 +306,7 @@ public class Team2Proj extends Activity {
 		//String[] ts_array = (String[])time_stamp.toArray(new String[size_ts]);
 		//String[] dt_array = (String[])time_date.toArray(new String[size_dt]);
 		
-		
+		/*
 		 new AsyncTask<Void, Void, Void> (){
 			 protected Void doInBackground(Void... params) {
 			    try {
@@ -367,40 +344,33 @@ public class Team2Proj extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}	
-				 
-				 
-			    //for fusion table
-			    
-			    int size_lat = latitude.size();
-				int size_lng = longitude.size();
-				int size_sensorType = sensorType.size();
-				int size_sensorID = sensorID.size();
-				int size_sensorValue = sensorValue.size();
-				int size_ts = time_stamp.size();
-				int size_dt = time_date.size();
-				
-		    	String[] lat_array = (String[])latitude.toArray(new String[size_lat]);
-				String[] lng_array = (String[])longitude.toArray(new String[size_lng]);
-				String[] sensorType_array = (String[])sensorType.toArray(new String[size_sensorType]);
-				String[] sensorID_array = (String[])sensorID.toArray(new String[size_sensorID]);
-				Double[] sensorValue_array = (Double[])sensorValue.toArray(new Double[size_sensorValue]);
-				String[] ts_array = (String[])time_stamp.toArray(new String[size_ts]);
-				String[] dt_array = (String[])time_date.toArray(new String[size_dt]);
-			    
-			    
-			    uf.update(ts_array,dt_array,lat_array,lng_array,sensorID_array,sensorType_array,sensorValue_array);
-			    
-			    
-				 
-				 
-			   
+				   
 			    
 			    
 			    return null; }
 		 }.execute();
-			   
+			*/   
 		
-		
+		//for fusion table
+		    
+		    int size_lat = latitude.size();
+			int size_lng = longitude.size();
+			int size_sensorType = sensorType.size();
+			int size_sensorID = sensorID.size();
+			int size_sensorValue = sensorValue.size();
+			int size_ts = time_stamp.size();
+			int size_dt = time_date.size();
+			
+	    	String[] lat_array = (String[])latitude.toArray(new String[size_lat]);
+			String[] lng_array = (String[])longitude.toArray(new String[size_lng]);
+			String[] sensorType_array = (String[])sensorType.toArray(new String[size_sensorType]);
+			String[] sensorID_array = (String[])sensorID.toArray(new String[size_sensorID]);
+			Double[] sensorValue_array = (Double[])sensorValue.toArray(new Double[size_sensorValue]);
+			String[] ts_array = (String[])time_stamp.toArray(new String[size_ts]);
+			String[] dt_array = (String[])time_date.toArray(new String[size_dt]);
+		    
+		    
+		    uf.update(ts_array,dt_array,lat_array,lng_array,sensorID_array,sensorType_array,sensorValue_array);
 		
 		
 	}
