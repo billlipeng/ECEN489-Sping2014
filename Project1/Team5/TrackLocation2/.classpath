@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="/Users/samcarey/Desktop/Spring 2014/489/AndroidPacket1.jar"/>
-	<classpathentry exported="true" kind="lib" path="/Users/samcarey/Desktop/Spring 2014/489/ObjectItem.jar"/>
-	<classpathentry exported="true" kind="lib" path="/Users/samcarey/Desktop/Spring 2014/489/AmarinoLibrary_v0_55.jar"/>
-	<classpathentry exported="true" kind="lib" path="/Users/samcarey/Desktop/Spring 2014/489/SensorData.jar"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry excluding="com/example/tracklocation/ObjectItem.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
@@ -11,6 +7,10 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/fusiontables-v1r41lv1.16.0-rc"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK/google-play-services_lib"/>
-	<classpathentry kind="lib" path="/Users/samcarey/Desktop/Spring 2014/489/gson-2.2.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Users/samcarey/Desktop/Spring 2014/489/AndroidPacket1.jar"/>
+	<classpathentry kind="lib" path="libs_extra/AmarinoLibrary_v0_55.jar"/>
+	<classpathentry kind="lib" path="libs_extra/gson-2.2.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs_extra/SensorData.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Users/samcarey/Desktop/Spring 2014/489/ObjectItem.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

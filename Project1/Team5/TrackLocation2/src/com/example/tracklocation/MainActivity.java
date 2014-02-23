@@ -14,6 +14,7 @@ import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -49,6 +50,7 @@ public class MainActivity extends FragmentActivity implements
 	private String ip = "10.200.213.22";
 	String teamid = "team5";
 	String run_id;
+	public static final String PREFS_NAME = "MyPrefsFile";
 	
 	
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -272,6 +274,13 @@ public class MainActivity extends FragmentActivity implements
 		 };
 		 findViewById(R.id.button1).setOnClickListener(handler);
 		 
+		 /*
+		// Restore preferences
+	       SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	       String ip = settings.getString("ip", "ip");
+	       port = settings.getInt("port", port);
+	       */
+		 
 	}
 	/*
 	@Override
@@ -433,19 +442,19 @@ public class MainActivity extends FragmentActivity implements
 		if (newSensorData)
 			return sensorData.sensor_value;
 		else
-			return null;
+			return 0.0;
 	}
 	
 	public Double bearing(){
-		return null;
+		return 0.0;
 	}
 	
 	public Double speed(){
-		return null;
+		return 0.0;
 	}
 	
 	public Double altitude(){
-		return null;
+		return 0.0;
 	}
 	
 	public String run_id(){
