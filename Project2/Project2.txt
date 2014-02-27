@@ -1,7 +1,9 @@
 ### Android
 ***
 
-The Android application will be used to collect data. We collect both GPS and sensor data every 10 seconds. Everytime we collect 10 data points, we should remove GPS information of the previous 9 points (no change for sensor information). We will send the dataset to server while completing data collection.
+The Android application will be used to collect data. We collect both GPS and sensor data every 10 seconds. Everytime we 
+collect 10 data points, we should remove GPS information of the previous 9 points (no change for sensor information). We 
+will send the dataset to server while completing data collection.
 The following is a list of data that we should collect:
 
 **Data collected by Android Location API**
