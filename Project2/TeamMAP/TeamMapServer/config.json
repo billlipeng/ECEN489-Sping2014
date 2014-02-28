@@ -1,0 +1,10 @@
+{
+	"DB_PATH": "C:/projone.db",
+	"TABLE_NAME": "ecen489_project2_data",
+	"FUSION_TABLE_NAME": "1Wq0kwSrOoUH46wjkygxFqp7Xv439F4ZybcxKQq0",
+	"PORT": 5544,
+	"COLUMN_NAMES": ["time", "longitude", "latitude", "bearing", "speed", "accelX", "accelY",
+					"accelZ", "orientationA","orientationP", "orientationR", "rotVecX", "rotVecZ",
+					"rotVecC", "linAccX", "linAccY", "linAccZ", "gravityX", "gravityY", "gravityZ",
+					"gyroX", "gyroX", "gyroX"]
+}
