@@ -59,6 +59,7 @@
             android:text="unknown"
             android:textSize="20dip" >
         </TextView>
+
         <EditText
             android:id="@+id/coordInterval"
             android:layout_width="wrap_content"
@@ -70,8 +71,14 @@
         android:id="@+id/tmr"
         android:layout_width="match_parent"
         android:layout_height="86dp"
+        android:onClick="onClick"
         android:text="Clear"
-    	android:onClick="onClick"
-    	android:textSize="26sp" />
+        android:textSize="26sp" />
+
+    <TextView
+        android:id="@+id/dbOutputText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.78" />
 
 </LinearLayout>
