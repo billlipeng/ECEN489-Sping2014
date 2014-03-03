@@ -31,8 +31,8 @@ public class ServerTeam2 extends JFrame {
 	private static final long serialVersionUID = 1L;
 	//SQLITE VARIABLES
 	  private static Connection c;
-	  private static String filepath = "C:\\Users\\Alexandre\\Downloads\\adt-bundle-windows-x86_64-20131030\\sdk\\tools\\";
-	  private static String sql;
+	  private static String filepath = "C:\\Eclipse_ADT\\";
+	  private static String sql, sql2;
 	  private static Statement query;
 	  //WINDOW VARIABLES DONT CHANGE
 	  private JTextField enterField; // inputs message from user
@@ -110,7 +110,9 @@ public class ServerTeam2 extends JFrame {
 		  	String LatitudetoString;
 		  	String bearingtoString;
 		  	String speedtoString;
-		  
+		  		
+		  	System.out.printf("Array size %d\n",received.size());
+		  	
 				for (int interator=0;interator<received.size();interator++){	
 					
 					timetoString = Long.toString(received.get(interator).getTime());
@@ -134,22 +136,30 @@ public class ServerTeam2 extends JFrame {
 				                "linAccX,linAccY,linAccZ,gravityX,gravityY,gravityZ,gyroX,gyroY,gyroZ)"
 				  		+ "VALUES ('"+timetoString+"','0','0','"+bearingtoString+"','"+speedtoString+"',"+received.get(interator).getAccelX()+","+received.get(interator).getAccelY()+","+received.get(interator).getAccelZ()+","+received.get(interator).getOrientationA()+","+received.get(interator).getOrientationB()+","+received.get(interator).getOrientationC()+","+received.get(interator).getRotVecX()+","+received.get(interator).getRotVecY()+","+received.get(interator).getRotVecZ()+","+received.get(interator).getLinAccX()+","+received.get(interator).getLinAccY()+","+received.get(interator).getLinAccZ()+","+received.get(interator).getGravityX()+","+received.get(interator).getGravityY()+","+received.get(interator).getGravityZ()+","+received.get(interator).getGyroX()+","+received.get(interator).getGyroY()+","+received.get(interator).getGyroZ()+")";
 					
-				}
-				
-				try{
-				query = c.createStatement();
+					// Creating the table with all the values to be able to calculate the error 
+					sql2 =	"INSERT INTO ecen489_project2_data_Complete(time,longitude,latitude,bearing,speed,accelX" +
+			                ",accelY,accelZ,orientationA,orientationB,orientationC,rotVecX,rotVecY,rotVecZ," +
+			                "linAccX,linAccY,linAccZ,gravityX,gravityY,gravityZ,gyroX,gyroY,gyroZ)"
+			  		+ "VALUES ('"+timetoString+"','"+longitudetoString+"','"+LatitudetoString+"','"+bearingtoString+"','"+speedtoString+"',"+received.get(interator).getAccelX()+","+received.get(interator).getAccelY()+","+received.get(interator).getAccelZ()+","+received.get(interator).getOrientationA()+","+received.get(interator).getOrientationB()+","+received.get(interator).getOrientationC()+","+received.get(interator).getRotVecX()+","+received.get(interator).getRotVecY()+","+received.get(interator).getRotVecZ()+","+received.get(interator).getLinAccX()+","+received.get(interator).getLinAccY()+","+received.get(interator).getLinAccZ()+","+received.get(interator).getGravityX()+","+received.get(interator).getGravityY()+","+received.get(interator).getGravityZ()+","+received.get(interator).getGyroX()+","+received.get(interator).getGyroY()+","+received.get(interator).getGyroZ()+")";
+					
+					try{
+						query = c.createStatement();
 
-		         query.executeUpdate(sql);
-		         query.close();
+				         query.executeUpdate(sql);
+				         query.close();
+						query = c.createStatement();
+
+				         query.executeUpdate(sql2);
+				         query.close();
+						}
+					catch(SQLException el){el.printStackTrace();System.out.printf("chegou 2");}				
 				}
-				catch(SQLException el){el.printStackTrace();System.out.printf("chegou 2");}
-			
+						
 	  	}
 	  
 
 	  
 	  public void startServer(){
-			SQLINSERT();
 
 			try // set up server to receive connections; process connections
 			{
@@ -181,14 +191,15 @@ public class ServerTeam2 extends JFrame {
 							{
 
 								input.close(); // close input stream
-								connection.close(); // close socket			
+								connection.close(); // close socket	
+								SQLINSERT();
 							} // end finally
-							
-					    
+							  
 					} // end try
 					catch ( EOFException eofException )
 					{		
 					} // end catch
+
 				}
 				 // end while
 			} // end try
@@ -196,6 +207,8 @@ public class ServerTeam2 extends JFrame {
 			{
 				ioException.printStackTrace();
 			} // end catch
+			
+			
 	  }
 
 
