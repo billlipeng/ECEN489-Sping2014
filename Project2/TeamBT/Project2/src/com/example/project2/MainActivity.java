@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements SensorEventListener {
@@ -166,7 +167,13 @@ public class MainActivity extends Activity implements SensorEventListener {
 	  @Override
 	  protected void onPause() {
 	    super.onPause();
-	    mSensorManager.unregisterListener(this);
+	    //mSensorManager.unregisterListener(this);
+	  }
+	  
+	  @Override
+	  public void onStop(){
+		  super.onStop();
+		  mSensorManager.unregisterListener(this);
 	  }
 	  
 	    /**
@@ -181,10 +188,12 @@ public class MainActivity extends Activity implements SensorEventListener {
 		
 	public void setTimer(String voiceCommand) {
 		// TODO Auto-generated method stub
+		TextView editTxt = (TextView) findViewById(R.id.textView1);
 		Log.d(TAG,"Command: " + voiceCommand + " " + Boolean.toString(running));
         if (voiceCommand.equals("stop") && running) 
         {
         	running = false;
+        	editTxt.setText("Stopped");
             timer.stop();
             DPprocess();
         } 
@@ -193,6 +202,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         	//------for gps integration
         	Log.d(TAG,"Started running");
         	running = true;
+        	editTxt.setText("Running");
         	timer = new Timer(10, new Callable<Integer>(){
         	    				public Integer call() {
         	    						return DPprocess();
