@@ -58,10 +58,10 @@ public class MainActivity extends Activity implements LocationListener{
 	
 	// Setting the bluetooth address of each team 
 	private static final String TEAM1_ADDRESS =  "00:12:09:13:99:42";
-	private static final String TEAM2_ADDRESS =  "00:12:09:25:92:95";
+	private static final String TEAM2_ADDRESS =  "00:15:FF:F2:10:0F";
 	private static final String TEAM3_ADDRESS =  "00:12:09:25:92:95";
-	private static final String TEAM4_ADDRESS =  "00:12:09:25:92:95";
-	private static final String TEAM5_ADDRESS =  "00:12:09:25:92:95";
+	private static final String TEAM4_ADDRESS =  "00:12:09:25:92:92";
+	private static final String TEAM5_ADDRESS =  "00:12:09:25:96:92";
 	
 	// Broadcast receivers
 	private ArduinoReceiver arduinoReceiver = new ArduinoReceiver();

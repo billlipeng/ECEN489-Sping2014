@@ -1,4 +1,4 @@
-package com.example.project1;
+package com.example.project2;
 
 import android.location.Criteria;
 import android.location.Location;
@@ -16,7 +16,23 @@ public class GPSData implements LocationListener {
 	  private double bearing;
 	  private double speed;
 	  
-	  public void onCreate(){
+	  public double getBearing() {
+		return bearing;
+	}
+
+	public void setBearing(double bearing) {
+		this.bearing = bearing;
+	}
+
+	public double getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}
+
+	public void onCreate(){
 		
 	    Criteria criteria = new Criteria();
 	    Log.d(TAG, criteria.toString());
@@ -50,25 +66,10 @@ public class GPSData implements LocationListener {
 	  public void onLocationChanged(Location location) {
 	    lat = (double) (location.getLatitude());
 	    lng = (double) (location.getLongitude());
-
+	    bearing = location.getBearing();
+	    speed = (double) location.getSpeed();
 	  }
-	  public double getBearing() {
-		return bearing;
-	}
-
-	public void setBearing(double bearing) {
-		this.bearing = bearing;
-	}
-
-	public double getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(double speed) {
-		this.speed = speed;
-	}
-
-	@Override
+	  @Override
 	  public void onProviderEnabled(String provider) {
 
 	  }
