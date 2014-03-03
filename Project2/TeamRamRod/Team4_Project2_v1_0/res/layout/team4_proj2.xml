@@ -1,0 +1,184 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".Team4Proj2" >
+<LinearLayout 
+	    android:layout_width="match_parent"  
+        android:layout_height="match_parent"  
+        android:orientation="vertical" > 
+        
+    <EditText 
+        android:id="@+id/ip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ip" />
+    
+    <EditText 
+        android:id="@+id/port"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="port" />
+    
+    <TextView
+        android:id="@+id/acceX"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="acceX" />
+    
+    <TextView
+        android:id="@+id/acceY"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="acceY" />
+    
+    <TextView
+        android:id="@+id/acceZ"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="acceZ" />
+    
+    <TextView
+        android:id="@+id/gyroX"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="gyroX" />
+    
+    <TextView
+        android:id="@+id/gyroY"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="gyroY" />
+    
+    <TextView
+        android:id="@+id/gyroZ"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="gyroZ" />
+    
+    <TextView
+        android:id="@+id/orientationA"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="orientationA" />
+    
+    <TextView
+        android:id="@+id/orientationP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="orientationP" />
+    
+    <TextView
+        android:id="@+id/orientationR"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="orientationR" />
+    
+    <TextView
+        android:id="@+id/linAccX"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="linAccX" />
+    
+    <TextView
+        android:id="@+id/linAccY"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="linAccY" />
+    
+    <TextView
+        android:id="@+id/linAccZ"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="linAccZ" />
+    
+    <TextView
+        android:id="@+id/gravityX"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="gravityX" />
+    
+    <TextView
+        android:id="@+id/gravityY"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="gravityY" />
+    
+    <TextView
+        android:id="@+id/gravityZ"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="gravityZ" />
+    
+    <TextView
+        android:id="@+id/rotVecX"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="rotVecX" />
+    
+    <TextView
+        android:id="@+id/rotVecY"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="rotVecY" />
+    
+    <TextView
+        android:id="@+id/rotVecZ"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="rotVecZ" />
+    
+    <TextView
+        android:id="@+id/rotVecC"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="rotVecC" />
+    
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="time" />
+    
+    <TextView
+        android:id="@+id/lng"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="longitude" />
+    
+    <TextView
+        android:id="@+id/lat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="latitude" />
+    
+    <TextView
+        android:id="@+id/bearing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="bearing" />
+    
+    <TextView
+        android:id="@+id/speed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="speed" />
+    
+    <Button 
+        android:id="@+id/speak"
+        android:onClick="speak"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Speak!" />
+    
+  
+       
+    
+    
+    
+	</LinearLayout>
+</ScrollView>
