@@ -14,25 +14,25 @@ public class DataPoint implements Serializable {
     private final double latitude;
     private final double bearing;
     private final double speed;
-    private final Integer accelX;
-    private final Integer accelY;
-    private final Integer accelZ;
-    private final Integer orientationA;
-    private final Integer orientationP;
-    private final Integer orientationR;
-    private final Integer rotVecX;
-    private final Integer rotVecY;
-    private final Integer rotVecZ;
-    private final Integer rotVecC;
-    private final Integer linAccX;
-    private final Integer linAccY;
-    private final Integer linAccZ;
-    private final Integer gravityX;
-    private final Integer gravityY;
-    private final Integer gravityZ;
-    private final Integer gyroX;
-    private final Integer gyroY;
-    private final Integer gyroZ;
+    private final double accelX;
+    private final double accelY;
+    private final double accelZ;
+    private final double orientationA;
+    private final double orientationP;
+    private final double orientationR;
+    private final double rotVecX;
+    private final double rotVecY;
+    private final double rotVecZ;
+    private final double rotVecC;
+    private final double linAccX;
+    private final double linAccY;
+    private final double linAccZ;
+    private final double gravityX;
+    private final double gravityY;
+    private final double gravityZ;
+    private final double gyroX;
+    private final double gyroY;
+    private final double gyroZ;
 
     public static class Builder {
         private long time;
@@ -40,25 +40,25 @@ public class DataPoint implements Serializable {
         private double latitude;
         private double bearing;
         private double speed;
-        private Integer accelX;
-        private Integer accelY;
-        private Integer accelZ;
-        private Integer orientationA;
-        private Integer orientationP;
-        private Integer orientationR;
-        private Integer rotVecX;
-        private Integer rotVecY;
-        private Integer rotVecZ;
-        private Integer rotVecC;
-        private Integer linAccX;
-        private Integer linAccY;
-        private Integer linAccZ;
-        private Integer gravityX;
-        private Integer gravityY;
-        private Integer gravityZ;
-        private Integer gyroX;
-        private Integer gyroY;
-        private Integer gyroZ;
+        private double accelX;
+        private double accelY;
+        private double accelZ;
+        private double orientationA;
+        private double orientationP;
+        private double orientationR;
+        private double rotVecX;
+        private double rotVecY;
+        private double rotVecZ;
+        private double rotVecC;
+        private double linAccX;
+        private double linAccY;
+        private double linAccZ;
+        private double gravityX;
+        private double gravityY;
+        private double gravityZ;
+        private double gyroX;
+        private double gyroY;
+        private double gyroZ;
 
         public Builder() {
         }
@@ -83,79 +83,79 @@ public class DataPoint implements Serializable {
             speed = val;
             return this;
         }
-        public Builder accelX(Integer val) {
+        public Builder accelX(double val) {
             accelX = val;
             return this;
         }
-        public Builder accelY(Integer val) {
+        public Builder accelY(double val) {
             accelY = val;
             return this;
         }
-        public Builder accelZ(Integer val) {
+        public Builder accelZ(double val) {
             accelZ = val;
             return this;
         }
-        public Builder orientationA(Integer val) {
+        public Builder orientationA(double val) {
             orientationA = val;
             return this;
         }
-        public Builder orientationP(Integer val) {
+        public Builder orientationP(double val) {
             orientationP = val;
             return this;
         }
-        public Builder orientationR(Integer val) {
+        public Builder orientationR(double val) {
             orientationR = val;
             return this;
         }
-        public Builder rotVecX(Integer val) {
+        public Builder rotVecX(double val) {
             rotVecX = val;
             return this;
         }
-        public Builder rotVecY(Integer val) {
+        public Builder rotVecY(double val) {
             rotVecY = val;
             return this;
         }
-        public Builder rotVecZ(Integer val) {
+        public Builder rotVecZ(double val) {
             rotVecZ = val;
             return this;
         }
-        public Builder rotVecC(Integer val) {
+        public Builder rotVecC(double val) {
             rotVecC = val;
             return this;
         }
-        public Builder linAccX(Integer val) {
+        public Builder linAccX(double val) {
             linAccX = val;
             return this;
         }
-        public Builder linAccY(Integer val) {
+        public Builder linAccY(double val) {
             linAccY = val;
             return this;
         }
-        public Builder linAccZ(Integer val) {
+        public Builder linAccZ(double val) {
             linAccZ = val;
             return this;
         }
-        public Builder gravityX(Integer val) {
+        public Builder gravityX(double val) {
             gravityX = val;
             return this;
         }
-        public Builder gravityY(Integer val) {
+        public Builder gravityY(double val) {
             gravityY = val;
             return this;
         }
-        public Builder gravityZ(Integer val) {
+        public Builder gravityZ(double val) {
             gravityZ = val;
             return this;
         }
-        public Builder gyroX(Integer val) {
+        public Builder gyroX(double val) {
             gyroX = val;
             return this;
         }
-        public Builder gyroY(Integer val) {
+        public Builder gyroY(double val) {
             gyroY = val;
             return this;
         }
-        public Builder gyroZ(Integer val) {
+        public Builder gyroZ(double val) {
             gyroZ = val;
             return this;
         }
@@ -213,79 +213,79 @@ public class DataPoint implements Serializable {
         return speed;
     }
 
-    public Integer getAccelX() {
+    public double getAccelX() {
         return accelX;
     }
 
-    public Integer getAccelY() {
+    public double getAccelY() {
         return accelY;
     }
 
-    public Integer getAccelZ() {
+    public double getAccelZ() {
         return accelZ;
     }
 
-    public Integer getOrientationA() {
+    public double getOrientationA() {
         return orientationA;
     }
 
-    public Integer getOrientationP() {
+    public double getOrientationP() {
         return orientationP;
     }
 
-    public Integer getOrientationR() {
+    public double getOrientationR() {
         return orientationR;
     }
 
-    public Integer getRotVecX() {
+    public double getRotVecX() {
         return rotVecX;
     }
 
-    public Integer getRotVecY() {
+    public double getRotVecY() {
         return rotVecY;
     }
 
-    public Integer getRotVecZ() {
+    public double getRotVecZ() {
         return rotVecZ;
     }
 
-    public Integer getRotVecC() {
+    public double getRotVecC() {
         return rotVecC;
     }
 
-    public Integer getLinAccX() {
+    public double getLinAccX() {
         return linAccX;
     }
 
-    public Integer getLinAccY() {
+    public double getLinAccY() {
         return linAccY;
     }
 
-    public Integer getLinAccZ() {
+    public double getLinAccZ() {
         return linAccZ;
     }
 
-    public Integer getGravityX() {
+    public double getGravityX() {
         return gravityX;
     }
 
-    public Integer getGravityY() {
+    public double getGravityY() {
         return gravityY;
     }
 
-    public Integer getGravityZ() {
+    public double getGravityZ() {
         return gravityZ;
     }
 
-    public Integer getGyroX() {
+    public double getGyroX() {
         return gyroX;
     }
 
-    public Integer getGyroY() {
+    public double getGyroY() {
         return gyroY;
     }
 
-    public Integer getGyroZ() {
+    public double getGyroZ() {
         return gyroZ;
     }
 
@@ -297,14 +297,6 @@ public class DataPoint implements Serializable {
         sb.append(latitude+",");
         sb.append(bearing+",");
         sb.append(speed+",");
-        sb.append(accelX+",");
-        sb.append(accelY+",");
-        sb.append(accelZ+",");
-        sb.append(accelX+",");
-        sb.append(accelX+",");
-        sb.append(accelX+",");
-        sb.append(accelX+",");
-        sb.append(accelX+",");
         sb.append(accelX+",");
         sb.append(accelY+",");
         sb.append(accelZ+",");

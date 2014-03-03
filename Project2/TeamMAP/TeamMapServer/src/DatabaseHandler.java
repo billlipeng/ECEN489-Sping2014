@@ -1,7 +1,7 @@
 import java.sql.*;
 import java.util.ArrayList;
 
-import com.zpartal.project1.datapackets.*;
+import com.zpartal.project2.datapackets.*;
 
 /*
     The DatabaseHandler class is a thread that is created by passing in an array list of datapoints.
