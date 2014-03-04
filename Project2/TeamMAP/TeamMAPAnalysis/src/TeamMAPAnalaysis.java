@@ -116,7 +116,8 @@ public class TeamMAPAnalaysis extends Component {
 
         // Do some analysis
 
-        dbh.writeDBData(new ArrayList <Integer>());
+
+        dbh.writeDBData(null);
 
         // Upload to Fusion Table
     }

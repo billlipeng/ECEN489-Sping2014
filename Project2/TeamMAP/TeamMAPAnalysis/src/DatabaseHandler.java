@@ -13,7 +13,7 @@ public class DatabaseHandler {
         this.filePath = _filePath;
     }
 
-    public ArrayList<Integer> readDBData() {
+    public ArrayList<DataPoint> readDBData() {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + filePath);
             Statement statement = connection.createStatement();
@@ -22,10 +22,10 @@ public class DatabaseHandler {
             e.printStackTrace();
         }
 
-        return new ArrayList<Integer>();
+        return new ArrayList<DataPoint>();
     }
 
-    public void writeDBData(ArrayList<Integer> analyzedData) {
+    public void writeDBData(ArrayList<DataPoint> analyzedData) {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + filePath);
             Statement statement = connection.createStatement();
