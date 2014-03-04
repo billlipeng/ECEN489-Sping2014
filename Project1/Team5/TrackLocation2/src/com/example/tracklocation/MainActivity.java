@@ -282,113 +282,6 @@ public class MainActivity extends FragmentActivity implements
 	       */
 		 
 	}
-	/*
-	@Override
-	protected void onStart(){ //need this 
-		super.onStart();
-		registerReceiver(arduinorec, new IntentFilter(AmarinoIntent.ACTION_RECEIVED));
-		registerReceiver(arduinoconn, new IntentFilter(AmarinoIntent.ACTION_CONNECTED));
-		Amarino.connect(this, "00:12:09:25:96:92");
-		//display("startingAmarino...");
-	}
-	
-	@Override
-	public void onStop(){ //need this
-		super.onStop();
-		unregisterReceiver(arduinorec);
-		unregisterReceiver(arduinoconn);
-		Amarino.disconnect(this, "00:12:09:25:96:92");
-	}
-	
-	//Connect the address of the device it sees
-	public void connectT1(View v) //ignore other teams for now
-	{
-		Amarino.connect(this, TEAM1);
-	}public void connectT2(View v)
-	{
-		Amarino.connect(this, TEAM2);
-	}public void connectT3(View v)
-	{
-		Amarino.connect(this, TEAM3);
-	}
-	public void connectT4(View v)
-	{
-		Amarino.connect(this, TEAM4);
-	}
-	public void connectT5(View v)
-	{
-		Amarino.connect(this, TEAM5);
-	}
-	public void senddata(String address)
-	{
-		Amarino.sendDataToArduino(this, "00:12:09:25:96:92", function, "");
-	}
-	public void disconnect(String address)
-	{
-		Amarino.disconnect(this, address);
-	}
-	
-	public class ArduinoReciever extends BroadcastReceiver { //need this
-		@Override
-		public void onReceive(Context context, Intent intent){
-			final String action = intent.getAction();
-			final String addr = intent.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
-			
-			display("0");
-			if (AmarinoIntent.ACTION_CONNECTED.equals(action)){ 
-				// connection has been established 
-				display("1");
-				} 
-				else if (AmarinoIntent.ACTION_DISCONNECTED.equals(action)){ 
-				// disconnected from a device
-					display("2");
-				} 
-				else if (AmarinoIntent.ACTION_CONNECTION_FAILED.equals(action)){ 
-				// connection attempt was not successful 
-					display("3");
-				} 
-				else if (AmarinoIntent.ACTION_PAIRING_REQUESTED.equals(action)){ 
-				// a notification message to pair the device has popped up 
-					display("4");
-				}
-			
-			
-			
-			//display("Sensor Data?");
-			String jsonString = null;
-			//String result = null;
-			
-			//final String addr = intent.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
-			
-			final int dataType = intent.getIntExtra(AmarinoIntent.EXTRA_DATA_TYPE,-1);	
-			
-			if (dataType == AmarinoIntent.STRING_EXTRA){
-			
-				jsonString = intent.getStringExtra(AmarinoIntent.EXTRA_DATA);
-				
-				if (jsonString != null){
-					//display("Sensor Data!");
-					receive = true;
-					Gson gson = new Gson();
-					sensorData = gson.fromJson(jsonString, SensorData.class);
-					//AndroidPacket1 sensordata = gson.fromJson(data, AndroidPacket1.class); //
-					//sensordata = sensordata.getsensor_id().getsensor_type().getsensor_value(); //sensordata parse data into respective fields here
-					//dp.add(sensordata);	
-					newSensorData = true;
-					receive = false;
-				}
-			}
-		}
-	}
-
-	public class ArduinoConnected extends BroadcastReceiver{ //need this
-		@Override
-		public void onReceive(Context context, Intent intent){
-			addr = intent.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
-			senddata(addr);
-		}
-	}
-*/
 	
 	
 	public void beginCollection(View view){
@@ -585,7 +478,7 @@ public class MainActivity extends FragmentActivity implements
     			output.close();
     			connection.close();
     			//display("Data sent");
-    			data = new ArrayList<AndroidPacket1>();
+    			//data = new ArrayList<AndroidPacket1>();
     			begun = false;
     		} catch(IOException e){
     		}finally{}
