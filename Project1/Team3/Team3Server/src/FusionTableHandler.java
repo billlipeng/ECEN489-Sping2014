@@ -81,6 +81,7 @@ public class FusionTableHandler implements Runnable {
 //                sql.execute();
         try {
             if (dataset.size() <= 500) {
+                // https://groups.google.com/forum/#!topic/fusion-tables-users-group/CqhjtdhHea4
                 String sql = createMultipleInsertSQL(dataset);
                 HttpContent content = ByteArrayContent.fromString(null, "sql=" + sql);
                 HttpRequest httpRequest = client.getRequestFactory().buildPostRequest(new GenericUrl("https://www.googleapis.com/fusiontables/v1/query"), content);
