@@ -44,11 +44,9 @@ public class TeamMAPAnalaysis extends Component {
 
     private void runAnalysis() throws ClassNotFoundException {
         filePath = pathTxt.getText();
-        System.out.println("test");
-
-//        alg = new ZachAlgorithm();
+        alg = new ZachAlgorithm();
         ArrayList<DataPoint> data = dbh.readDBData(readTable);
-//        ArrayList<DataPoint> results = alg.analyze(data);
+        ArrayList<DataPoint> results = alg.analyze(data);
 //        dbh.writeDBData(writeTable, results);
 
         // Upload to Fusion Table
