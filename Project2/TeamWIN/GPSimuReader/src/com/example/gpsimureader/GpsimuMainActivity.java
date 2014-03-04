@@ -83,7 +83,7 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 			int seconds = (int) (millis / 1000);
 			int minutes = seconds / 60;
 			seconds = seconds % 60;
-
+			
 			tmr.setText(String.format("%d:%02d", minutes, seconds));
 			if(seconds%interv == 0)
 			{
@@ -91,7 +91,7 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 
 				DPprocess();
 			}
-			timerHandler.postDelayed(this, 500);
+			timerHandler.postDelayed(this, 1000);
 		}
 	};
 
@@ -188,6 +188,44 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 				if (reCoord.getText().equals("stop")) {
 					timerHandler.removeCallbacks(timerRunnable);
 					reCoord.setText("recoord");
+					
+					// try it here
+					SQLiteDatabase db1;
+					db1 = openOrCreateDatabase("SensorReadings.db", SQLiteDatabase.OPEN_READONLY, null);
+					db1.setVersion(3);
+					db1.setLocale(Locale.getDefault());
+					Cursor cursor = db1.query("sensorData", null, null, null, null, null, null);
+					cursor.moveToFirst();
+					while (cursor.isAfterLast() == false) {
+						dbOutputText.append("\n----------\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("time")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("longitude")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("latitude")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("bearing")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("speed")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("accelX")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("accelY")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("accelZ")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("orientationA")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("orientationP")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("orientationR")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecX")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecY")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecZ")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecC")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("linAccX")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("linAccY")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("linAccZ")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("gravityX")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("gravityY")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("gravityZ")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("gyroX")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("gyroY")) + "\n");
+						dbOutputText.append(cursor.getString(cursor.getColumnIndex("gyroZ")) + "\n");
+						cursor.moveToNext();
+					}
+					cursor.close();
+					
 				} else {
 					//------for gps integration
 
@@ -398,41 +436,7 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 		dbOutputText = (TextView) findViewById(R.id.dbOutputText);
 		dbOutputText.setMovementMethod(new ScrollingMovementMethod());
 		
-		SQLiteDatabase db1;
-		db1 = openOrCreateDatabase("SensorReadings.db", SQLiteDatabase.OPEN_READONLY, null);
-		db1.setVersion(3);
-		db1.setLocale(Locale.getDefault());
-		Cursor cursor = db1.query("sensorData", null, null, null, null, null, null);
-		cursor.moveToFirst();
-		while (cursor.isAfterLast() == false) {
-			dbOutputText.append("\n----------\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("time")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("longitude")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("latitude")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("bearing")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("speed")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("accelX")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("accelY")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("accelZ")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("orientationA")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("orientationP")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("orientationR")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecX")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecY")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecZ")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecC")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("linAccX")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("linAccY")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("linAccZ")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("gravityX")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("gravityY")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("gravityZ")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("gyroX")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("gyroY")) + "\n");
-			dbOutputText.append(cursor.getString(cursor.getColumnIndex("gyroZ")) + "\n");
-			cursor.moveToNext();
-		}
-		cursor.close();
+		
 
 		//prints
 
