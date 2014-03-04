@@ -31,12 +31,12 @@ public class Tester {
         ArrayList<DataPoint> dataset = new ArrayList<DataPoint>();
         int num = 1100;
         for (int i = 0; i < num; i++) {
-            dataset.add(new DataPoint.Builder()
-                .time("12:45:00").date("2014-2-16").client_id("zpartal")
-                .run_id("run1").latitude(1234.1234).longitude(4342.2323)
-                .bearing(23.42).speed(23.2).altitude(554).sensor_id("S1")
-                .sensor_type("temp").sensor_value(112.3).attribute("sensor")
-                .build());
+//            dataset.add(new DataPoint.Builder()
+//                .time("12:45:00").date("2014-2-16").client_id("zpartal")
+//                .run_id("run1").latitude(1234.1234).longitude(4342.2323)
+//                .bearing(23.42).speed(23.2).altitude(554).sensor_id("S1")
+//                .sensor_type("temp").sensor_value(112.3).attribute("sensor")
+//                .build());
         }
 
 //        FusionTableHandler fth = new FusionTableHandler(dataset);

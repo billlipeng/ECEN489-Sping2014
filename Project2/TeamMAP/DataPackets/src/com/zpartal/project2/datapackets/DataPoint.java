@@ -300,14 +300,6 @@ public class DataPoint implements Serializable {
         sb.append(accelX+",");
         sb.append(accelY+",");
         sb.append(accelZ+",");
-        sb.append(accelX+",");
-        sb.append(accelX+",");
-        sb.append(accelX+",");
-        sb.append(accelX+",");
-        sb.append(accelX+",");
-        sb.append(accelX+",");
-        sb.append(accelY+",");
-        sb.append(accelZ+",");
         sb.append(orientationA+",");
         sb.append(orientationP+",");
         sb.append(orientationR+",");

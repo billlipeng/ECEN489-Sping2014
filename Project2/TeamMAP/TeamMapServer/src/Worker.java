@@ -21,6 +21,9 @@ public class Worker implements Runnable {
         try {
             ois = new ObjectInputStream(client.getInputStream());
             dataset = (ArrayList<DataPoint>) ois.readObject();
+            for (DataPoint dp : dataset) {
+                System.out.println(dp.toString());
+            }
             ois.close();
             client.close();
 
