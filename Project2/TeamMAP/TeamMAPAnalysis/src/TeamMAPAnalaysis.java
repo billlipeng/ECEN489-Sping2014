@@ -3,10 +3,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 
 
 public class TeamMAPAnalaysis extends Component {
+    DatabaseHandler dbh = null;
+
     // GUI Objects
     private JFrame guiFrame = new JFrame();
     private JPanel sortPanel = new JPanel(new GridBagLayout());
@@ -85,7 +88,11 @@ public class TeamMAPAnalaysis extends Component {
             @Override
             public void actionPerformed(ActionEvent ae)
             {
-                runAnalysis();
+                try {
+                    runAnalysis();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         };
         runBtn.addActionListener(a3);
@@ -103,7 +110,14 @@ public class TeamMAPAnalaysis extends Component {
 
     }
 
-    void runAnalysis() {
+    void runAnalysis() throws ClassNotFoundException {
+        dbh = new DatabaseHandler(filePath);
+        dbh.readDBData();
 
+        // Do some analysis
+
+        dbh.writeDBData(new ArrayList <Integer>());
+
+        // Upload to Fusion Table
     }
 }
