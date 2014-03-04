@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class GPSData implements LocationListener {
+		private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 0; // in Meters
+		private static final long MINIMUM_TIME_BETWEEN_UPDATES = 500; // in Milliseconds
+	
 	  private static final String TAG = "GPSData";
 	  private LocationManager locationManager;
 	  private String provider;
@@ -40,14 +43,15 @@ public class GPSData implements LocationListener {
 	    Log.d(TAG, provider.toString());
 	    Location location = null;
 	    
-	    //try{
+	    try{
 	        location = locationManager.getLastKnownLocation(provider);
-	    //    } finally {if (location == null) Log.e("location", "manager error" );}
+	        } finally {if (location == null) Log.e(TAG, "Last known location null" );}
 	    
-	    //if (location != null) {
+	    if (location != null) {
 	        Log.d(TAG, "Provider " + provider + " has been selected.");
 	        onLocationChanged(location);
-	      //}
+	     }
+	     locationManager.requestLocationUpdates(provider, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_DISTANCE_CHANGE_FOR_UPDATES, this);
 	  }
 	  
 	  public GPSData(LocationManager locationManager) {
@@ -56,18 +60,18 @@ public class GPSData implements LocationListener {
 	}
 
 	public void onPause(){
-		  locationManager.requestLocationUpdates(provider, 400, 1, this);
+		locationManager.removeUpdates(this);
 	  }
 	  
 	  public void onResume(){
-		  locationManager.removeUpdates(this);
+		  locationManager.requestLocationUpdates(provider, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_DISTANCE_CHANGE_FOR_UPDATES, this);
 	  }
 	  
 	  @Override
 	  public void onLocationChanged(Location location) {
 	    lat = (double) (location.getLatitude());
 	    lng = (double) (location.getLongitude());
-	    bearing = location.getBearing();
+	    bearing = (double) location.getBearing();
 	    speed = (double) location.getSpeed();
 	  }
 	  @Override
