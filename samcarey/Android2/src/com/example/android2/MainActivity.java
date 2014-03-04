@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
 	public int num2 = 0;
 	public int result  = 0;
 	private int port = 5555;
-	private String ip = "10.201.48.176";
+	private String ip = "10.201.41.112";
 
 	public void sendMessage(View view) {
 		if (netCheck()){
