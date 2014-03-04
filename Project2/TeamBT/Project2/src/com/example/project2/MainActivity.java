@@ -34,7 +34,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 	// Setting constants
 	private static final String TAG = "Project2";
-	private static final int PORT_NUMBER = 5555;
+	private static final int PORT_NUMBER = 545;
 	private static final int REQUEST_CODE = 1234;
 	
 	//Definition of date format
@@ -165,8 +165,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	  
 	  @Override
 	  protected void onPause() {
-	    super.onResume();
-	    gps.onResume();
+	    super.onPause();
 	    mSensorManager.unregisterListener(this);
 	  }
 	  
@@ -182,7 +181,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 		
 	public void setTimer(String voiceCommand) {
 		// TODO Auto-generated method stub
-		Log.d(TAG,"Command: " + voiceCommand);
+		Log.d(TAG,"Command: " + voiceCommand + " " + Boolean.toString(running));
         if (voiceCommand.equals("stop") && running) 
         {
         	running = false;
@@ -192,6 +191,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         else  if (voiceCommand.equals("start"))
         {
         	//------for gps integration
+        	Log.d(TAG,"Started running");
         	running = true;
         	timer = new Timer(10, new Callable<Integer>(){
         	    				public Integer call() {
@@ -269,9 +269,9 @@ public class MainActivity extends Activity implements SensorEventListener {
 //			Log.d(TAG,Float.toString(dpx.getAccelX()));
 //			Log.d(TAG,Float.toString(dpx.getGravityX()));
 //			Log.d(TAG,Float.toString(dpx.getGyroX()));
-//			Log.d(TAG,Float.toString(dpx.getLinAccX()));
-//			Log.d(TAG,Float.toString(dpx.getOrientationA()));
-//			Log.d(TAG,Integer.toString(dp.size()));
+			Log.d(TAG,Double.toString(dpx.getLatitude()));
+			Log.d(TAG,Double.toString(dpx.getLongitude()));
+			Log.d(TAG,Integer.toString(dp.size()));
 		return 0;
 	}
 	  

@@ -39,6 +39,7 @@ public class linearinterpolation {
 			latlongArray[2*(i+1)-1]= asin(sin(latitude1R)*cos(angulardistanceR)+ cos(latitude1R)*sin(angulardistanceR)*cos(forwardazimuthR));
 			longitude1R= latlongArray[2*(i+1)-2];
 			latitude1R= latlongArray[2*(i+1)-1];
+			forwardazimuthR = acos((sin(latitude2R)-sin(latitude1R)*cos(distance))/(sin(distance)*cos(latitude1R)));
 		}
 		
 		return latlongArray;

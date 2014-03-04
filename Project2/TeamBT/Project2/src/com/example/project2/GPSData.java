@@ -37,16 +37,17 @@ public class GPSData implements LocationListener {
 	    Criteria criteria = new Criteria();
 	    Log.d(TAG, criteria.toString());
 	    provider = locationManager.getBestProvider(criteria, false);
+	    Log.d(TAG, provider.toString());
 	    Location location = null;
 	    
-	    try{
+	    //try{
 	        location = locationManager.getLastKnownLocation(provider);
-	        } finally {if (location == null) Log.e("location", "manager error" );}
+	    //    } finally {if (location == null) Log.e("location", "manager error" );}
 	    
-	    if (location != null) {
+	    //if (location != null) {
 	        Log.d(TAG, "Provider " + provider + " has been selected.");
 	        onLocationChanged(location);
-	      }
+	      //}
 	  }
 	  
 	  public GPSData(LocationManager locationManager) {
