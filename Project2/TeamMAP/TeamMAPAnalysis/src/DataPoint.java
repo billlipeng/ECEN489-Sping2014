@@ -42,7 +42,25 @@ public class DataPoint {
         return speed;
     }
 
-    public void toSql(String tableName) {
+    public String toSql(String tableName) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("INSERT INTO ");
+        sql.append(tableName);
+        sql.append(" (");
+        String sep = "";
+        String[] columnNames = new String[]{"time", "longitude", "latitude", "bearing", "speed"};
+        for (String s : columnNames) {
+            sql.append(sep);
+            sql.append(s);
+            sep = ",";
+        }
+        sql.append(") VALUES (");
+        sql.append(this.toString());
+        sql.append(");");
+        return sql.toString();
+    }
 
+    public String toString() {
+        return time + ", " + longitude + ", " + latitude + ", " + bearing + ", " + speed;
     }
 }

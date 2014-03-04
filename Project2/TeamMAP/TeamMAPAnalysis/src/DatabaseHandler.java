@@ -1,7 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class DatabaseHandler {
@@ -11,23 +8,34 @@ public class DatabaseHandler {
     public DatabaseHandler(String _filePath) throws ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
         this.filePath = _filePath;
-    }
-
-    public ArrayList<DataPoint> readDBData() {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + filePath);
-            Statement statement = connection.createStatement();
-            statement.setQueryTimeout(30);  // set timeout to 30 sec.
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return new ArrayList<DataPoint>();
+        System.out.println("Made DB Connection...");
     }
 
-    public void writeDBData(ArrayList<DataPoint> analyzedData) {
+    public ArrayList<DataPoint> readDBData(String tableName) {
+        ArrayList<DataPoint> dataset = new ArrayList<DataPoint>();
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:" + filePath);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            ResultSet rs = statement.executeQuery("select * from " + tableName);
+            while(rs.next())
+            {
+                dataset.add(new DataPoint(rs.getLong("time"), rs.getDouble("latitude"), rs.getDouble("longitude"), rs.getDouble("bearing"), rs.getDouble("speed")));
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataset;
+    }
+
+    public void writeDBData(String tableName, ArrayList<DataPoint> analyzedData) {
+        try {
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -36,6 +44,40 @@ public class DatabaseHandler {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public ArrayList<String> getTableList() {
+        ArrayList<String> tables = new ArrayList<String>();
+        if (connection != null) {
+            try {
+                DatabaseMetaData meta = connection.getMetaData();
+                ResultSet rs = meta.getTables(null, null, "%", null);
+                while (rs.next()) {
+                    String tablename = rs.getString(3);
+                    if (!tablename.equals("sqlite_sequence")) {
+                        if (!tablename.equals("master")) {
+                            tables.add(rs.getString(3));
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return tables;
+    }
+
+    public void createNewTable(String tableName) {
+        if (connection != null) {
+            try {
+                Statement statement = connection.createStatement();
+                statement.setQueryTimeout(30);  // set timeout to 30 sec.
+                String createTableSql = "CREATE TABLE " + tableName + " ( _id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,time TEXT,longitude REAL,latitude REAL,bearing REAL,speed REAL,accelX INTEGER,accelY INTEGER,accelZ INTEGER,orientationA INTEGER,orientationP INTEGER,rientationR INTEGER,rotVecX INTEGER,rotVecY INTEGER,rotVecZ INTEGER,rotVecC INTEGER,linAccX INTEGER,linAccY INTEGER,linAccZ INTEGER,gravityX INTEGER,gravityY INTEGER,gravityZ INTEGER,gyroX INTEGER,gyroY INTEGER,gyroZ INTEGER);";
+                statement.executeUpdate(createTableSql);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
