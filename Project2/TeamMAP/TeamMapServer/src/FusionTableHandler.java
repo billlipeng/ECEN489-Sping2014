@@ -12,7 +12,7 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.fusiontables.Fusiontables;
 import com.google.api.services.fusiontables.FusiontablesScopes;
 import com.google.api.client.googleapis.*;
-import com.zpartal.project1.datapackets.DataPoint;
+import com.zpartal.project2.datapackets.DataPoint;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

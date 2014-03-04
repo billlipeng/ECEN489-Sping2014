@@ -1,9 +1,8 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="DataPackets">
-    <output-path>$PROJECT_DIR$/out/artifacts/DataPackets</output-path>
+  <artifact type="jar" name="DataPackets:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/DataPackets_jar</output-path>
     <root id="archive" name="DataPackets.jar">
       <element id="module-output" name="DataPackets" />
-      <element id="dir-copy" path="$PROJECT_DIR$/src" />
     </root>
   </artifact>
 </component>
