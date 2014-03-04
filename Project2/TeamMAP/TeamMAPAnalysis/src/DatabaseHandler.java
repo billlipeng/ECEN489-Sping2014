@@ -38,10 +38,13 @@ public class DatabaseHandler {
         try {
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
-
-            // For some loop {
-            // statement.executeUpdate(SOME SQL);
-
+            String deleteRowsSQL = "DELETE FROM " + tableName + ";";
+            statement.executeUpdate(deleteRowsSQL);
+            String sql = "";
+            for (DataPoint dp : analyzedData) {
+                sql += dp.toSql(tableName);
+            }
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }

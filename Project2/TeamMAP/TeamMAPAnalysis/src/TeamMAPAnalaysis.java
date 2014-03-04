@@ -8,8 +8,13 @@ import java.util.Comparator;
 
 
 public class TeamMAPAnalaysis extends Component {
+
+    /* CHANGE ALGORITHM USED HERE!!
+    /************************************************************/
+    private InterpolationAlgorithm alg = new ZachAlgorithm();
+    /***********************************************************/
+
     private DatabaseHandler dbh = null;
-    private InterpolationAlgorithm alg = null;
 
     // GUI Objects
     private JFrame guiFrame = new JFrame();
@@ -44,10 +49,9 @@ public class TeamMAPAnalaysis extends Component {
 
     private void runAnalysis() throws ClassNotFoundException {
         filePath = pathTxt.getText();
-        alg = new ZachAlgorithm();
         ArrayList<DataPoint> data = dbh.readDBData(readTable);
         ArrayList<DataPoint> results = alg.analyze(data);
-//        dbh.writeDBData(writeTable, results);
+        dbh.writeDBData(writeTable, results);
 
         // Upload to Fusion Table
     }
@@ -191,7 +195,7 @@ public class TeamMAPAnalaysis extends Component {
                     readTableCmb.insertItemAt(writeTableName, 0);
                     dbh.createNewTable(writeTableName);
                 }
-
+                writeTable = (String) writeTableCmb.getSelectedItem();
             }
         };
 
