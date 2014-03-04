@@ -197,13 +197,13 @@ public class MainActivity extends Activity{
 
 
 class myListener implements LocationListener, SensorEventListener{
-	 private final SensorManager mSensorManager;
-     private final Sensor sAccelerometer;
-     private final Sensor sGyro;
-     private final Sensor sGravity;
-     private final Sensor sLinAccel;
+	 private SensorManager mSensorManager;
+     private Sensor sAccelerometer;
+     private Sensor sGyro;
+     private Sensor sGravity;
+     private Sensor sLinAccel;
      private boolean hasGyro = false;
-     private final Sensor sRotateVec;
+     private Sensor sRotateVec;
      private float accelX;
      private float accelY;
      private float accelZ;
@@ -229,6 +229,9 @@ class myListener implements LocationListener, SensorEventListener{
      private boolean gotGravity = false;
      private boolean gotSensor = true;
 	
+     private boolean enableSensors = false;
+     private boolean hasSpeed = false;
+     
      private imu currentData;
      
      private long time;
@@ -259,36 +262,41 @@ class myListener implements LocationListener, SensorEventListener{
 		else
 		System.out.println("null\n");
 		
-		mSensorManager = sensorM;
-		sAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		sGyro = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-		sRotateVec = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-		sLinAccel = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-		sGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
-
-		if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)==null)
-		{
-	    	 Toast.makeText(mainContext, "Gyroscope unvailable.", Toast.LENGTH_LONG).show();	
-	    	 orientX = 0.0f;
-	    	 orientY = 0.0f;
-	    	 orientZ = 0.0f;
-	    	 hasGyro = false;
+		if (enableSensors)
+		{	
+			mSensorManager = sensorM;
+			sAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+			sGyro = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+			sRotateVec = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+			sLinAccel = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+			sGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+	
+			if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)==null)
+			{
+		    	 Toast.makeText(mainContext, "Gyroscope unvailable.", Toast.LENGTH_LONG).show();	
+		    	 orientX = 0.0f;
+		    	 orientY = 0.0f;
+		    	 orientZ = 0.0f;
+		    	 hasGyro = false;
+			}
+			else
+				hasGyro = true;
 		}
-		else
-			hasGyro = true;
      }
      
      @SuppressLint("NewApi")
      public void getCoordinates()
      {
     	 lm.requestSingleUpdate(provider, this, null);
-    	 mSensorManager.registerListener(this, sAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-    	 mSensorManager.registerListener(this, sRotateVec, SensorManager.SENSOR_DELAY_NORMAL);
-    	 if (hasGyro)
-    		 mSensorManager.registerListener(this, sGyro, SensorManager.SENSOR_DELAY_NORMAL);
-    	 mSensorManager.registerListener(this, sLinAccel, SensorManager.SENSOR_DELAY_NORMAL);
-    	 mSensorManager.registerListener(this, sGravity, SensorManager.SENSOR_DELAY_NORMAL);
-  
+    	 if (enableSensors)
+    	 {
+	    	 mSensorManager.registerListener(this, sAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+	    	 mSensorManager.registerListener(this, sRotateVec, SensorManager.SENSOR_DELAY_NORMAL);
+	    	 if (hasGyro)
+	    		 mSensorManager.registerListener(this, sGyro, SensorManager.SENSOR_DELAY_NORMAL);
+	    	 mSensorManager.registerListener(this, sLinAccel, SensorManager.SENSOR_DELAY_NORMAL);
+	    	 mSensorManager.registerListener(this, sGravity, SensorManager.SENSOR_DELAY_NORMAL);
+    	 }
      }
 	
 	
@@ -298,6 +306,7 @@ class myListener implements LocationListener, SensorEventListener{
     	 latitude = loc.getLatitude();
     	 longitude = loc.getLongitude();
     	 speed = loc.getSpeed();
+    	 hasSpeed = loc.hasSpeed();
     	 bearing = loc.getBearing();
     	 time = loc.getTime();
     	 if (currentData == null)
@@ -309,7 +318,7 @@ class myListener implements LocationListener, SensorEventListener{
     	 currentData.speed = speed;
     	 currentData.bearing = bearing;
     	 currentData.time = time;
-    	 if (gotSensor)
+    	 if (gotSensor | !enableSensors)
     		 makeEntry();
      }
 	
@@ -478,7 +487,7 @@ class myListener implements LocationListener, SensorEventListener{
     	 gotGPS = false;
     	 rowArray.add(currentData);
     	 displayData.add(Double.toString(currentData.latitude) + ", " + Double.toString(currentData.longitude)
-				+ ";  " + Double.toString(currentData.speed) + ", " + Double.toString(currentData.bearing));
+				+ ";  " + Double.toString(currentData.speed) + ", " + Double.toString(currentData.bearing) + ", " + Boolean.toString(hasSpeed));
     	 dataText.setAdapter(new ArrayAdapter<String>(mainContext, android.R.layout.simple_list_item_1, displayData));	
     	 currentData = null;
      }
