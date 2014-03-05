@@ -26,6 +26,10 @@ public class TeamMAPAnalaysis extends Component {
     private JButton browseBtn = new JButton("Browse");
     private JButton dBConnectBtn = new JButton("Connect");
 
+    private JLabel prepareTableLbl = new JLabel("Prepare Table:");
+    private JComboBox prepareTableCmb = new JComboBox(new String[] {""});
+    private JButton prepareBtn = new JButton("Prepare");
+
     private JLabel readTableLbl = new JLabel("Read Table:");
     private JComboBox readTableCmb = new JComboBox(new String[] {""});
 
@@ -34,7 +38,7 @@ public class TeamMAPAnalaysis extends Component {
 
     private JButton runBtn = new JButton("Run");
 
-    private String filePath = "C:\\Users\\Zachary\\Desktop\\projtwo.db";
+    private String filePath = "C:\\Users\\Zach\\Desktop\\projtwo.db";
     private String readTable;
     private String writeTable;
 
@@ -126,6 +130,9 @@ public class TeamMAPAnalaysis extends Component {
                     updateComboBoxes();
                     readTableCmb.setEnabled(true);
                     writeTableCmb.setEnabled(true);
+                    prepareTableCmb.setEnabled(true);
+                    prepareBtn.setEnabled(true);
+                    runBtn.setEnabled(true);
                     writeTableCmb.setSelectedItem(null);
                     dBConnectBtn.setEnabled(false);
                 } catch (ClassNotFoundException e) {
@@ -142,10 +149,62 @@ public class TeamMAPAnalaysis extends Component {
         analysisPanel.add(dBConnectBtn, c4);
 
         // Row 2
+        // Prepare Label
+        GridBagConstraints c9 = new GridBagConstraints();
+        c9.gridx = 0;
+        c9.gridy = 1;
+        c9.gridwidth = 1;
+        c9.ipadx = 10;
+        c9.anchor = GridBagConstraints.LINE_START;
+        c9.insets = new Insets(5,10,5,5);
+        analysisPanel.add(prepareTableLbl, c9);
+
+        ActionListener a9;
+        a9 = new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent ae)
+            {
+                readTable = (String) prepareTableCmb.getSelectedItem();
+            }
+        };
+
+        prepareTableCmb.addActionListener(a9);
+        prepareTableCmb.setEnabled(false);
+        GridBagConstraints c11 = new GridBagConstraints();
+        c11.gridx = 2;
+        c11.gridy = 1;
+        c11.gridwidth = 4;
+        c11.insets = new Insets(5,5,5,10);
+        c11.anchor = GridBagConstraints.LINE_START;
+        analysisPanel.add(prepareTableCmb, c11);
+
+        ActionListener a3;
+        a3 = new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent ae)
+            {
+                String prepareTableName = (String) prepareTableCmb.getSelectedItem();
+                dbh.prepareDBData(prepareTableName);
+                updateComboBoxes();
+            }
+        };
+        prepareBtn.addActionListener(a3);
+
+        prepareBtn.setEnabled(false);
+        GridBagConstraints c13 = new GridBagConstraints();
+        c13.gridx = 6;
+        c13.gridy = 1;
+        c13.gridwidth = 1;
+        c13.insets = new Insets(5,5,10,10);
+        analysisPanel.add(prepareBtn, c13);
+
+        // Row 3
         // ReadTable Label
         GridBagConstraints c5 = new GridBagConstraints();
         c5.gridx = 0;
-        c5.gridy = 1;
+        c5.gridy = 2;
         c5.gridwidth = 1;
         c5.ipadx = 10;
         c5.anchor = GridBagConstraints.LINE_START;
@@ -167,17 +226,17 @@ public class TeamMAPAnalaysis extends Component {
         readTableCmb.setEnabled(false);
         GridBagConstraints c6 = new GridBagConstraints();
         c6.gridx = 2;
-        c6.gridy = 1;
+        c6.gridy = 2;
         c6.gridwidth = 4;
         c6.insets = new Insets(5,5,5,10);
         c6.anchor = GridBagConstraints.LINE_START;
         analysisPanel.add(readTableCmb, c6);
 
-        // Row 3
+        // Row 4
         // writeTable Label
         GridBagConstraints c7 = new GridBagConstraints();
         c7.gridx = 0;
-        c7.gridy = 2;
+        c7.gridy = 3;
         c7.gridwidth = 1;
         c7.ipadx = 10;
         c7.anchor = GridBagConstraints.LINE_START;
@@ -204,16 +263,16 @@ public class TeamMAPAnalaysis extends Component {
         writeTableCmb.setEnabled(false);
         GridBagConstraints c8 = new GridBagConstraints();
         c8.gridx = 2;
-        c8.gridy = 2;
+        c8.gridy = 3;
         c8.gridwidth = 4;
         c8.insets = new Insets(5,5,5,10);
         c8.anchor = GridBagConstraints.LINE_START;
         analysisPanel.add(writeTableCmb, c8);
 
-        // Row 4
+        // Row 5
         // Run Button
-        ActionListener a3;
-        a3 = new ActionListener()
+        ActionListener a6;
+        a6 = new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent ae)
@@ -225,11 +284,12 @@ public class TeamMAPAnalaysis extends Component {
                 }
             }
         };
-        runBtn.addActionListener(a3);
+        runBtn.addActionListener(a6);
 
+        runBtn.setEnabled(false);
         GridBagConstraints c12 = new GridBagConstraints();
         c12.gridx = 6;
-        c12.gridy = 3;
+        c12.gridy = 4;
         c12.gridwidth = 1;
         c12.insets = new Insets(5,5,10,10);
         analysisPanel.add(runBtn, c12);
@@ -243,9 +303,11 @@ public class TeamMAPAnalaysis extends Component {
         ArrayList<String> tableList = dbh.getTableList();
         readTableCmb.removeAllItems();
         writeTableCmb.removeAllItems();
+        prepareTableCmb.removeAllItems();
         for (String table : tableList) {
             readTableCmb.addItem(table);
             writeTableCmb.addItem(table);
+            prepareTableCmb.addItem(table);
         }
     }
 

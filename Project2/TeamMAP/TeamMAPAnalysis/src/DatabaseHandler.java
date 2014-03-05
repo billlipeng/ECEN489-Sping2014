@@ -34,6 +34,24 @@ public class DatabaseHandler {
         return dataset;
     }
 
+    public void prepareDBData(String tableName) {
+        String newTableName = "prepared_" + tableName;
+        createNewTable(newTableName);
+
+        ArrayList<DataPoint> originalData = readDBData(tableName);
+        try {
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+            String sql = "";
+            for (int i = 0; i < originalData.size(); i++) {
+                sql += originalData.get(i).toSql(tableName);
+            }
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void writeDBData(String tableName, ArrayList<DataPoint> analyzedData) {
         try {
             Statement statement = connection.createStatement();
