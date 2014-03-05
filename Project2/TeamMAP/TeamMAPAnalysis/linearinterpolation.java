@@ -31,15 +31,17 @@ public class linearinterpolation {
 		double interval= distance/10;
 		double angulardistanceR= interval/radiusearth;		
 		//calculate the forward azimuth(bearing)		
-		double forwardazimuthR = acos((sin(latitude2R)-sin(latitude1R)*cos(distance))/(sin(distance)*cos(latitude1R)));
+		double forwardazimuthR = atan2(sin(longitude2R-longitude1R)*cos(latitude2R),cos(latitude1R)*sin(latitude2R)-sin(latitude1R)*cos(latitude2R)*cos(longitude2R-longitude1R));
+		latlongArray[0]=toDegrees(latitude1R);
+		latlongArray[1]=toDegrees(longitude1R);
 		
-		//populate double array that contains [longitude,latitude....] values for each of the 10 points
-		for (int i =0; i<10;i++) {
+		//populate double array that contains [latitude, longitude....] values for each of the 10 points
+		for (int i =0; i<9;i++) {
 			longitude1R= longitude1R+ atan2(sin(forwardazimuthR)*sin(angulardistanceR)*cos(latitude1R),cos(angulardistanceR)-sin(latitude1R)*sin(latitude2R));
 			latitude1R= asin(sin(latitude1R)*cos(angulardistanceR)+ cos(latitude1R)*sin(angulardistanceR)*cos(forwardazimuthR));
-			latlongArray[2*(i+1)-2]= toDegrees(longitude1R);
-			latlongArray[2*(i+1)-1]= toDegrees(latitude1R);
-			forwardazimuthR = acos((sin(latitude2R)-sin(latitude1R)*cos(distance))/(sin(distance)*cos(latitude1R)));
+			latlongArray[2*(i+1)]= toDegrees(latitude1R);
+			latlongArray[2*(i+1)+1]= toDegrees(longitude1R);
+			
 			
 		}
 		
