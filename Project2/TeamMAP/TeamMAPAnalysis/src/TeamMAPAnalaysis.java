@@ -2,16 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 
 public class TeamMAPAnalaysis extends Component {
 
     /* CHANGE ALGORITHM USED HERE!!
     /************************************************************/
-    private InterpolationAlgorithm alg = new ZachAlgorithm();
+    private InterpolationAlgorithm alg = new MapAlgorithm();
     /***********************************************************/
 
     private DatabaseHandler dbh = null;
@@ -130,8 +128,8 @@ public class TeamMAPAnalaysis extends Component {
                     updateComboBoxes();
                     readTableCmb.setEnabled(true);
                     writeTableCmb.setEnabled(true);
-                    prepareTableCmb.setEnabled(true);
-                    prepareBtn.setEnabled(true);
+//                    prepareTableCmb.setEnabled(true);
+//                    prepareBtn.setEnabled(true);
                     runBtn.setEnabled(true);
                     writeTableCmb.setSelectedItem(null);
                     dBConnectBtn.setEnabled(false);
