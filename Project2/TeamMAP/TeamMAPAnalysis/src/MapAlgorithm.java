@@ -9,24 +9,35 @@ public class MapAlgorithm implements InterpolationAlgorithm {
         dataSet = _dataSet;
         ArrayList<List<DataPoint>> partitions = paritionData();
         for (List<DataPoint> partition : partitions) {
-            // When its not a complete partition
-            if (partition.size() != 11) {
-                continue;
-            }
-            // Complete Partition
-            else {
-                for (int i = 0; i < partition.size(); i++) {
-                    if (i == 0 || i == partition.size()) continue;
-                    else {
-                        DataPoint dp_prev = partition.get(i-1);
-                        DataPoint dp_curr = partition.get(i);
-                        double distance = calcDistance(dp_prev.getTime(), dp_curr.getTime(), dp_curr.getSpeed());
-                        Coord coords = genCoord(dp_prev.getLatitude(), dp_prev.getLongitude(), distance, dp_prev.getBearing());
-                        dp_curr.setLatitude(coords.lat);
-                        dp_curr.setLongitude(coords.lon);
-                    }
+            for (int i = 0; i < partition.size(); i++) {
+                if (i == 0 || i == partition.size()) continue;
+                else {
+                    DataPoint dp_prev = partition.get(i-1);
+                    DataPoint dp_curr = partition.get(i);
+                    double distance = calcDistance(dp_prev.getTime(), dp_curr.getTime(), dp_curr.getSpeed());
+                    Coord coords = genCoord(dp_prev.getLatitude(), dp_prev.getLongitude(), distance, dp_prev.getBearing());
+                    dp_curr.setLatitude(coords.lat);
+                    dp_curr.setLongitude(coords.lon);
                 }
             }
+//            // When its not a complete partition
+//            if (partition.size() != 11) {
+//                continue;
+//            }
+//            // Complete Partition
+//            else {
+//                for (int i = 0; i < partition.size(); i++) {
+//                    if (i == 0 || i == partition.size()) continue;
+//                    else {
+//                        DataPoint dp_prev = partition.get(i-1);
+//                        DataPoint dp_curr = partition.get(i);
+//                        double distance = calcDistance(dp_prev.getTime(), dp_curr.getTime(), dp_curr.getSpeed());
+//                        Coord coords = genCoord(dp_prev.getLatitude(), dp_prev.getLongitude(), distance, dp_prev.getBearing());
+//                        dp_curr.setLatitude(coords.lat);
+//                        dp_curr.setLongitude(coords.lon);
+//                    }
+//                }
+//            }
         }
         return mergePartitions(partitions);
     }
