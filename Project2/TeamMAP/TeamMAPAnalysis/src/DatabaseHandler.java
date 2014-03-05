@@ -25,7 +25,7 @@ public class DatabaseHandler {
             ResultSet rs = statement.executeQuery("select * from " + tableName);
             while(rs.next())
             {
-                dataset.add(new DataPoint(rs.getLong("time"), rs.getDouble("latitude"), rs.getDouble("longitude"), rs.getDouble("bearing"), rs.getDouble("speed")));
+                dataset.add(new DataPoint(rs.getLong("time"), rs.getDouble("longitude"), rs.getDouble("latitude"), rs.getDouble("bearing"), rs.getDouble("speed")));
             }
             rs.close();
         } catch (SQLException e) {
