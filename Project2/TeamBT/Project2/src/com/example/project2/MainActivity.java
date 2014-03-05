@@ -115,7 +115,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 		  {
 		   speakButton.setEnabled(false);
 		   Toast.makeText(getApplicationContext(), "Recognizer Not Found",
-		     1000).show();
+		     Toast.LENGTH_SHORT).show();
 		  }
 		  speakButton.setOnClickListener(new View.OnClickListener() {
 			   @Override
@@ -139,7 +139,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	  if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
 	   ArrayList<String> matches = data
 	     .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-	   setTimer(matches.get(0));
+	   voiceCommand(matches.get(0));
 	  }
 	  super.onActivityResult(requestCode, resultCode, data);
 	 }
@@ -155,7 +155,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	  @Override
 	  protected void onResume() {
 	    super.onResume();
-	    gps.onResume();
+	    //gps.onResume();
 	    mSensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL);
 	    mSensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_NORMAL);
 	    mSensorManager.registerListener(this, rotation, SensorManager.SENSOR_DELAY_NORMAL);
@@ -167,6 +167,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	  @Override
 	  protected void onPause() {
 	    super.onPause();
+	    //gps.onPause();
 	    //mSensorManager.unregisterListener(this);
 	  }
 	  
@@ -186,18 +187,18 @@ public class MainActivity extends Activity implements SensorEventListener {
     //tmr = (TextView) findViewById(R.id.tmr);
     
 		
-	public void setTimer(String voiceCommand) {
+	public void voiceCommand(String Command) {
 		// TODO Auto-generated method stub
 		TextView editTxt = (TextView) findViewById(R.id.textView1);
-		Log.d(TAG,"Command: " + voiceCommand + " " + Boolean.toString(running));
-        if (voiceCommand.equals("stop") && running) 
+		Log.d(TAG,"Command: " + Command + " " + Boolean.toString(running));
+        if (Command.equals("stop") && running) 
         {
         	running = false;
         	editTxt.setText("Stopped");
             timer.stop();
             DPprocess();
         } 
-        else  if (voiceCommand.equals("start"))
+        else  if (Command.equals("start"))
         {
         	//------for gps integration
         	Log.d(TAG,"Started running");
@@ -210,6 +211,14 @@ public class MainActivity extends Activity implements SensorEventListener {
         	//------timerry stuff
         	timer.start();
             DPprocess();
+        }
+        else  if (Command.equals("send"))
+        {
+        	this.connectToServer();
+        }
+        else  if (Command.equals("reset"))
+        {
+        	dp.clear();
         }
 	}
 	
@@ -279,14 +288,14 @@ public class MainActivity extends Activity implements SensorEventListener {
 //			Log.d(TAG,Float.toString(dpx.getAccelX()));
 //			Log.d(TAG,Float.toString(dpx.getGravityX()));
 //			Log.d(TAG,Float.toString(dpx.getGyroX()));
-			Log.d(TAG,Double.toString(dpx.getLatitude()));
+			Log.d(TAG,Double.toString(dpx.getBearing()));
 			Log.d(TAG,Double.toString(dpx.getLongitude()));
 			Log.d(TAG,Integer.toString(dp.size()));
 		return 0;
 	}
 	  
 	// Server Connection
-	public void connectToServer(View view) {
+	public void connectToServer() {
 		if (isOnline())
 		{
 			EditText editText = (EditText) findViewById(R.id.edit_IPAddress);

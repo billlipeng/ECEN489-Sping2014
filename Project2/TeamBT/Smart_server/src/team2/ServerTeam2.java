@@ -124,7 +124,7 @@ public class ServerTeam2 extends JFrame {
 					
 					//I DONT KNOW IF WE WILL MERGE THE XYZ gravity, linAcc, gyro, etc. They said yes, but didnt
 					//write it on github. here, it will add a new Latitude and Longitude every 100 seconds (every 10 values) 
-					if ((interator%9==0)&&(interator!=0))
+					if (((interator%10==0))||(interator == received.size() -1)) // Last part makes sure the last point is included in data set
 						sql =	"INSERT INTO ecen489_project2_data(time,longitude,latitude,bearing,speed,accelX" +
 				                ",accelY,accelZ,orientationA,orientationB,orientationC,rotVecX,rotVecY,rotVecZ," +
 				                "linAccX,linAccY,linAccZ,gravityX,gravityY,gravityZ,gyroX,gyroY,gyroZ)"
