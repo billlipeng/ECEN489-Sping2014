@@ -16,7 +16,7 @@ import java.sql.*;
 public class Algorithm {
 	
 	static double t_sample = 100;	//10 seconds between every measurement point
-	static double R = 6371000; //mean radius of Earth in meters
+	static double R = 6731000; //mean radius of Earth in meters
 	static long time1;
 	static long time2;
 	static long delta_t;
@@ -27,6 +27,8 @@ public class Algorithm {
 	static double bearing;
 	static double speed;
 	static double distance;
+	static double delta_lat;
+	static double delta_lon;
 	
 	public static void main(String args[])	{
 		Connection c = null;
@@ -45,42 +47,55 @@ public class Algorithm {
 		         
 		    	 int id = rs.getInt(1);
 		    	 
-//		         if (id > 2) {
-//		        	 break;
-//		         }
-		         for(int i = 1; i<=4; i++) {
+		         if (id > 9) {
+		        	 break;
+		         }
 		         
-
-			         if (id == i) {
-				         System.out.println();
-			        	 System.out.println( "ID = " + id );	
-				         time1 = rs.getLong(2);
-				         latitude1 = deg2rad(rs.getDouble(3));
-				         longitude1 = deg2rad(rs.getDouble(4));		        	 
-				         System.out.println( "Time = " + time1 );
-				         System.out.println( "Latitude = " + rad2deg(latitude1) );
-				         System.out.println( "Longitude = " + rad2deg(longitude1) );		        	 
-			         }
+		         
+		         for(int i = 1; i<=10; i++) {
+		         
+			         for(int j = 1; j<=4; j++) {
 			         
-			         else if (id == (i+1)) {
-			        	 
-			        	 System.out.println( "ID = " + id );	
-			        	 time2 = rs.getLong(2);
-			        	 bearing = deg2rad(rs.getDouble(5));
-			        	 speed = rs.getDouble(6);
-						 
-			        	 delta_t = time2-time1;
-				         distance = speed/delta_t;
+				         if (id == j) {
+					         System.out.println();
+				        	 System.out.println( "Operating on Row: " + id );	
+					         time1 = rs.getLong(2);
+					         latitude1 = deg2rad(rs.getDouble(3));
+					         longitude1 = deg2rad(rs.getDouble(4));		        	 
+					         System.out.println( "Time = " + time1 );
+					         System.out.println( "Latitude = " + rad2deg(latitude1) );
+					         System.out.println( "Longitude = " + rad2deg(longitude1) );		        	 
+				         }
 				         
-				         latitude2 = Math.asin( Math.sin(latitude1)*Math.cos(distance/R) + 
-						              Math.cos(latitude1)*Math.sin(distance/R)*Math.cos(bearing) );				        	 
-						 longitude2 = longitude1 + Math.atan2(Math.sin(bearing)*Math.sin(distance/R)*Math.cos(latitude1), 
-				                     Math.cos(distance/R)-Math.sin(latitude1)*Math.sin(latitude2));	
-						 
-				         System.out.println( "Bearing = " + rad2deg(bearing) );
-				         System.out.println( "Speed = " + speed );		    
-				         System.out.println( "Latitude2 = " + rad2deg(latitude2) );		
-				         System.out.println( "Longitude2 = " + rad2deg(longitude2) );					       
+				         else if (id == (j+1)) {
+				        	 
+				        	 System.out.println( "Operating on Row: " + id );	
+				        	 time2 = rs.getLong(2);
+				        	 bearing = deg2rad(rs.getDouble(5));
+				        	 speed = rs.getDouble(6);
+							 
+				        	 delta_t = time2-time1;
+					         distance = speed/delta_t;
+					         
+					         latitude2 = rad2deg(Math.asin( Math.sin(latitude1)*Math.cos(distance/R) + 
+							              Math.cos(latitude1)*Math.sin(distance/R)*Math.cos(bearing) ));				        	 
+							 longitude2 = rad2deg(longitude1 + Math.atan2(Math.sin(bearing)*Math.sin(distance/R)*Math.cos(latitude1), 
+					                     Math.cos(distance/R)-Math.sin(latitude1)*Math.sin(latitude2) ));	
+							 
+							 delta_lat = latitude2-rad2deg(latitude1);
+							 delta_lon = longitude2-rad2deg(longitude1);
+							 
+					         System.out.println( "Bearing = " + rad2deg(bearing) );
+					         System.out.println( "Speed = " + speed );		    
+					         System.out.println( "Latitude2 = " + latitude2 );		
+					         System.out.println( "Longitude2 = " + longitude2 );		
+					         System.out.println("-------------------------");
+					         System.out.println("(latitude1, longitude1) = (" + rad2deg(latitude1) + "," + rad2deg(longitude1) + ")");
+					         System.out.println("(latitude2, longitude2) = (" + latitude2 + "," + longitude2 + ")");
+					         System.out.println("Delta_Latitude = " + delta_lat);
+					         System.out.println("Delta_Longitude = " + delta_lon);
+					         System.out.println();
+				         }
 			         }
 		         }
 		         
