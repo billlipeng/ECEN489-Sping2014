@@ -371,8 +371,14 @@ public class Test1 {
 		System.out.println("point ="+point);
 		System.out.println("node_head ="+node_head);
 		System.out.println("head="+p1[0]+"   "+p0[0]+"   "+p1[1]+"   "+p0[1]);
-*/
-		
+*/	
+		// rotate angle
+		double angle = computeAngle(p0,p1,p2);
+		System.out.println("=======================");
+
+		System.out.println("angle = " + angle);
+		System.out.println("=======================");
+
 		// figure out rotate direction
 		int direction;
 		double bx = p2[0]-p0[0];
@@ -384,17 +390,12 @@ public class Test1 {
 		else 
 			direction = -1;
 		for(int i = 1; i< position; i++){
-			if(bearing.get(point-i) != 0){
+			if(bearing.get(point-i) != 0 && Math.abs(angle) < 0.7){
 				p1[0] = longitude.get(point-i);
 				p1[1] = latitude.get(point-i);
 				
-				System.out.println("p1[0] = " + p1[0] +"p1[1] = "+ p1[1]);
-	
-				
-				double angle = computeAngle(p0,p1,p2);
-				
-				System.out.println("angle = " + angle);
-	
+				System.out.println("p1[0] = " + p1[0] +"  p1[1] = "+ p1[1]);
+		
 				double xx = p1[0]-p0[0];
 				double yy = p1[1]-p0[1];
 				if(direction==1)// clock-wise rotate, change angle to negative
@@ -403,7 +404,7 @@ public class Test1 {
 				x1 = (xx*Math.cos(angle) - yy*Math.sin(angle)) * ratio;
 				y1 = (xx*Math.sin(angle) + yy*Math.cos(angle)) * ratio;			
 				longitude.set(point-i, p0[0]+x1);
-				System.out.print("point-i ="+(point-i)+" p0[0]+x1  "+( p0[0]+x1));
+				System.out.println("point-i ="+(point-i)+" p0[0]+x1  "+( p0[0]+x1));
 	
 				latitude.set(point-i, p0[1]+y1);
 				System.out.println("  p0[0]+y1  "+( p0[1]+y1));
@@ -422,7 +423,13 @@ public class Test1 {
 		System.out.println("node_tail ="+node_tail);
 		System.out.println("tail="+p1[0]+"   "+p0[0]+"   "+p1[1]+"   "+p0[1]);
 */
-		
+		// rotate angle
+		angle = computeAngle(p0,p1,p2);
+		System.out.println("=======================");
+
+		System.out.println("angle = " + angle);
+		System.out.println("=======================");
+
 		// figure out rotate direction
 		bx = p2[0]-p0[0];
 		by = p2[1]-p0[1];
@@ -434,15 +441,13 @@ public class Test1 {
 			direction = -1;
 		
 		for(int i = 1; i< 10-position; i++){
-			if(bearing.get(point+i) != 0){
-				p1[0] = longitude.get(point+i);
-				p1[1] = latitude.get(point+i);
+			if(bearing.get(point+i) != 0 && Math.abs(angle) < 0.7){
+				p1[0] = longitudeCopy.get(point+i);
+				p1[1] = latitudeCopy.get(point+i);
 				
-				System.out.println("p1[0] = " + p1[0] +"p1[1] = "+ p1[1]);
+				System.out.println("p1[0] = " + p1[0] +"   p1[1] = "+ p1[1]);
 	
-				double angle = computeAngle(p0,p1,p2);
 				
-				System.out.println("angle = " + angle);
 	
 				double xx = p1[0]-p0[0];
 				double yy = p1[1]-p0[1];
@@ -455,7 +460,7 @@ public class Test1 {
 				System.out.println("point+i = "+(point+i)+" p0[0]+x1  "+( p0[0]+x1));
 	
 				latitude.set(point+i, p0[1]+y1);
-				System.out.print(" p0[0]+y1  "+( p0[1]+y1));
+				System.out.println(" p0[0]+y1  "+( p0[1]+y1));
 			}
 			else{}
 
@@ -472,10 +477,11 @@ public class Test1 {
 
 		double x2 = p2[0] - p0[0];   	System.out.print(" "+x2);
 
-		double y2 = p2[1] - p0[1];		System.out.println(" "+x2);
-
-
-		return Math.acos((x1*x2+y1*y2)/(Math.sqrt(Math.pow(x1,2)+Math.pow(y1,2))*Math.sqrt(Math.pow(x2,2)+Math.pow(y2,2))));
-	  
+		double y2 = p2[1] - p0[1];		System.out.println(" "+y2);
+		double angle = Math.acos((x1*x2+y1*y2)/(Math.sqrt(Math.pow(x1,2)+Math.pow(y1,2))*Math.sqrt(Math.pow(x2,2)+Math.pow(y2,2))));
+		
+		
+		
+		return angle;
 	}
 }
