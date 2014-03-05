@@ -54,6 +54,7 @@ public class TeamMAPAnalaysis extends Component {
         ArrayList<DataPoint> data = dbh.readDBData(readTable);
         ArrayList<DataPoint> results = alg.analyze(data);
         dbh.writeDBData(writeTable, results);
+        new Thread(new FusionUpload(results)).start();
 
         // Upload to Fusion Table
     }

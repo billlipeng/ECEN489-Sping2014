@@ -12,6 +12,7 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.fusiontables.Fusiontables;
 import com.google.api.services.fusiontables.FusiontablesScopes;
 import com.google.api.client.googleapis.*;
+import com.sun.corba.se.spi.logging.CORBALogDomains;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,8 +25,8 @@ import static com.google.api.services.fusiontables.Fusiontables.*;
 
 public class FusionUpload implements Runnable {
 
-    private String FUSION_TABLE_NAME = "1wBCyK6GHyFahftu8kGymu4nFmPHTZhKmB";
-    private ArrayList<String> COLUMN_NAMES = ["time", "longitude", "latitude", "bearing", "speed"];
+    private String FUSION_TABLE_NAME = "1wBCyK6GHyFahftu8kGymu4nFmPHTZhKmB_N2e7xr";
+    private ArrayList<String> COLUMN_NAMES = new ArrayList<String>();
 
     private static final String APPLICATION_NAME = "ECEN 489 Project Two";
     private static final java.io.File DATA_STORE_DIR =
@@ -62,6 +63,11 @@ public class FusionUpload implements Runnable {
     }
 
     public FusionUpload(ArrayList<DataPoint> _dataset) {
+        COLUMN_NAMES.add("time");
+        COLUMN_NAMES.add("longitude");
+        COLUMN_NAMES.add("latitude");
+        COLUMN_NAMES.add("bearing");
+        COLUMN_NAMES.add("speed");
         try {
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
             dataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR);
@@ -119,10 +125,10 @@ public class FusionUpload implements Runnable {
         //  VALUES ('Cardinal','Tom B. Erichsen','Skagen 21','Stavanger','4006','Norway');
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO ");
-        query.append(config.FUSION_TABLE_NAME);
+        query.append(FUSION_TABLE_NAME);
         query.append(" (");
         String sep = "";
-        for (String s : config.COLUMN_NAMES) {
+        for (String s : COLUMN_NAMES) {
             query.append(sep);
             query.append(s);
             sep = ",";
