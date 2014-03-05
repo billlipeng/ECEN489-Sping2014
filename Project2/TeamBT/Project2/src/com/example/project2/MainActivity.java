@@ -170,13 +170,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	    //gps.onPause();
 	    //mSensorManager.unregisterListener(this);
 	  }
-	  
-	  @Override
-	  public void onStop(){
-		  super.onStop();
-		  mSensorManager.unregisterListener(this);
-	  }
-	  
+
 	    /**
 	     * Method to create points from the GPS
 	     */
@@ -204,13 +198,12 @@ public class MainActivity extends Activity implements SensorEventListener {
         	Log.d(TAG,"Started running");
         	running = true;
         	editTxt.setText("Running");
-        	timer = new Timer(10, new Callable<Integer>(){
+        	timer = new Timer(10, System.currentTimeMillis() ,new Callable<Integer>(){
         	    				public Integer call() {
         	    						return DPprocess();
         	    				}});
         	//------timerry stuff
         	timer.start();
-            DPprocess();
         }
         else  if (Command.equals("send"))
         {
@@ -241,29 +234,41 @@ public class MainActivity extends Activity implements SensorEventListener {
 		
 	    if(event.sensor.getType() == accel.getType())
 	    {
-	    	accel_data = event.values;
+	    	accel_data[0] = event.values[0];
+	    	accel_data[1] = event.values[1];
+	    	accel_data[2] = event.values[2];
 	    }
 	    else if(event.sensor.getType() == gyro.getType())
 	    {
-	    	gyro_data = event.values;
+	    	gyro_data[0] = event.values[0];
+	    	gyro_data[1] = event.values[1];
+	    	gyro_data[2] = event.values[2];
 	    }
 	    else if(event.sensor.getType() == rotation.getType())
 	    {
-	    	rot_data = event.values;
+	    	rot_data[0] = event.values[0];
+	    	rot_data[1] = event.values[1];
+	    	rot_data[2] = event.values[2];
 	    }
 	    else if(event.sensor.getType() == linearAcc.getType())
 	    {
-	    	linAcc_data = event.values;
+	    	linAcc_data[0] = event.values[0];
+	    	linAcc_data[1] = event.values[1];
+	    	linAcc_data[2] = event.values[2];
 	    }
 	    else
 	    	{
 	    		if(event.sensor.getType() == gravity.getType())
 			    {
-			    	gravity_data = event.values;
+			    	gravity_data[0] = event.values[0];
+			    	gravity_data[1] = event.values[1];
+			    	gravity_data[2] = event.values[2];
 			    }
 	    		else if (event.sensor.getType() == geomagnetic.getType())
 	    		{
-	    			magData = event.values;
+	    			magData[0] = event.values[0];
+	    			magData[1] = event.values[1];
+	    			magData[2] = event.values[2];
 	    		}
 	    		
 	    		SensorManager.getRotationMatrix(rotationMatrix, null, gravity_data, magData);
@@ -287,7 +292,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 		//prints
 //			Log.d(TAG,Float.toString(dpx.getAccelX()));
 //			Log.d(TAG,Float.toString(dpx.getGravityX()));
-//			Log.d(TAG,Float.toString(dpx.getGyroX()));
+			Log.d(TAG,Long.toString(dpx.getTime()));
 			Log.d(TAG,Double.toString(dpx.getBearing()));
 			Log.d(TAG,Double.toString(dpx.getLongitude()));
 			Log.d(TAG,Integer.toString(dp.size()));

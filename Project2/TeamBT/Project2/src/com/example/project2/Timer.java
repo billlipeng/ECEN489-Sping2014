@@ -5,8 +5,11 @@ import java.util.GregorianCalendar;
 import java.util.concurrent.Callable;
 
 import android.os.Handler;
+import android.util.Log;
 
 public class Timer {
+	private static final String TAG = "Timer";
+	
 	//TIMER Variables
 	public long strtTime = 0;
 	Handler timerHandler = new Handler();
@@ -26,19 +29,21 @@ public class Timer {
 	          if(seconds%interv == 0)
 	          {
 	        	  try{
-	        	  func.call();
+	        		  //Log.d(TAG, "Seconds: "+ Integer.toString(seconds)+ " Interval: " + Integer.toString(interv));
+	        		  func.call();
 	        	  }
 	        	  catch(Exception e)
 	        	  {        		  
 	        	  }
 	          }
-	          timerHandler.postDelayed(this, 500);
+	          timerHandler.postDelayed(this, 1000);
 	      }
 	  };
 	  
 	// Constructor, need to receive a function to be executed
-	public Timer(int interv, Callable<Integer> func) {
+	public Timer(int interv, long strTime, Callable<Integer> func) {
 		super();
+		this.strtTime = strTime;
 		this.interv = interv;
 		this.func = func;
 	  	}
