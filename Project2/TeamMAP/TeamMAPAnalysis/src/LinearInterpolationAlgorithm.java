@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class LinearInterpolationAlogrithm implements InterpolationAlgorithm {
+public class LinearInterpolationAlgorithm implements InterpolationAlgorithm {
 	ArrayList<DataPoint> dataSet;
 
 	    @Override
@@ -24,8 +24,8 @@ public class LinearInterpolationAlogrithm implements InterpolationAlgorithm {
 	        		double[] dub = lp.analyze();
 	        		
 	        		for(int p=0;p<dub.length;p++){
-	        			paritions.get(i).get(p).setLatitude(dub[2*(p+1)-2]);
-	        			paritions.get(i).get(p).setLongitude(dub[2*(p+1)-1]);
+	        			dataSet.get(i*10+p).setLatitude(dub[2*(p+1)-2]);
+	        			dataSet.get(i*10+p).setLongitude(dub[2*(p+1)-1]);
 	        			
 	        			
 	        		}
