@@ -5,18 +5,23 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
+import com.mhardiman.project2app.imu;
 
 public class DBHandler {
 	
 	private String mDBName;
 	private String mFilepath = "jdbc:sqlite:/home/heffay/school/ECEN489-Spring2014/Project2/TeamJCM/";
 	private Connection connection;
-	private String mTablename= "table1";
+	private String mTablename= "SampleData1";
 	private ResultSet rs; //for handling the query results
+	private ArrayList<imu> imus;
 	
 	DBHandler(String dbname){
 		
 		mDBName = dbname;
+		imus = new ArrayList<imu>();
 		
 		try{
 			Class.forName("org.sqlite.JDBC");
@@ -42,24 +47,26 @@ public class DBHandler {
 	}
 	
 	//instead of ResultSet, return ArrayList<imu>
-	ResultSet getDBValues(){
-		
+	ArrayList<imu> getDBValues(){
+			imus.clear(); //re-initalize arraylist
+			imu temp;
 		try{
 			Statement query = connection.createStatement();
 			String sql = "SELECT * from "+mTablename;
 			rs = query.executeQuery(sql);
 			//System.out.println(rs.getDouble(1));
 			while(rs.next()){
-			row2imu(rs);
-			
+			temp = row2imu(rs);
+			imus.add(temp);
 			//after returning imu, add to array list;
+			
 			}
 			query.close();
-			return rs;
+			return imus;
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-		return rs; //return null if nothing
+		return imus; //return null if nothing
 	}
 	
 	
@@ -79,19 +86,21 @@ public class DBHandler {
 	}
 	
 	//Information swap.. we need to return type imu here
-	void row2imu(ResultSet rs){
+	imu row2imu(ResultSet rs){
+		imu temp = new imu();
 		try{
-			//here is pseudo code
-			//imu.setTime(rs.getDouble(1));
-			//imu.setLatitude(rs.getDouble(2));
-			//imu.setLongitude(rs.getDouble(3));
-			//imu.setBearing(rs.getDouble(4));
-			//imu.setSpeed(rs.getDouble(5));
-			//return imu;
-			System.out.println(rs.getDouble(1));
+			
+			temp.time =  rs.getLong(1);
+			temp.longitude =  rs.getDouble(2);
+			temp.latitude =  rs.getDouble(3);
+			temp.bearing =  rs.getDouble(4);
+			temp.speed =  rs.getDouble(5);
+			return temp;
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
+		return temp;
 	}
+	
 
 }
