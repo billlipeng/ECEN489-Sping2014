@@ -11,10 +11,12 @@ public class Main {
 	static double speed = 0;
 	static double bearing = 0;
 	static double speedFactor = 1;
-	static double bearingFactor = 5;
-	static double curl = 0;
+	static double bearingFactor = 5;	
+	static double previousBearing = 0;
+	static double maxDeltaBearing = 1;	//degrees
+	static double curl = 0.05;
 	static int minutes = 20;
-	static int smallPeriod = 10;
+	static int smallPeriod = 10; //seconds
 	static int bigPeriod = 100;
 	static int gap = bigPeriod/smallPeriod;
 	static String folder = "/Users/samcarey/Desktop/Spring 2014/489/Project2/";
@@ -27,7 +29,6 @@ public class Main {
 		/////////////////////// Choose One interpolation method for the path reconstruction
 		ArrayList<DataPoint> guess1 = linear(strip(generated));
 		ArrayList<DataPoint> guess2 = vector(strip(generated));
-		
 		
 		toCsv(guess1,"guess1");
 		toCsv(guess2,"guess2");
@@ -45,9 +46,15 @@ public class Main {
 			Double yRelative = 0.0;
 			Double[][] extensions = new Double[segment.size()-1][2];
 			for (int j = 0 ; j < segment.size()-1 ; j++){
-				xRelative += segment.get(j).getSpeed()*smallPeriod*Math.cos(toRadians(segment.get(j).getBearing()));
-				yRelative += segment.get(j).getSpeed()*smallPeriod*Math.sin(toRadians(segment.get(j).getBearing()));
-				
+				double newBearing = segment.get(j).getBearing();
+				//Cap Bearing change
+				if (newBearing > previousBearing+maxDeltaBearing) newBearing = previousBearing+maxDeltaBearing;
+				if (newBearing < previousBearing-maxDeltaBearing) newBearing = previousBearing-maxDeltaBearing;
+				//
+				double newSpeed = segment.get(j).getSpeed()*smallPeriod;
+				xRelative += newSpeed*Math.cos(toRadians(newBearing));
+				yRelative += newSpeed*Math.sin(toRadians(newBearing));
+				previousBearing = newBearing;
 				extensions[j][0] = xRelative;
 				extensions[j][1] = yRelative;
 			}
