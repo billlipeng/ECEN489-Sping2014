@@ -41,7 +41,8 @@ public class Algorithm {
 		      
 		      stmt = c.createStatement();
 		      
-		      ResultSet rs = stmt.executeQuery( "SELECT * FROM ecen489_project2_data;" );
+		      ResultSet rs = stmt.executeQuery( "SELECT * FROM ecen489_proj2_sample;" );
+//		      ResultSet.rs1 = stmt.executeQuery();
 		      
 		      while (rs.next())	{
 		         
@@ -51,10 +52,11 @@ public class Algorithm {
 		        	 break;
 		         }
 		         
-		         
-		         for(int i = 1; i<=10; i++) {
-		         
-			         for(int j = 1; j<=4; j++) {
+		         //start over again from actual gps sample
+//		         for(int i = 1; i<=10; i++) {
+		        	 
+		        	 //get the next 9 points
+			         for(int j = 2; j<=8; j++) {
 			         
 				         if (id == j) {
 					         System.out.println();
@@ -74,7 +76,8 @@ public class Algorithm {
 				        	 bearing = deg2rad(rs.getDouble(5));
 				        	 speed = rs.getDouble(6);
 							 
-				        	 delta_t = time2-time1;
+//				        	 delta_t = time2-time1;
+				        	 delta_t = 1;
 					         distance = speed/delta_t;
 					         
 					         latitude2 = rad2deg(Math.asin( Math.sin(latitude1)*Math.cos(distance/R) + 
@@ -97,7 +100,7 @@ public class Algorithm {
 					         System.out.println();
 				         }
 			         }
-		         }
+//		         }
 		         
 		         System.out.println();
 
