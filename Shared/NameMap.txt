@@ -1,15 +1,18 @@
-Miguel Alvarez --> mfa157
-Joseph Binder --> jpbinder
-Colin Brasher --> cbrasher
-Samuel Carey --> samcarey
-Clayton Crawford --> clayton.crawford
-Joao Marcos De Aguiar --> joao.een
-Mark Hardiman --> mtn7450
-Jeffrey Jensen --> jeffsanwa
-Peng Li --> billlipeng
-Jason Moore --> jason.moore
-Zachary Partal --> zpartal
-Alexandre Ribeiro Lopes --> alelopes
-Cameron Shaw --> cameroncowden
-Jeff Terrell --> jdterrell
-Yuanxing Yin --> yin634
+= Full Name --> Howdy NetID --> GitHub Username =
+
+Miguel Alvarez --> mfa157 --> mfa157
+Joseph Binder --> jpbinder --> jpbinder
+Colin Brasher --> cbrasher --> cbrasher
+Samuel Carey --> samcarey --> samcarey
+Clayton Crawford --> clayton.crawford --> claytoncrawford
+Joao Marcos De Aguiar --> joao.een --> joaoeen
+Mark Hardiman --> mtn7450 --> mtn7450
+Jeffrey Jensen --> jeffsanwa --> happycamper
+Peng Li --> billlipeng --> billlipeng
+Jason Moore --> jason.moore --> IntrepidNomad
+Zachary Partal --> zpartal --> zpartal
+Alexandre Ribeiro Lopes --> alelopes --> alelopes
+Cameron Shaw --> cameroncowden --> cameroncowden
+Jeff Terrell --> jdterrell --> AggieEE
+Yuanxing Yin --> yin634 --> toming90
+
