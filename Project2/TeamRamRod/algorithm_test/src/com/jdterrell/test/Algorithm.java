@@ -41,7 +41,7 @@ public class Algorithm {
 		      
 		      stmt = c.createStatement();
 		      
-		      ResultSet rs = stmt.executeQuery( "SELECT * FROM ecen489_proj2_sample;" );
+		      ResultSet rs = stmt.executeQuery( "SELECT * FROM ecen489_project2_data;" );
 //		      ResultSet.rs1 = stmt.executeQuery();
 		      
 		      while (rs.next())	{
@@ -77,7 +77,7 @@ public class Algorithm {
 				        	 speed = rs.getDouble(6);
 							 
 //				        	 delta_t = time2-time1;
-				        	 delta_t = 1;
+				        	 delta_t = 10;
 					         distance = speed/delta_t;
 					         
 					         latitude2 = rad2deg(Math.asin( Math.sin(latitude1)*Math.cos(distance/R) + 
