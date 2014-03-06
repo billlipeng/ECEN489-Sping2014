@@ -1,4 +1,4 @@
-package team2;
+package com.google.api.services.samples.fusiontables.cmdline;
 
 
 
@@ -22,6 +22,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+
+import team2.DataPacket;
 
 
 public class ServerTeam2 extends JFrame {
@@ -157,6 +159,35 @@ public class ServerTeam2 extends JFrame {
 						
 	  	}
 	  
+	  
+	  
+	  
+	  public void FUSIONTABLE(){
+			FusiontablesSample Fusion = new FusiontablesSample();
+
+			//this little part is for testing, just this
+			/*
+			DataPacket test;			
+	  		float fakefloat=1.1f;
+	  		long fakelong=1;
+			double fakedouble=1.2;					
+	  		test = new DataPacket(fakelong,fakedouble,fakedouble,fakedouble,fakedouble,fakefloat,fakefloat,fakefloat,fakefloat,fakefloat,fakefloat,fakefloat,fakefloat,fakefloat,fakefloat,fakefloat,fakefloat,fakefloat,fakefloat,fakefloat,fakefloat,fakefloat,fakefloat);
+*/
+			
+			for (int i=0;i<received.size();i++){
+
+				Fusion.Start(received.get(i));
+				if ((i%30==0) && (i!=0)){
+					try {
+					    Thread.sleep(60000);
+					} catch(InterruptedException ex) {
+					    Thread.currentThread().interrupt();
+					}
+				}
+			}
+
+	  }
+	  
 
 	  
 	  public void startServer(){
@@ -164,13 +195,13 @@ public class ServerTeam2 extends JFrame {
 			try // set up server to receive connections; process connections
 			{
 	
-				server = new ServerSocket(545, 100); // create ServerSocket
+				server = new ServerSocket(5453, 100); // create ServerSocket
 				displayMessage( "\nServer Started" );
 				
 				while(true){
 					try
 					{
-					
+
 						displayMessage( "\nWaiting for connection\n" );
 						connection = server.accept(); // allow server to accept connection
 					    input = new ObjectInputStream( connection.getInputStream() );
@@ -193,6 +224,8 @@ public class ServerTeam2 extends JFrame {
 								input.close(); // close input stream
 								connection.close(); // close socket	
 								SQLINSERT();
+								FUSIONTABLE();
+
 							} // end finally
 							  
 					} // end try

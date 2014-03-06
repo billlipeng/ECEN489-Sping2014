@@ -1,6 +1,6 @@
-package team2;
+package com.google.api.services.samples.fusiontables.cmdline;
 
-public class StartHere {
+public class StartHere1 {
 
 	  public static void main(String[] args) {
 
