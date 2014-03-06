@@ -231,6 +231,7 @@ class myListener implements LocationListener, SensorEventListener{
     	 lm = (LocationManager)mainContext.getSystemService(Context.LOCATION_SERVICE);
     	 provider = LocationManager.GPS_PROVIDER;
     	 loc = lm.getLastKnownLocation(provider);
+    	 lm.requestLocationUpdates(provider, 1000, 0, this);
     	 if (loc != null)
     	 {
     		 System.out.println("GPS connected\n");
@@ -261,7 +262,7 @@ class myListener implements LocationListener, SensorEventListener{
      public void getCoordinates(boolean takeReadings)
      {
     	 this.takeReadings = takeReadings;
-    	 lm.requestSingleUpdate(provider, this, null);
+    	 
     	 
     	 if (enableSensors & takeReadings)
     	 {
@@ -294,6 +295,8 @@ class myListener implements LocationListener, SensorEventListener{
 	    	 
 	    	 if (gotSensor | !enableSensors)
 	    		 makeEntry();
+	    	 
+	    	 takeReadings = false;
     	 }
      }
 	
