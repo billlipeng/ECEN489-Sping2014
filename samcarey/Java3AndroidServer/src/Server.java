@@ -18,7 +18,9 @@ public class Server {
 			System.out.println("Server connected!");
 			
 			ObjectInputStream input = new ObjectInputStream(connection.getInputStream());
+			
 			ClientPacket clientPacket = (ClientPacket) input.readObject();
+			System.out.println("Halfway");
 			int num1 = clientPacket.getNum1();
 			int num2 = clientPacket.getNum2();
 			int result = num1 + num2;
@@ -27,6 +29,7 @@ public class Server {
 			ServerPacket serverPacket = new ServerPacket(serverID, result);
 			output.writeObject(serverPacket);
 			output.flush();
+			System.out.println("Finished");
 			
 			input.close();
 			output.close();

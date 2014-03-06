@@ -1,0 +1,8 @@
+{
+	"DB_PATH": "C:/projone.db",
+	"TABLE_NAME": "ecen489_project1_data",
+	"FUSION_TABLE_NAME": "1Wq0kwSrOoUH46wjkygxFqp7Xv439F4ZybcxKQq0",
+	"PORT": 5544,
+	"COLUMN_NAMES": ["date", "time", "client_id", "run_id", "latitude", "longitude", "bearing",
+					"speed", "altitude","sensor_id", "sensor_type", "sensor_value", "attribute"]
+}

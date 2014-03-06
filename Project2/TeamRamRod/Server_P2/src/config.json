@@ -1,0 +1,10 @@
+{
+	"DB_PATH": "C:/p2.db",
+	"TABLE_NAME": "ecen489_project2_data",
+	"FUSION_TABLE_NAME": "1kMI1PaLFXtXuP06qk9SX7nARPeLehs1Jw5agd1M",
+	"PORT": 5555,
+	"COLUMN_NAMES": ["time", "latitude", "longitude", "bearing", "speed", "accel_x", "accel_y",
+					"accel_z", "gyro_x", "gyro_y", "gyro_z", "orientation_A", "orientation_P",
+					"orientation_R", "rotVec_X", "rotVec_Y", "rotVec_Z", "rotVec_C", "linACC_X",
+					"linACC_Y", "linACC_Z", "gravity_X", "gravity_Y", "gravity_Z"]
+}

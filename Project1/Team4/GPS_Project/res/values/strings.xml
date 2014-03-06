@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GPS_Project</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="button_start">Start</string>
+    <string name="button_update">Update</string>
+    <string name="button_send">Send</string>
+    <string name="value1">Values On the List</string>
+    <string name="valuelatm">Latitude</string>
+    <string name="valuelonm">Longitude</string>
+    <string name="title_activity_sql">SQLActivity</string>
+    <string name="button_change">View</string>
+    <string name="value0">Set IP</string>
+    <string name="button_erase">Erase</string>
+    <string name="button_getsensor">Connect Sensor</string>
+    
+</resources>

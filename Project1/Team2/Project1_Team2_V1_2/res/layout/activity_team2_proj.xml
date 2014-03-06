@@ -1,0 +1,106 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    
+    tools:context=".MainActivity" >
+<LinearLayout  
+        android:layout_width="match_parent"  
+        android:layout_height="match_parent"  
+        android:orientation="vertical" >  
+
+     <TextView
+         android:id="@+id/show"
+         android:layout_width="match_parent"
+         android:layout_height="84dp"
+         android:layout_above="@+id/text"
+         android:gravity="center"
+         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+     <TextView
+         android:id="@+id/tvData"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:gravity="center_horizontal"
+         android:text="Current data" />
+    
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bluetooth_address"
+        android:text="BlueTooth Address" />
+    
+     <Spinner
+        android:id="@+id/bluetooth_address"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+       />
+      <Button
+        android:id="@+id/btn1"
+        
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="receive"
+        android:text="Receive Data" />
+    
+        
+         
+      
+    <EditText
+        android:id="@+id/etPort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.73"
+        
+        android:hint="Port" />
+
+    <EditText
+        android:id="@+id/etIP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.73"
+        
+        android:hint="IP" >
+
+        
+    </EditText>
+
+
+    <Button
+        android:id="@+id/start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="gps"
+        android:text="Start Collecting GPS Info" />
+    
+    
+
+    
+
+    <Button
+        android:id="@+id/end"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="end"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:text="END" />
+    
+    <Button
+        android:id="@+id/send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="send"
+        android:text="Send to NUC" />
+    
+     <Button
+        android:id="@+id/reset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="reset"
+        android:text="Reset the ArrayList" />
+    
+ </LinearLayout>
+       
+
+</ScrollView>

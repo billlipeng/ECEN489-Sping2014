@@ -1,0 +1,10 @@
+{
+	"DB_PATH": "C:/Users/zach/Desktop/ECEN489-Spring2014/Project2/TeamMAP/TeamMapServer/projtwo.db",
+	"TABLE_NAME": "ecen489_project2_data",
+	"FUSION_TABLE_NAME": "1wBCyK6GHyFahftu8kGymu4nFmPHTZhKmB_N2e7xr",
+	"PORT": 5555,
+	"COLUMN_NAMES": ["time", "longitude", "latitude", "bearing", "speed", "accelX", "accelY",
+					"accelZ", "orientationA","orientationP", "orientationR", "rotVecX", "rotVecY", "rotVecZ",
+					"rotVecC", "linAccX", "linAccY", "linAccZ", "gravityX", "gravityY", "gravityZ",
+					"gyroX", "gyroX", "gyroX"]
+}

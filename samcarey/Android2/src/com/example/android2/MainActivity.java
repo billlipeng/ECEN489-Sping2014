@@ -20,6 +20,8 @@ import android.widget.EditText;
 import com.zpartal.commpackets.ClientPacket;
 import com.zpartal.commpackets.ServerPacket;
 
+//import com.example.samcarey.*;
+
 public class MainActivity extends Activity {
 
 	public final static String EXTRA_MESSAGE = "com.example.Android3.MESSAGE";
@@ -28,7 +30,7 @@ public class MainActivity extends Activity {
 	public int num2 = 0;
 	public int result  = 0;
 	private int port = 5555;
-	private String ip = "10.201.41.194";
+	private String ip = "10.201.41.112";
 
 	public void sendMessage(View view) {
 		if (netCheck()){

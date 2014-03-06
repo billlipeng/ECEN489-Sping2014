@@ -1,0 +1,42 @@
+### Android
+***
+
+The Android application will be used to collect data. We collect both GPS and sensor data every 10 seconds. Everytime we 
+collect 10 data points, we should remove GPS information of the previous 9 points (no change for sensor information). We 
+will send the dataset to server while completing data collection.
+The following is a list of data that we should collect:
+
+**Data collected by Android Location API**
+* time (_long_ , keep track of time )
+* longitude (_double_)
+* latitude (_double_)
+* bearing (_double_)
+* speed (_double_)
+
+
+**Data collected by Android build-in sensors**
+* accelX (_float_)
+* accelY (_float_)
+* accelZ (_float_)
+* orientationA (_float_)
+* orientationB (_float_)
+* orientationC (_float_)
+* rotVecX (_float_)
+* rotVecY (_float_)
+* rotVecZ (_float_)
+* linAccX (_float_)
+* linAccY (_float_)
+* linAccZ (_float_)
+* gravityX (_float_)
+* gravityY (_float_)
+* gravityZ (_float_)
+* gyroX (_float_)
+* gyroY (_float_)
+* gyroZ (_float_)
+
+
+### Server
+***
+
+The server first receives testing dataset from android and store them in database. 
+
