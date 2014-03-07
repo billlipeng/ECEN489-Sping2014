@@ -12,7 +12,10 @@ import java.util.Scanner;
 import java.util.Vector;
 
 public class Test1 {
-	public static Vector<Integer> flag = new Vector<Integer>();
+	//vector for calculation
+	public static Vector<Integer> flag = new Vector<Integer>(); //flag for display
+	public static Vector<Integer> crazy_angle = new Vector<Integer>(); // angle with mistake
+	public static Vector<Integer> crazy_distance = new Vector<Integer>(); // angle with mistake
 
 	public static Vector<Long> time = new Vector<Long>();
 	public static Vector<Long> timeCopy = new Vector<Long>();
@@ -48,30 +51,25 @@ public class Test1 {
 	public static Vector<Float> gyroY = new Vector<Float>();
 	public static Vector<Float> gyroZ = new Vector<Float>();
 	
-	
+	final static double longitude_unit = 95880.84;
+	final static double latitude_unit = 110862.94;
 	
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
 
 		try{
-			
-			/*
-			double[] p0;
-			double[] p1;
-			double[] p2;
-			p0 = new double[2];
-			p1 = new double[2];
-			p2 = new double[2];
-			
-			p0[0] = 0;
-			p0[1] = 0;
-			p1[0] = 1;
-			p1[1] = 0;
-			p2[0] = 0;
-			p2[1] = 1;
-			System.out.println(computeAngle(p0, p1, p2)/Math.PI*180);
 
-*/
 			read_data();
+			//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			// avg speed
+			double before;
+			double sum=0;
+			for(int i = 1; i< time.size();i++){
+				before = Math.sqrt(Math.pow(latitudeOriginal.get(i)*latitude_unit - latitudeOriginal.get(i-1)*latitude_unit, 2)
+						+Math.pow(longitudeOriginal.get(i)*longitude_unit - longitudeOriginal.get(i-1)*longitude_unit,2));
+				sum += before;
+			}
+			System.out.println("avg:"+sum/(time.size()-1));
+			//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			for(int i = 0; i < time.size(); i++){
 				if(i%10 == 0)
 					flag.add(i, 2);
@@ -80,7 +78,7 @@ public class Test1 {
 				else
 					flag.add(i,0);
 			}
-		//	new InsertFusionTables(longitudeOriginal,latitudeOriginal,"Original",flag).start();
+			new InsertFusionTables(longitudeOriginal,latitudeOriginal,"Original",flag).start();
 			reset_time_unit();
 			calculate();
 			System.out.println("num\ttime\t\tlatitude\t\tlongitutde");
@@ -90,10 +88,10 @@ public class Test1 {
 				System.out.println(longitude.get(i)+"\t");
 
 			}
-		//	Thread.sleep(6000);
-			Thread.sleep(1);
-
-		//	new InsertFusionTables(longitude,latitude,"Calculate",flag).start();
+			Thread.sleep(6000);
+			Thread.sleep(1);			
+			
+			new InsertFusionTables(longitude,latitude,"Calculate",flag).start();
 
 
 		} catch (InterruptedException e) {
@@ -106,13 +104,16 @@ public class Test1 {
 		}
 
 	}
+	
+
+	
 	// modified from print table
 	public static void read_data() throws ClassNotFoundException {
 
 		try {
 			Class.forName("org.sqlite.JDBC");
 			Connection conn = null;
-			conn = DriverManager.getConnection("jdbc:sqlite:projtwo_5.db");
+			conn = DriverManager.getConnection("jdbc:sqlite:DataSampleMiguel.sqlite");
 
 			
 			Statement statement = conn.createStatement();
@@ -159,7 +160,7 @@ public class Test1 {
 				conn.close();
 			//--------------------------------------------------------		
 			Class.forName("org.sqlite.JDBC");
-			conn = DriverManager.getConnection("jdbc:sqlite:projtwo_5.db");
+			conn = DriverManager.getConnection("jdbc:sqlite:DataSampleMiguel.sqlite");
 
 			
 			statement = conn.createStatement();
@@ -238,12 +239,24 @@ public class Test1 {
 					calculate_node(node, 5, 1);
 					calculate_node(node+1, 5, -1);
 					rotation(node*10+5);
-					combine_vector(node);
+					//combine_vector(node);
 				}
 				
 				// calculate node list tail
 				calculate_node((time.size()-1)/10, (time.size()-1)%10 , 1);
 			}
+			detect_angle();
+			detect_distance();
+			repair();
+			System.out.println("ii\tangle\tdistance");
+
+			for(int ii=0;ii<crazy_angle.size();ii++)
+			{
+				System.out.println(ii+"\t"+crazy_angle.get(ii)+"\t"+crazy_distance.get(ii));
+			}
+
+			
+			
 			System.out.println("Calculating Complete!");
 
 		}
@@ -252,12 +265,136 @@ public class Test1 {
 		}
 
 	}
-		
-	// calculate points by using bearing and velocity
-	// input:  	part(int):		part want to calculate
-	//			nodeNum(int):	number of nodes to calculate
-	//		    direction: 		direction the nodes. 1 forward; -1 backward; 
-	//			dataset:		save data in longitude(dataset = 0) or longitudeCopy(dataset =1)
+	private static void detect_angle() {
+		double[] mid = new double[2];
+		double[] before = new double[2];
+		double[] after = new double[2];
+		double angle;
+		int flag = 0;
+		crazy_angle.add(0);// set zero to 0
+		for(int i = 1; i< (time.size()-1);i++){
+			while(latitude.get(i-1)==latitude.get(i)&&longitude.get(i-1)==longitude.get(i)){
+				i++;
+				crazy_angle.add(0);
+			}
+			mid[0] = latitude.get(i)*latitude_unit;
+			mid[1] = longitude.get(i)*longitude_unit;
+			before[0] = latitude.get(i-1)*latitude_unit;
+			before[1] = longitude.get(i-1)*longitude_unit;			
+			after[0] = latitude.get(i+1)*latitude_unit;
+			after[1] = longitude.get(i+1)*longitude_unit;
+			angle = computeAngle(mid,before,after);
+			
+			if(angle < Math.PI/180*105){
+				flag++;
+				if(flag>=2)
+				{
+					crazy_angle.set(i-1, 1);
+					crazy_angle.add(1);
+				}
+				else
+					crazy_angle.add(0);
+			}
+			else{
+				if(flag>=2){
+					crazy_angle.add(1);
+					// reset flag
+					flag = 0;
+				}
+				else
+					crazy_angle.add(0);
+			}
+						
+		}
+		// set last element to 0 
+		crazy_angle.add(0);
+			
+	}
+	private static void detect_distance() {
+		double before;
+		double after;
+		double ratio;
+		crazy_distance.add(0);// set zero to 0
+		for(int i = 1; i< (time.size()-1);i++){
+			while(latitude.get(i-1)==latitude.get(i)&&longitude.get(i-1)==longitude.get(i)){
+				i++;
+				crazy_distance.add(0);
+			}
+			before = Math.sqrt(Math.pow(latitude.get(i)*latitude_unit - latitude.get(i-1)*latitude_unit, 2)
+							+Math.pow(longitude.get(i)*longitude_unit - longitude.get(i-1)*longitude_unit,2));
+			after = Math.sqrt(Math.pow(latitude.get(i+1)*latitude_unit - latitude.get(i)*latitude_unit, 2)
+					+Math.pow(longitude.get(i+1)*longitude_unit - longitude.get(i)*longitude_unit,2));	
+			ratio = Math.max(before, after)/Math.min(before, after);
+			if(ratio>2&&Math.max(before, after)>25){
+				crazy_distance.add(1);
+			}
+			else{
+				crazy_distance.add(0);
+			}			
+		}
+		// set last element to 0 
+		crazy_distance.add(0);
+			
+	}
+	
+	private static void repair() throws ClassNotFoundException, IOException{
+		Vector<Double> latitude_temp = new Vector<Double>();
+		Vector<Double> longitude_temp = new Vector<Double>();
+		int cnt = 0;
+		for(int i=0; i<crazy_angle.size(); i++){
+			if(crazy_angle.get(i)==1){
+				cnt++;		
+				
+			}
+			else {
+				if(cnt>=4){
+					for(int j=(i-cnt); j<i; j++){
+						if(j%10==0){
+							calculate_node(j/10, i-j, 1);
+							calculate_node(j/10, j-(i-cnt),-1);
+							for(int k = j-1; k>(i-cnt-1); k--){
+								longitude.set(k,longitudeCopy.get(k));
+								latitude.set(k,latitudeCopy.get(k));
+							}
+							cnt = 0;
+						}	
+					}
+					for(int j=(i-cnt); j<i; j++){
+						if(j%5==0){
+							cnt = 0;
+						}	
+					}
+					if(i%10==0){
+						calculate_node(i/10, cnt, -1);
+						for(int k = i-1 ; k>(i-cnt-1); k--){
+							longitude.set(k,longitudeCopy.get(k));
+							latitude.set(k,latitudeCopy.get(k));
+							System.out.println("I am here");
+						}
+						cnt = 0;
+					}
+					else if((i-cnt-1)%10==0){
+						calculate_node(i, cnt, 1);
+						cnt = 0;
+					}
+					else
+						cnt = 0;
+				}
+				else if(cnt==3){
+					cnt = 0;
+				}
+				cnt = 0;
+			}
+		}
+	}
+	
+	
+	/** calculate points by using bearing and velocity
+	 	input:  part(int):		part want to calculate
+				nodeNum(int):	number of nodes to calculate
+			    direction: 		direction the nodes. 1 forward; -1 backward; 
+				dataset:		save data in longitude(dataset = 0) or longitudeCopy(dataset =1)
+	**/
 	public static int calculate_node(int node, int nodeNum, int direction) throws ClassNotFoundException, IOException {
 	
 		double radius;
@@ -272,8 +409,7 @@ public class Test1 {
 		// At latitude 30.62
 		// Length Of A Degree Of Latitude In Meters: 110862.94	
 		// Length Of A Degree Of Longitude In Meters: 95880.84
-		final double longitude_unit = 95880.84;
-		final double latitude_unit = 110862.94;
+		
 
 
 		if((direction == 1 && node*10+nodeNum>time.size())||(direction == -1 && node*10 > time.size())){
@@ -295,7 +431,7 @@ public class Test1 {
 			
 			//System.out.println("i"+i+"  t = "+t+"  v = "+v+"  radius="+radius);
 
-			radians = (double) bearing.get(point-1);
+			radians = (double) bearing.get(point);
 			radians = Math.toRadians(radians);
 			deltaX = radius * Math.sin(radians);
 			deltaY = radius * Math.cos(radians);
@@ -356,12 +492,6 @@ public class Test1 {
 		p2[0] = midX;
 		p2[1] = midY;
 		double ratio = Math.sqrt(Math.pow(p2[0]-p0[0],2)+Math.pow(p2[1]-p0[1],2))/Math.sqrt(Math.pow(p1[0]-p0[0], 2)+Math.pow(p1[1]-p0[1], 2));
-		/*System.out.println("ratio1="+ratio);
-		System.out.println("sqrt="+Math.sqrt(Math.pow(p1[0]-p0[0], 2)+Math.pow(p1[1]-p0[1], 2)));
-		System.out.println("point ="+point);
-		System.out.println("node_head ="+node_head);
-		System.out.println("head="+p1[0]+"   "+p0[0]+"   "+p1[1]+"   "+p0[1]);
-*/	
 		// rotate angle
 		double angle = computeAngle(p0,p1,p2);
 		// figure out rotate direction
@@ -374,20 +504,24 @@ public class Test1 {
 			direction = 1; // b is on the clock-wise side of c
 		else 
 			direction = -1;
+		if(direction==1)// clock-wise rotate, change angle to negative
+			angle = -angle;
 		for(int i = 1; i< position; i++){
-			if(bearing.get(point-i) != 0 && Math.abs(angle) < 0.7){
+			if(bearing.get(point-i) != 0){
 				p1[0] = longitude.get(point-i);
 				p1[1] = latitude.get(point-i);
-				
+				x1 = 0;
+				y1 = 0;
 				System.out.println("p1[0] = " + p1[0] +"  p1[1] = "+ p1[1]);
 		
 				double xx = p1[0]-p0[0];
 				double yy = p1[1]-p0[1];
-				if(direction==1)// clock-wise rotate, change angle to negative
-					angle = -angle;
-				
-				x1 = (xx*Math.cos(angle) - yy*Math.sin(angle)) * ratio;
-				y1 = (xx*Math.sin(angle) + yy*Math.cos(angle)) * ratio;			
+
+				if(Math.abs(angle) < Math.PI/180*45)
+				{
+					x1 = (xx*Math.cos(angle) - yy*Math.sin(angle)) * ratio;
+					y1 = (xx*Math.sin(angle) + yy*Math.cos(angle)) * ratio;
+				}
 				longitude.set(point-i, p0[0]+x1);
 				System.out.println("point-i ="+(point-i)+" p0[0]+x1  "+( p0[0]+x1));
 	
@@ -401,17 +535,11 @@ public class Test1 {
 		
 		p0[0] = longitude.get(node_tail);
 		p0[1] = latitude.get(node_tail);
+		p1[0] = longitudeCopy.get(point);
+		p1[1] = latitudeCopy.get(point);
 		ratio = Math.sqrt(Math.pow(p2[0]-p0[0],2)+Math.pow(p2[1]-p0[1],2))/Math.sqrt(Math.pow(p1[0]-p0[0], 2)+Math.pow(p1[1]-p0[1], 2));
-		/*System.out.println("ratio2="+ratio);
-		System.out.println("sqrt="+Math.sqrt(Math.pow(p1[0]-p0[0], 2)+Math.pow(p1[1]-p0[1], 2)));
-		System.out.println("point ="+point);
-		System.out.println("node_tail ="+node_tail);
-		System.out.println("tail="+p1[0]+"   "+p0[0]+"   "+p1[1]+"   "+p0[1]);
-*/
 		// rotate angle
 		angle = computeAngle(p0,p1,p2);
-
-
 		// figure out rotate direction
 		bx = p2[0]-p0[0];
 		by = p2[1]-p0[1];
@@ -421,27 +549,33 @@ public class Test1 {
 			direction = 1; // b is on the clock-wise side of c
 		else 
 			direction = -1;
-		
+		if(direction==1)// clock-wise rotate, change angle to negative
+			angle = -angle;
 		for(int i = 1; i< 10-position; i++){
-			if(bearing.get(point+i) != 0 && Math.abs(angle) < 0.7){
+			if(bearing.get(point+i) != 0 ){
 				p1[0] = longitudeCopy.get(point+i);
 				p1[1] = latitudeCopy.get(point+i);
-				
+				x1 = 0;
+				y1 = 0;
 				System.out.println("p1[0] = " + p1[0] +"   p1[1] = "+ p1[1]);
-	
-				
 	
 				double xx = p1[0]-p0[0];
 				double yy = p1[1]-p0[1];
-				if(direction==1)// clock-wise rotate, change angle to negative
-					angle = -angle;
+
 				// for counter clock-wise rotate
-				x1 = (xx*Math.cos(angle) - yy*Math.sin(angle)) * ratio;
-				y1 = (xx*Math.sin(angle) + yy*Math.cos(angle)) * ratio;			
+				if(Math.abs(angle) < Math.PI/180*45)
+				{
+					x1 = (xx*Math.cos(angle) - yy*Math.sin(angle)) * ratio;
+					y1 = (xx*Math.sin(angle) + yy*Math.cos(angle)) * ratio;	
+				}
 				longitude.set(point+i, p0[0]+x1);
+				longitudeCopy.set(point+i, p0[0]+x1);
+
 				System.out.println("point+i = "+(point+i)+" p0[0]+x1  "+( p0[0]+x1));
 	
 				latitude.set(point+i, p0[1]+y1);
+				latitudeCopy.set(point+i, p0[1]+y1);
+
 				System.out.println(" p0[0]+y1  "+( p0[1]+y1));
 			}
 			else{}

@@ -215,7 +215,9 @@ public class InsertFusionTables extends Thread{
 	  for(int i = 0; i < latitude.size(); i++)
 	  {
 		  bulkinsert += " INSERT INTO " + tableId + " (Location,ID,Type,Flag) VALUES";
+
 		  bulkinsert += ("('" + latitude.get(i) + "," + longitude.get(i)+ "',"+ i + ",'"+type+"',"+flag.get(i)+");");
+		  
 	  }
 
 	  HttpContent content = ByteArrayContent.fromString(null, "sql=" + bulkinsert);
