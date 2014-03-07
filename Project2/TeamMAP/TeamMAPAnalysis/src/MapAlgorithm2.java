@@ -20,7 +20,7 @@ public class MapAlgorithm2 implements InterpolationAlgorithm {
             time.add(dp.getTime());
         }
 
-        avg_forward(bearing, speed, latitude, longitude, olatitude, olongitude);
+        forward_back_scaled(bearing, speed, latitude, longitude, olatitude, olongitude);
 
         ArrayList<DataPoint> results = new ArrayList<DataPoint>();
         for (int i = 0; i < bearing.size(); i++) {

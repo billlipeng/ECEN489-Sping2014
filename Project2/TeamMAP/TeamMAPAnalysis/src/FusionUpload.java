@@ -84,9 +84,13 @@ public class FusionUpload implements Runnable {
 
     @Override
     public void run() {
-//        Fusiontables.Query.Sql sql = null;
-//                sql = client.query().sql(createMultipleInsertSQL(dataset));
-//                sql.execute();
+        Fusiontables.Query.Sql delSQL = null;
+        try {
+            delSQL = client.query().sql("DELETE FROM " + FUSION_TABLE_NAME);
+            delSQL.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         try {
             if (dataset.size() <= 500) {
                 // https://groups.google.com/forum/#!topic/fusion-tables-users-group/CqhjtdhHea4

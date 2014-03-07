@@ -9,7 +9,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="DataPackets" level="project" />
     <orderEntry type="library" name="Maven: com.google.apis:google-api-services-fusiontables:v1-rev41-1.17.0-rc" level="project" />
     <orderEntry type="library" name="Maven: com.google.api-client:google-api-client:1.17.0-rc" level="project" />
     <orderEntry type="library" name="Maven: com.google.oauth-client:google-oauth-client:1.17.0-rc" level="project" />
@@ -26,6 +25,7 @@
     <orderEntry type="library" name="Maven: org.mortbay.jetty:jetty:6.1.26" level="project" />
     <orderEntry type="library" name="Maven: org.mortbay.jetty:jetty-util:6.1.26" level="project" />
     <orderEntry type="library" name="Maven: org.mortbay.jetty:servlet-api:2.5-20081211" level="project" />
+    <orderEntry type="library" name="libs" level="project" />
   </component>
 </module>
 
