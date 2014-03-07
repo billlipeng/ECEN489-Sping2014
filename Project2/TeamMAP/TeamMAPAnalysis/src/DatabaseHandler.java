@@ -48,8 +48,10 @@ public class DatabaseHandler {
             }
             statement.executeUpdate(sql);
 
-            String updateSQL = "Update " + newTableName + " SET longitude=NULL where (rowid-1)%10!=0 and rowid!=1;";
-            statement.execute(updateSQL);
+            String updateLatSQL = "Update " + newTableName + " SET latitude=NULL where (rowid-1)%10!=0 and rowid!=1;";
+            statement.execute(updateLatSQL);
+            String updateLongSQL = "Update " + newTableName + " SET longitude=NULL where (rowid-1)%10!=0 and rowid!=1;";
+            statement.execute(updateLongSQL);
         } catch (SQLException e) {
             e.printStackTrace();
         }
