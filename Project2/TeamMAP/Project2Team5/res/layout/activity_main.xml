@@ -1,0 +1,129 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/bStart"
+        android:gravity="center_horizontal"
+        android:text="Time"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/etIP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/etPort"
+        android:layout_alignLeft="@+id/etPort"
+        android:layout_alignParentRight="true"
+        android:ems="10"
+        android:hint="IP Address" />
+
+    <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvTime"
+        android:layout_alignRight="@+id/tvTime"
+        android:layout_below="@+id/tvTime"
+        android:text="Lat: Lng:"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tvLinAcc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvLocation"
+        android:text="Brng: Spd:"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tvRot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvLinAcc"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/bSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvRot"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:onClick="Send"
+        android:text="Send" />
+
+    <EditText
+        android:id="@+id/etPort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bStart"
+        android:layout_alignLeft="@+id/bStart"
+        android:layout_alignRight="@+id/bStart"
+        android:ems="10"
+        android:hint="Port" />
+
+    <TextView
+        android:id="@+id/tvGyro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvRot"
+        android:layout_alignRight="@+id/tvRot"
+        android:layout_below="@+id/tvRot"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/bReset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bSend"
+        android:layout_alignLeft="@+id/bSend"
+        android:layout_alignRight="@+id/bSend"
+        android:onClick="Reset"
+        android:text="Reset" />
+
+    <Button
+        android:id="@+id/bStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bReset"
+        android:layout_alignLeft="@+id/bSend"
+        android:layout_alignRight="@+id/bReset"
+        android:onClick="Stop"
+        android:text="Stop" />
+
+    <Button
+        android:id="@+id/bStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bStop"
+        android:layout_alignLeft="@+id/bStop"
+        android:layout_alignRight="@+id/bStop"
+        android:onClick="Start"
+        android:text="Start" />
+
+    <Button
+        android:id="@+id/bVoice"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/etIP"
+        android:layout_alignLeft="@+id/etIP"
+        android:onClick="Voice"
+        android:text="Voice" />
+
+</RelativeLayout>
