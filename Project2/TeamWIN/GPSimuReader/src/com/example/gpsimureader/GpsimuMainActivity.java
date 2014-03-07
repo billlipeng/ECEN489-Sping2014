@@ -4,11 +4,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,6 +27,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.RecognizerIntent;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +38,9 @@ import android.widget.Toast;
 
 public class GpsimuMainActivity extends Activity implements LocationListener, SensorEventListener {
 
+	//speech stuff
+	private static final int REQUEST_CODE = 1234;
+	
 	// SQLite Database 
 	SQLiteDatabase db;
 	private TextView dbOutputText;
@@ -83,7 +92,7 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 			int seconds = (int) (millis / 1000);
 			int minutes = seconds / 60;
 			seconds = seconds % 60;
-			
+
 			tmr.setText(String.format("%d:%02d", minutes, seconds));
 			if(seconds%interv == 0)
 			{
@@ -106,10 +115,27 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//-------------------------------------------------
+		// BUTTON STUFF
+		//button func
+				Button reCoord = (Button) findViewById(R.id.getCoords);
+		
+		// Disable button if no recognition service is present
+				PackageManager pm = getPackageManager();
+				List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(
+			    RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+				if (activities.size() == 0) {
+					reCoord.setEnabled(false);
+					Toast.makeText(getApplicationContext(), "Recognizer Not Found",
+					Toast.LENGTH_SHORT).show();
+				}
+		
+		
+		
 		//----------------------------------------------------
 
 		// DATABASE STUFF
-		
+
 		this.deleteDatabase("SensorReadings.db");
 		db = openOrCreateDatabase("SensorReadings.db", SQLiteDatabase.CREATE_IF_NECESSARY, null);
 		db.setVersion(3);
@@ -147,8 +173,8 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 
 		//GPS STUFF
 		setContentView(R.layout.activity_gpsimu_main);
-		latText = (TextView) findViewById(R.id.latText);
-		longText = (TextView) findViewById(R.id.longText);
+		//latText = (TextView) findViewById(R.id.latText);
+		//longText = (TextView) findViewById(R.id.longText);
 
 		// Get the location manager
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -165,90 +191,63 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 			System.out.println("Provider " + provider + " has been selected.");
 			onLocationChanged(location);
 		} else {
-			latText.setText("Location not available");
-			longText.setText("Location not available");
+			//latText.setText("Location not available");
+			//longText.setText("Location not available");
 		}
 		//------------------------------------------
 		//TIMER STUFF
 		tmr = (TextView) findViewById(R.id.tmr);
 
-		//for gps integration
-		final EditText interval = (EditText) findViewById(R.id.coordInterval);
 
-
-		//button func
-		Button reCoord = (Button) findViewById(R.id.getCoords);
-
+/*
 		reCoord.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
 				// TODO Auto-generated method stub
-				Button reCoord = (Button) view;
-				if (reCoord.getText().equals("stop")) {
-					timerHandler.removeCallbacks(timerRunnable);
-					reCoord.setText("recoord");
-					
-					// try it here
-					SQLiteDatabase db1;
-					db1 = openOrCreateDatabase("SensorReadings.db", SQLiteDatabase.OPEN_READONLY, null);
-					db1.setVersion(3);
-					db1.setLocale(Locale.getDefault());
-					Cursor cursor = db1.query("sensorData", null, null, null, null, null, null);
-					cursor.moveToFirst();
-					while (cursor.isAfterLast() == false) {
-						dbOutputText.append("\n----------\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("time")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("longitude")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("latitude")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("bearing")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("speed")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("accelX")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("accelY")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("accelZ")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("orientationA")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("orientationP")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("orientationR")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecX")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecY")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecZ")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecC")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("linAccX")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("linAccY")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("linAccZ")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("gravityX")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("gravityY")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("gravityZ")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("gyroX")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("gyroY")) + "\n");
-						dbOutputText.append(cursor.getString(cursor.getColumnIndex("gyroZ")) + "\n");
-						cursor.moveToNext();
-					}
-					cursor.close();
-					
-				} else {
-					//------for gps integration
-
-					if (interval.getText().toString().length() > 0)
-						interv = Integer.parseInt(interval.getText().toString());
-					Calendar cal1 = new GregorianCalendar();
-					java.util.Date callTime1 = cal1.getTime();
-					java.sql.Date sqlDate = new java.sql.Date(callTime1.getTime());
-
-					//------timerry stuff
-					//System.out.println(interv);
-					strtTime = System.currentTimeMillis();
-					timerHandler.postDelayed(timerRunnable, 0);
-					reCoord.setText("stop");
-				}
+				startVoiceRecognitionActivity(view);
 			}
 		});
-
+*/
 
 
 
 	}//--------------------------------END OF ONCREATE
 
+	//SPEECH STUFF
+	
+	public void startVoiceRecognitionActivity(View view) {
+		  Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+		  intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+		    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+		  intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+		    "Start speaking...");
+		  startActivityForResult(intent, REQUEST_CODE);
+		 }
+	
+	@SuppressLint("InlinedApi")
+	@Override
+	 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	  if (requestCode == REQUEST_CODE & resultCode == RESULT_OK) {
+		  ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+		  String Soln = matches.get(0);
+		  System.out.println(Soln);
+		  if (Soln.contains("record"))
+		  {
+			  record();
+		  }
+		  if (Soln.contains("stop"))
+		  {
+			  stop();
+		  }
+		  
+	  }
+	  
+	  super.onActivityResult(requestCode, resultCode, data);
+	 }
+	
+	
+	
 	/* Request updates at startup */
 	@Override
 	protected void onResume() {
@@ -290,8 +289,8 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 		bear = (double) (location.getBearing());
 		spd = (double) (location.getSpeed());
 
-		latText.setText(String.valueOf(lat));
-		longText.setText(String.valueOf(lng));
+		//latText.setText(String.valueOf(lat));
+		//longText.setText(String.valueOf(lng));
 
 		//System.out.println("does it get this far again?");
 
@@ -342,6 +341,68 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 		// TODO Auto-generated method stub
 
 	}
+	
+	private void record() {
+		System.out.println("inside record()");
+		//------for gps integration
+		//for gps integration
+		EditText interval = (EditText) findViewById(R.id.coordInterval);
+		if (interval.getText().toString().length() > 0)
+			interv = Integer.parseInt(interval.getText().toString());
+		System.out.println(interv);
+		Calendar cal1 = new GregorianCalendar();
+		java.util.Date callTime1 = cal1.getTime();
+		java.sql.Date sqlDate = new java.sql.Date(callTime1.getTime());
+
+		//------timerry stuff
+		strtTime = System.currentTimeMillis();
+		timerHandler.postDelayed(timerRunnable, 0);
+		//reCoord.setText("stop");
+	}
+	
+	public void stop() {
+		
+		timerHandler.removeCallbacks(timerRunnable);
+		
+		// try it here
+		SQLiteDatabase db1;
+		db1 = openOrCreateDatabase("SensorReadings.db", SQLiteDatabase.OPEN_READONLY, null);
+		db1.setVersion(3);
+		db1.setLocale(Locale.getDefault());
+		Cursor cursor = db1.query("sensorData", null, null, null, null, null, null);
+		cursor.moveToFirst();
+		while (cursor.isAfterLast() == false) {
+			dbOutputText.append("\n----------\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("time")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("longitude")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("latitude")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("bearing")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("speed")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("accelX")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("accelY")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("accelZ")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("orientationA")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("orientationP")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("orientationR")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecX")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecY")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecZ")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("rotVecC")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("linAccX")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("linAccY")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("linAccZ")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("gravityX")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("gravityY")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("gravityZ")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("gyroX")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("gyroY")) + "\n");
+			dbOutputText.append(cursor.getString(cursor.getColumnIndex("gyroZ")) + "\n");
+			cursor.moveToNext();
+		}
+		cursor.close();
+
+	}
+	
 	//-----------------------------------------------
 	//SENSOR STUFF
 	private void getAccelerometer(SensorEvent event) {
@@ -399,8 +460,8 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 		//GET ALL VALUES
 		DataPoint dpx = new DataPoint.Builder().time(time).latitude(lat).longitude(lng).bearing(bear).speed(spd).accelX(acX).accelY(acY).accelZ(acZ).orientationA(orA).orientationP(orP).orientationR(orR).rotVecX(rvX).rotVecY(rvY).rotVecZ(rvZ).rotVecC(rvC).linAccX(laX).linAccY(laY).linAccZ(laZ).gravityX(gX).gravityY(gY).gravityZ(gZ).gyroX(gyX).gyroY(gyY).gyroZ(gyZ).build();
 		dp.add(dpx);
-		
-		
+
+
 		// DATABASE INSERTION
 		try {
 			ContentValues data = new ContentValues();
@@ -432,11 +493,11 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 		} catch (SQLException e) {
 			dbOutputText.setText(e.getMessage());
 		}
-		
+
 		dbOutputText = (TextView) findViewById(R.id.dbOutputText);
 		dbOutputText.setMovementMethod(new ScrollingMovementMethod());
-		
-		
+
+
 
 		//prints
 
@@ -475,7 +536,3 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 	}
 
 } 
-
-
-
-

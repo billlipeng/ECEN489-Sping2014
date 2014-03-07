@@ -11,30 +11,12 @@
         android:layout_marginTop="40dip"
         android:orientation="horizontal" >
 
-        <TextView
-            android:id="@+id/TextView01"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="5dip"
-            android:text="Latitude: "
-            android:textSize="20dip" >
-        </TextView>
-
-        <TextView
-            android:id="@+id/latText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="unknown"
-            android:textSize="20dip" >
-        </TextView>
-
         <Button
             android:id="@+id/getCoords"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:text="recoord" />
+            android:onClick="startVoiceRecognitionActivity"
+            android:text="speech" />
     </LinearLayout>
 
     <LinearLayout
@@ -42,31 +24,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/TextView03"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="5dip"
-            android:text="Longitute: "
-            android:textSize="20dip" >
-        </TextView>
-
-        <TextView
-            android:id="@+id/longText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="unknown"
-            android:textSize="20dip" >
-        </TextView>
-
         <EditText
             android:id="@+id/coordInterval"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="interval(int)" />
     </LinearLayout>
-
+	
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+		
+        <EditText
+            android:id="@+id/IPaddress"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:hint="IP Address" />
+        
+        <EditText
+            android:id="@+id/portNumber"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:hint="port" />
+        
+        <Button
+            android:id="@+id/sendTbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="Send" />
+            
+        
+        </LinearLayout>
+    
     <TextView
         android:id="@+id/tmr"
         android:layout_width="match_parent"
@@ -75,6 +66,9 @@
         android:text="Clear"
         android:textSize="26sp" />
 
+    
+    
+    
     <TextView
         android:id="@+id/dbOutputText"
         android:layout_width="match_parent"
