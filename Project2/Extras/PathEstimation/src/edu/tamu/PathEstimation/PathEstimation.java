@@ -14,6 +14,26 @@ public class PathEstimation {
 		return (2 * EarthRadius * Math.asin(Math.sqrt(a)));		
 	}
 
+	double[] getoNormalizedXYZbearing(Coordinates coordinate, double bearing, double speed) {
+		double latitude = coordinate.getLatitude();
+		double longitude = coordinate.getLongitude();
+//		double altitude = coordinate.getAltitude();
+
+		// Normalization is m/s to normalized unit per 10 seconds.
+		double normalizedSpeed = 0.01 * speed / EarthRadius;
+		double[] XYZbearing;
+		XYZbearing = new double[3];
+		
+		XYZbearing[0] = - Math.cos(bearing) * Math.sin(latitude) * Math.cos(longitude) + Math.sin(bearing) * Math.sin(longitude);
+		XYZbearing[1] = - Math.cos(bearing) * Math.sin(latitude) * Math.sin(longitude) + Math.sin(bearing) * Math.cos(longitude);
+		XYZbearing[2] = - Math.cos(bearing) * Math.cos(latitude);
+		
+		XYZbearing[0] = XYZbearing[0] * normalizedSpeed;
+		XYZbearing[1] = XYZbearing[1] * normalizedSpeed;
+		XYZbearing[2] = XYZbearing[2] * normalizedSpeed;
+		
+		return XYZbearing;
+	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		final Coordinates NewYork = new Coordinates(0.710599509,-1.291647896);
