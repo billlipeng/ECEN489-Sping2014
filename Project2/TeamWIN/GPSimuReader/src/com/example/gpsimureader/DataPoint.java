@@ -1,12 +1,14 @@
 package com.example.gpsimureader;
 
+import java.io.Serializable;
+
 // DataPoint class
 /*
     Created using "builde" pattern, http://www.javaspecialists.eu/archive/Issue163.html
   DataPoint dp = new DataPoint.Builder().client_id("id").run_id("rid").build();
  */
 
-public class DataPoint {
+public class DataPoint implements Serializable{
     // Required
     private final long time;
     private final double latitude;

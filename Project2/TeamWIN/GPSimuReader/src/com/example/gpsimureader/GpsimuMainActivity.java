@@ -1,5 +1,9 @@
 package com.example.gpsimureader;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,6 +29,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
@@ -44,6 +49,15 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 	// SQLite Database 
 	SQLiteDatabase db;
 	private TextView dbOutputText;
+	
+	// Android to PC server variables
+	private EditText IPaddress;
+	private EditText portNumber;
+	private Button sendTbl;
+	private String IP;
+	private int portNum;
+	static private Socket socket;
+	private ObjectOutputStream out;
 
 	//GPS DECL
 	private TextView latText;
@@ -115,6 +129,7 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_gpsimu_main);
 		//-------------------------------------------------
 		// BUTTON STUFF
 		//button func
@@ -129,6 +144,21 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 					Toast.makeText(getApplicationContext(), "Recognizer Not Found",
 					Toast.LENGTH_SHORT).show();
 				}
+		
+		// Android to Server Stuff
+		IPaddress = (EditText) findViewById(R.id.IPaddress);
+		portNumber = (EditText) findViewById(R.id.portNumber);
+		sendTbl = (Button) findViewById(R.id.sendTbl);
+		
+		sendTbl.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				IP = IPaddress.getText().toString().trim();
+				portNum = Integer.parseInt(portNumber.getText().toString());
+				
+				AsyncCreateConnection createConnection = new AsyncCreateConnection();
+				createConnection.execute();
+			}
+		});
 		
 		
 		
@@ -172,7 +202,7 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
 		//GPS STUFF
-		setContentView(R.layout.activity_gpsimu_main);
+		
 		//latText = (TextView) findViewById(R.id.latText);
 		//longText = (TextView) findViewById(R.id.longText);
 
@@ -214,6 +244,27 @@ public class GpsimuMainActivity extends Activity implements LocationListener, Se
 
 	}//--------------------------------END OF ONCREATE
 
+	
+	// Async Task for Android to PC server
+	public class AsyncCreateConnection extends AsyncTask<Void, Void, Void> {
+		protected Void doInBackground(Void... arg0) {
+			try {
+				socket = new Socket(InetAddress.getByName(IP), portNum);
+				out = new ObjectOutputStream(socket.getOutputStream());
+				out.flush();
+				
+				for (int i = 0; i < dp.size(); ++i) {
+					out.writeObject((DataPoint) dp.get(i));
+					out.flush();
+				}
+				
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+			}
+			return null;
+		}
+	}
+	
 	//SPEECH STUFF
 	
 	public void startVoiceRecognitionActivity(View view) {
