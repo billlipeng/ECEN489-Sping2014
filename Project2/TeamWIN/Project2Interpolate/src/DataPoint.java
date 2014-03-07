@@ -320,8 +320,8 @@ public class DataPoint {
     	return gyroZ;
     }
 
-	public static Object Builder() {
+	//public static Object Builder() {
 		// TODO Auto-generated method stub
-		return null;
-	}
+		//return null;
+	//}
 }

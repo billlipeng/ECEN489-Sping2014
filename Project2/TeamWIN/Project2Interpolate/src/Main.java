@@ -1,11 +1,15 @@
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Random;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 public class Main {
-	
+
 	static double Lat = 0;
 	static double Lon = 0;
 	static double speed = 0;
@@ -19,27 +23,134 @@ public class Main {
 	static int smallPeriod = 10; //seconds
 	static int bigPeriod = 100;
 	static int gap = bigPeriod/smallPeriod;
-	static String folder = "/Users/samcarey/Desktop/Spring 2014/489/Project2/";
+	static String folder = "C:\\Users\\ClayClay\\Desktop\\";
 	static ArrayList<DataPoint> generated = new ArrayList<DataPoint>();
+
+
+	private static long time;
+	private static double latitude;
+	private static double longitude;
+	private static double bearing1;
+	private static double speed1;
+	private static double accelX;
+	private static double accelY;
+	private static double accelZ;
+	private static double orientationA;
+	private static double orientationP;
+	private static double orientationR;
+	private static double rotVecX;
+	private static double rotVecY;
+	private static double rotVecZ;
+	private static double rotVecC;
+	private static double linAccX;
+	private static double linAccY;
+	private static double linAccZ;
+	private static double gravityX;
+	private static double gravityY;
+	private static double gravityZ;
+	private static double gyroX;
+	private static double gyroY;
+	private static double gyroZ;
+	static ArrayList<DataPoint> IMUdata1 = new ArrayList<DataPoint>();
+	static ArrayList<DataPoint> IMUdata2 = new ArrayList<DataPoint>();
 	
 	public static void main(String []args){
-		generated = genFake();
-		toCsv(trim(generated),"generated");
-		
+
+		try {
+			Reader reader = new FileReader("C:\\Users\\ClayClay\\Desktop\\SampleData2Proj2.csv");
+			CSVReader csvReader = new CSVReader(new FileReader("C:\\Users\\ClayClay\\Desktop\\SampleData2Proj2.csv"));
+			String[] row = csvReader.readNext();
+			while ((row = csvReader.readNext()) != null) {
+				time = Long.parseLong(row[0].toString());
+				if (row[1].toString().isEmpty())
+					latitude = 0;
+				else 
+					latitude = Double.parseDouble(row[1].toString());
+				if (row[2].toString().isEmpty())
+					longitude = 0;
+				else
+					longitude = Double.parseDouble(row[2].toString());
+				bearing1 = Double.parseDouble(row[3].toString());
+				speed1 = Double.parseDouble(row[4].toString());
+				accelX = Double.parseDouble(row[5].toString());
+				accelY = Double.parseDouble(row[6].toString());
+				accelZ = Double.parseDouble(row[7].toString());
+				orientationA = Double.parseDouble(row[8].toString());
+				orientationP = Double.parseDouble(row[9].toString());
+				orientationR = Double.parseDouble(row[10].toString());
+				rotVecX = Double.parseDouble(row[11].toString());
+				rotVecY = Double.parseDouble(row[12].toString());
+				rotVecZ = Double.parseDouble(row[13].toString());
+				rotVecC = Double.parseDouble(row[14].toString());
+				linAccX = Double.parseDouble(row[15].toString());
+				linAccY = Double.parseDouble(row[16].toString());
+				linAccZ = Double.parseDouble(row[17].toString());
+				gravityX = Double.parseDouble(row[18].toString());
+				gravityY = Double.parseDouble(row[19].toString());
+				gravityZ = Double.parseDouble(row[20].toString());
+				gyroX = Double.parseDouble(row[21].toString());
+				if (row[22].toString().isEmpty())
+					gyroY = 0.0;
+				else 
+					gyroY = Double.parseDouble(row[22].toString());
+				if (row[23].toString().isEmpty())
+					gyroZ = 0.0;
+				else
+					gyroZ = Double.parseDouble(row[23].toString());
+
+
+				DataPoint dp = new DataPoint.Builder().time(time)
+						.latitude(latitude)
+						.longitude(longitude)
+						.bearing(bearing1)
+						.speed(speed1)
+						.accelX(accelX)
+						.accelY(accelY)
+						.accelZ(accelZ)
+						.orientationA(orientationA)
+						.orientationP(orientationP)
+						.orientationR(orientationR)
+						.rotVecX(rotVecX)
+						.rotVecY(rotVecY)
+						.rotVecZ(rotVecZ)
+						.rotVecC(rotVecC)
+						.linAccX(linAccX)
+						.linAccY(linAccY)
+						.linAccZ(linAccZ)
+						.gravityX(gravityX)
+						.gravityY(gravityY)
+						.gravityZ(gravityZ)
+						.gyroX(gyroX)
+						.gyroY(gyroY)
+						.gyroZ(gyroZ).build();
+				IMUdata1.add(dp);
+				IMUdata2.add(dp);
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		//generated = genFake();
+		//toCsv(trim(generated),"generated");
+
 		/////////////////////// Choose One interpolation method for the path reconstruction
-		ArrayList<DataPoint> guess1 = linear(strip(generated));
-		ArrayList<DataPoint> guess2 = vector(strip(generated));
-		
+		ArrayList<DataPoint> guess1 = linear(IMUdata1);
+		ArrayList<DataPoint> guess2 = vector(IMUdata2);
+
 		toCsv(guess1,"guess1");
 		toCsv(guess2,"guess2");
 		System.out.println("done");
 	}
+
 	private static ArrayList<DataPoint> vector(ArrayList<DataPoint> dps){	//sums vectors,then scales to end point
-		ArrayList<ArrayList<DataPoint>> segments = segment(generated);
+		ArrayList<ArrayList<DataPoint>> segments = segment(dps);
 		ArrayList<ArrayList<DataPoint>> guesses = new ArrayList<ArrayList<DataPoint>>();
 		for (int i = 0 ; i < segments.size() ; i++){
 			ArrayList<DataPoint> segment = segments.get(i);
-			
+
 			ArrayList<DataPoint> guess = new ArrayList<DataPoint>();
 			///////Interpolation begins here
 			Double xRelative = 0.0;
@@ -163,15 +274,15 @@ public class Main {
 	private static void toCsv(ArrayList<DataPoint> dps, String file){	//prints "Lat,Lon\n" for all elements to csvPath
 		try {
 			FileWriter fw = new FileWriter(folder + file + ".csv");
-	        PrintWriter pw = new PrintWriter(fw);
-	        for (int i = 0 ; i < dps.size() ; i++){
-	        	pw.print(dps.get(i).getLatitude());
-	        	pw.print(",");
-	        	pw.println(dps.get(i).getLongitude());
-	        }
-	        pw.flush();
-	        pw.close();
-	        fw.close();
+			PrintWriter pw = new PrintWriter(fw);
+			for (int i = 0 ; i < dps.size() ; i++){
+				pw.print(dps.get(i).getLatitude());
+				pw.print(",");
+				pw.println(dps.get(i).getLongitude());
+			}
+			pw.flush();
+			pw.close();
+			fw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
