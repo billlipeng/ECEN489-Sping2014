@@ -15,17 +15,24 @@ public class Grader {
         masterDBH = new DatabaseHandler(masterbdpath);
         studentDBH = new DatabaseHandler(studentdbpath);
         System.out.println(studentdbpath);
+        ArrayList<Double> averages = new ArrayList<Double>();
         for (String table : tables) {
             ArrayList<Coordinates> masterCoords = masterDBH.readDBData(table);
             ArrayList<Coordinates> studentCoords = studentDBH.readDBData(table);
+
             Double average = 0.0;
             for (int i = 0; i < masterCoords.size(); i++) {
                 average += haversine(masterCoords.get(i), studentCoords.get(i));
             }
             average = average/masterCoords.size();
-            System.out.println(table + " " + average);
+            averages.add(average);
+            System.out.println(table + " " + average*1000 + "m");
         }
-
+        Double totalaverage = 0.0;
+        for (Double average:averages) {
+            totalaverage += average;
+        }
+        System.out.println("Total Average: " + totalaverage/averages.size()*1000 + "m");
     }
     static double haversine(Coordinates coordinates0, Coordinates coordinates1) {
         double EarthRadius = 6372.8; // Kilometers
