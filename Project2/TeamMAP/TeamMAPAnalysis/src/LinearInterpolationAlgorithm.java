@@ -6,8 +6,9 @@ public class LinearInterpolationAlgorithm implements InterpolationAlgorithm {
 
 	    @Override
 	    public ArrayList<DataPoint> analyze(ArrayList<DataPoint> _dataSet) {
-	    	ArrayList<List<DataPoint>> paritions = paritionData();
 	    	dataSet = _dataSet;
+	    	ArrayList<List<DataPoint>> paritions = paritionData();
+	    	
 	        
 	        for (int i = 0; i<paritions.size();i++){
 	        	List<DataPoint> list = paritions.get(i);
@@ -23,7 +24,7 @@ public class LinearInterpolationAlgorithm implements InterpolationAlgorithm {
 	        		linearinterpolation lp = new linearinterpolation(longitude1,latitude1,longitude2,latitude2);
 	        		double[] dub = lp.analyze();
 	        		
-	        		for(int p=0;p<dub.length;p++){
+	        		for(int p=0;p<dub.length/2;p++){
 	        			dataSet.get(i*10+p).setLatitude(dub[2*(p+1)-2]);
 	        			dataSet.get(i*10+p).setLongitude(dub[2*(p+1)-1]);
 	        			
