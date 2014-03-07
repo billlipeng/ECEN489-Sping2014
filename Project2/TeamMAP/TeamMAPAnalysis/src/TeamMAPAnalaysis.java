@@ -9,7 +9,7 @@ public class TeamMAPAnalaysis extends Component {
 
     /* CHANGE ALGORITHM USED HERE!!
     /************************************************************/
-    private InterpolationAlgorithm alg = new MapAlgorithm();
+    private InterpolationAlgorithm alg = new MapAlgorithm2();
     /***********************************************************/
 
     private DatabaseHandler dbh = null;
@@ -36,7 +36,7 @@ public class TeamMAPAnalaysis extends Component {
 
     private JButton runBtn = new JButton("Run");
 
-    private String filePath = "C:\\Users\\Zach\\Desktop\\projtwo.db";
+    private String filePath = "C:\\Users\\Zachary\\Desktop\\projtwo.db";
     private String readTable;
     private String writeTable;
 
@@ -129,8 +129,8 @@ public class TeamMAPAnalaysis extends Component {
                     updateComboBoxes();
                     readTableCmb.setEnabled(true);
                     writeTableCmb.setEnabled(true);
-//                    prepareTableCmb.setEnabled(true);
-//                    prepareBtn.setEnabled(true);
+                    prepareTableCmb.setEnabled(true);
+                    prepareBtn.setEnabled(true);
                     runBtn.setEnabled(true);
                     writeTableCmb.setSelectedItem(null);
                     dBConnectBtn.setEnabled(false);

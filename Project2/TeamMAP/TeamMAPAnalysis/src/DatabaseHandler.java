@@ -44,9 +44,12 @@ public class DatabaseHandler {
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             String sql = "";
             for (int i = 0; i < originalData.size(); i++) {
-                sql += originalData.get(i).toSql(tableName);
+                sql += originalData.get(i).toSql(newTableName);
             }
             statement.executeUpdate(sql);
+
+            String updateSQL = "Update " + newTableName + " SET longitude=NULL where (rowid-1)%10!=0 and rowid!=1;";
+            statement.execute(updateSQL);
         } catch (SQLException e) {
             e.printStackTrace();
         }
