@@ -1,17 +1,19 @@
-package sql_test;
+package com.google.api.services.samples.fusiontables.cmdline;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 import java.util.Vector;
 
 public class Test1 {
+	public static Vector<Integer> flag = new Vector<Integer>();
+
 	public static Vector<Long> time = new Vector<Long>();
 	public static Vector<Long> timeCopy = new Vector<Long>();
 
@@ -19,6 +21,9 @@ public class Test1 {
 	public static Vector<Double> latitude = new Vector<Double>();
 	public static Vector<Double> longitudeCopy = new Vector<Double>(); 
 	public static Vector<Double> latitudeCopy = new Vector<Double>();
+	public static Vector<Double> longitudeOriginal = new Vector<Double>(); 
+	public static Vector<Double> latitudeOriginal = new Vector<Double>();
+	
 	
 	public static Vector<Double> bearing = new Vector<Double>();
 	public static Vector<Double> speed = new Vector<Double>();
@@ -67,15 +72,33 @@ public class Test1 {
 
 */
 			read_data();
+			for(int i = 0; i < time.size(); i++){
+				if(i%10 == 0)
+					flag.add(i, 2);
+				else if(i%5 == 0)
+					flag.add(i,1);
+				else
+					flag.add(i,0);
+			}
+		//	new InsertFusionTables(longitudeOriginal,latitudeOriginal,"Original",flag).start();
 			reset_time_unit();
 			calculate();
-			System.out.println("num\ttime\t\tlongitutde\t\tlatitude");
+			System.out.println("num\ttime\t\tlatitude\t\tlongitutde");
 			for(int i = 0; i<time.size(); i++){
 				System.out.print(i+"\t"+time.get(i)+"\t");
-				System.out.print(longitude.get(i)+"\t");
-				System.out.println(latitude.get(i)+"\t");
+				System.out.print(latitude.get(i)+"\t");
+				System.out.println(longitude.get(i)+"\t");
+
 			}
-			
+		//	Thread.sleep(6000);
+			Thread.sleep(1);
+
+		//	new InsertFusionTables(longitude,latitude,"Calculate",flag).start();
+
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		finally
 		{
@@ -89,7 +112,7 @@ public class Test1 {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			Connection conn = null;
-			conn = DriverManager.getConnection("jdbc:sqlite:projtwo_3.db");
+			conn = DriverManager.getConnection("jdbc:sqlite:projtwo_5.db");
 
 			
 			Statement statement = conn.createStatement();
@@ -134,6 +157,22 @@ public class Test1 {
 			}
 			if(conn != null)
 				conn.close();
+			//--------------------------------------------------------		
+			Class.forName("org.sqlite.JDBC");
+			conn = DriverManager.getConnection("jdbc:sqlite:projtwo_5.db");
+
+			
+			statement = conn.createStatement();
+			statement.setQueryTimeout(30);  // set timeout to 30 sec.
+			System.out.println("Loading data...");
+			rs = statement.executeQuery("select * from ecen489_project2_data_Complete");
+			while (rs.next()) {
+				longitudeOriginal.addElement(new Double(rs.getDouble("longitude")));
+				latitudeOriginal.addElement(new Double(rs.getDouble("latitude")));
+			}
+			if(conn != null)
+				conn.close();
+			//--------------------------------------------------------		
 			
 		}
 		catch (SQLException e) {
@@ -143,10 +182,6 @@ public class Test1 {
 
 	}
 	
-
-	
-
-
 	public static void insertInTable(Connection conn) throws ClassNotFoundException, IOException {
 		String Make = "";
 		String Model = "";
@@ -194,29 +229,20 @@ public class Test1 {
 				System.err.println("No data");
 			}
 			else if(time.size()<10){	
-				calculate_node(0, time.size()-1, 1, 0);
-			}
-			else if(time.size()<20){	
-				calculate_node(1, 9, -1, 0);
-				calculate_node(1, time.size()%10-1, 1, 0);
+				calculate_node(0, time.size()-1, 1);
 			}
 			else{
-				// calculate node list head
-				calculate_node(0, 5 , 1, 0);
-				calculate_node(1, 5 , -1, 1);
-				rotation(5);
-				combine_vector(0);
-				
-				// calculate node list tail
-				calculate_node(time.size()/10, time.size()%10-1 , 1, 0);
-
-				// calculate node list middle
-				for(int node = 1; node < time.size()/10;node++){
-					calculate_node(node, 5,1, 0);
-					calculate_node(node+1, 5, -1, 1);
+				// calculate_node(node, nodeNum, direction, dataset)
+				// calculate node list
+				for(int node = 0; node < (time.size()-1)/10;node++){
+					calculate_node(node, 5, 1);
+					calculate_node(node+1, 5, -1);
 					rotation(node*10+5);
 					combine_vector(node);
 				}
+				
+				// calculate node list tail
+				calculate_node((time.size()-1)/10, (time.size()-1)%10 , 1);
 			}
 			System.out.println("Calculating Complete!");
 
@@ -227,114 +253,78 @@ public class Test1 {
 
 	}
 		
-	// calculate nodes by using bearing and velocity
+	// calculate points by using bearing and velocity
 	// input:  	part(int):		part want to calculate
 	//			nodeNum(int):	number of nodes to calculate
 	//		    direction: 		direction the nodes. 1 forward; -1 backward; 
 	//			dataset:		save data in longitude(dataset = 0) or longitudeCopy(dataset =1)
-	public static int calculate_node(int node, int nodeNum, int direction, int dataset) throws ClassNotFoundException, IOException {
+	public static int calculate_node(int node, int nodeNum, int direction) throws ClassNotFoundException, IOException {
 	
 		double radius;
 		double radians;
 		double v;
 		double t;
+		
+		int point;
+		
+		double deltaX;
+		double deltaY;
 		// At latitude 30.62
 		// Length Of A Degree Of Latitude In Meters: 110862.94	
 		// Length Of A Degree Of Longitude In Meters: 95880.84
-		double longitude_unit = 95880.84;
-		double latitude_unit = 110862.94;
+		final double longitude_unit = 95880.84;
+		final double latitude_unit = 110862.94;
 
-			// forward
-			if( direction == 1 ){
-				if(node*10+nodeNum>time.size()){
-					System.err.print("Error in calculate_node(): ");
-					System.err.println("Node numbers bigger than data set.");
-					return 1;
-				}
-					
-				for (int i = 0; i < nodeNum; i++) {
-					// v = speed[i+1]
-					v = (double) speed.get(i+1+node*10);
-					// t = time[i+1] - time[i+1]
-					t = ((long) timeCopy.get(i+1+node*10)) - ((long) timeCopy.get(i+node*10)) ;
-					radius = v * t / 1000.0 ;
-					
-					//System.out.println("i"+i+"  t = "+t+"  v = "+v+"  radius="+radius);
 
-					radians = (double) bearing.get(i);
-					radians = Math.toRadians(radians);
-					double deltaX = radius * Math.sin(radians);
-					double deltaY = radius * Math.cos(radians);
+		if((direction == 1 && node*10+nodeNum>time.size())||(direction == -1 && node*10 > time.size())){
+			System.err.print("Error in calculate_node(): ");
+			System.err.println("Node numbers bigger than data set.");
+			return 1;
+		}
+		for (int i = 0; i < nodeNum; i++) {
+			if(direction == 1)
+				point = node*10 + i + 1;						
+			else
+				point = node*10 - i;
+			
+			// v = speed[i+1]
+			v = (double) speed.get(point);
+			// t = time[i+1] - time[i+1]
+			t = ((long) timeCopy.get(point)) - ((long) timeCopy.get(point -1)) ;
+			radius = v * t / 1000.0 ;
+			
+			//System.out.println("i"+i+"  t = "+t+"  v = "+v+"  radius="+radius);
 
-					if(dataset==0){
-						//System.out.println("set(node*10+i+1)="+(longitude.get(node*10+i) + deltaX/longitude_unit));
-						longitude.set(node*10+i+1, longitude.get(node*10+i) + deltaX/longitude_unit);
-						latitude.set(node*10+i+1, latitude.get(node*10+i) + deltaY/latitude_unit);
-					}
-					else{
-						//System.out.println("set(node*10+i+1)="+(longitudeCopy.get(node*10+i) + deltaX/longitude_unit));
-						longitudeCopy.set(node*10+i+1, longitudeCopy.get(node*10+i) + deltaX/longitude_unit);
-						latitudeCopy.set(node*10+i+1, latitudeCopy.get(node*10+i) + deltaY/latitude_unit);
-					}
-				}
-				return 0;
-			}
-			// backward
-			else if( direction == -1 )
-			{
-				if(node == 0 || (node*10-nodeNum < 1)){
-					System.err.print("Error in calculate_node(): ");
-					System.err.println("0th node cannot do backward calculation.");
-					return 1;
-				}
-					
-				for (int i = 0; i < nodeNum; i++) {
-					// v = speed[i+1]
-					v = (double) speed.get(node*10-i);
-					// t = time[i+1] - time[i+1]
-					t = ((long) timeCopy.get(node*10-i)) - ((long) timeCopy.get(node*10-i-1)) ;
-					radius = v * t /1000.0;
-					//System.out.println("ii"+i+"  t = "+t+"  v = "+v+"  radius="+radius);
+			radians = (double) bearing.get(point-1);
+			radians = Math.toRadians(radians);
+			deltaX = radius * Math.sin(radians);
+			deltaY = radius * Math.cos(radians);
 
-					radians = (double) bearing.get(node*10-i-1);
-					radians = Math.toRadians(radians);
-					double deltaX = radius * Math.sin(radians) * (-1.0);
-					double deltaY = radius * Math.cos(radians) * (-1.0);
-
-					if(dataset==0){
-						//System.out.println("longitude.get(node*10-i)= "+(longitude.get(node*10-i)));
-						longitude.set(node*10-i-1, longitude.get(node*10-i) + deltaX/longitude_unit);
-						latitude.set(node*10-i-1, latitude.get(node*10-i) + deltaY/latitude_unit);
-					}
-					else{
-						//System.out.println("sset(node*10-i-1)=  "+(longitudeCopy.get(node*10-i) + deltaX/longitude_unit));
-						longitudeCopy.set(node*10-i-1, longitudeCopy.get(node*10-i) + deltaX/longitude_unit);
-						latitudeCopy.set(node*10-i-1, latitudeCopy.get(node*10-i) + deltaY/latitude_unit);
-					}
-					
-				}
-				return 0;
+			if(direction == 1){
+				//System.out.println("set(node*10+i+1)="+(longitude.get(node*10+i) + deltaX/longitude_unit));
+				longitude.set(point, longitude.get(point-1) + deltaX/longitude_unit);
+				latitude.set(point, latitude.get(point-1) + deltaY/latitude_unit);
 			}
 			else{
-				System.err.print("Error in calculate_node(): ");
-				System.err.println("direction or node not right");
-				return 1;
+				deltaX = -deltaX;
+				deltaY = -deltaY;
+				//System.out.println("set(node*10+i+1)="+(longitudeCopy.get(node*10+i) + deltaX/longitude_unit));
+				longitudeCopy.set(point-1, longitudeCopy.get(point) + deltaX/longitude_unit);
+				latitudeCopy.set(point-1, latitudeCopy.get(point) + deltaY/latitude_unit);
 			}
+		}
+		return 0;
 	}
 	
 
 	// combine longitude and longitudeCopy at node
 	public static void combine_vector(int node) throws IOException {
-		double dataX0, dataY0, dataX1, dataY1;
-		for(int i = node*10; i<(node*10+10); i++){
-			dataX0 = longitude.get(i);
-			dataY0 = latitude.get(i);
-			dataX1 = longitudeCopy.get(i);
-			dataY1 = latitudeCopy.get(i);
-			if(dataX1 < -1 && dataX0 > -1)
-				longitude.set(i,dataX1);
-			if(dataY1 > 1 && dataY0 < 1)
-				latitude.set(i,dataY1);
+		double dataX, dataY;
+		for(int i = node*10 + 6; i<(node*10+10); i++){
+			dataX = longitudeCopy.get(i);
+			dataY = latitudeCopy.get(i);
+			longitude.set(i,dataX);
+			latitude.set(i,dataY);
 		}
 	}
 	public static void reset_time_unit() throws IOException {
@@ -374,11 +364,6 @@ public class Test1 {
 */	
 		// rotate angle
 		double angle = computeAngle(p0,p1,p2);
-		System.out.println("=======================");
-
-		System.out.println("angle = " + angle);
-		System.out.println("=======================");
-
 		// figure out rotate direction
 		int direction;
 		double bx = p2[0]-p0[0];
@@ -425,10 +410,7 @@ public class Test1 {
 */
 		// rotate angle
 		angle = computeAngle(p0,p1,p2);
-		System.out.println("=======================");
 
-		System.out.println("angle = " + angle);
-		System.out.println("=======================");
 
 		// figure out rotate direction
 		bx = p2[0]-p0[0];
@@ -469,19 +451,19 @@ public class Test1 {
 		latitude.set(point, p2[1]);
 		
 	}
+
 	public static double computeAngle (double[] p0, double[] p1, double[] p2)
 	{
-		System.out.print("x1\t y1\t x2\t y2 ");
-		double x1 = p1[0] - p0[0]; 		System.out.print(""+x1);
-		double y1 = p1[1] - p0[1];    	System.out.print(" "+y1);
-
-		double x2 = p2[0] - p0[0];   	System.out.print(" "+x2);
-
-		double y2 = p2[1] - p0[1];		System.out.println(" "+y2);
+		double x1 = p1[0] - p0[0];
+		double y1 = p1[1] - p0[1];
+		double x2 = p2[0] - p0[0];
+		double y2 = p2[1] - p0[1];
 		double angle = Math.acos((x1*x2+y1*y2)/(Math.sqrt(Math.pow(x1,2)+Math.pow(y1,2))*Math.sqrt(Math.pow(x2,2)+Math.pow(y2,2))));
-		
-		
-		
+		System.out.println("=======================");
+		System.out.println("angle = " + angle/Math.PI*180 + "\t\t"+angle+"pi");
+		System.out.println("=======================");
+		System.out.println("x1\t\t\t y1\t\t\t x2\t\t\t y2 ");
+		System.out.println( x1+"\t"+y1+"\t"+ x2+"\t"+y2);	
 		return angle;
 	}
 }
