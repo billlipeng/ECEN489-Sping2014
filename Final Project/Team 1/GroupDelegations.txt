@@ -1,16 +1,17 @@
 Team 1: Clayton Crawford, Zach Partal, Jeff Jensen, Jeff Terrell, Jason Moore
 
+=== Leader ===
+Clayton
+
 === Hardware ===
 Jeff T. - Contact
 Zach
 
 === App ===
-Clayton - Contact
-Jason
+Jeff J. - Contact
 
 === Algorithm ===
 Jason - Contact
-Jeff J.
 
 === Server === 
 Zach - Contact
@@ -19,6 +20,7 @@ Jeff T.
 
 ### Phase I ####
 
-App - Clayton, Jason
-Characterization - Jeff T.
+App - Jeff J.
+Characterization - Jeff T., Zach
 Motor - Zach, Jeff T.
+Algorithm Start - Jason
