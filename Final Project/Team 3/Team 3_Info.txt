@@ -1,0 +1,60 @@
+----------Team 3-------------
+
+#############################
+
+Members: Miguel Alvarez, Joao Marcos de Aguiar, Joesph Binder, Colin Brasher, Yuanxig Yin
+
+############################# 
+
+#############################
+
+Main Positions:
+
+xxxxx Leader xxxxx 
+
+Colin Brasher
+
+xxxxx App xxxxx
+
+Miguel Alvarez
+
+xxxxx Algorithm xxxxx
+
+Joesph Binder
+
+xxxxx Hardware xxxxx 
+
+Joao Marcos de Aguiar
+
+xxxxx Server xxxxx
+
+Yuanxig Yin
+
+###############################
+
+###############################
+
+====== Phase 1 ======
+
+App - Miguel
+Characterization - Colin, Yuanxig, Joesph 
+Motor - Joao
+Holder - Miguel
+Algorithm Start - Joesph 
+Database Start 
+
+==== Deliverables ====
+
+=Done=    ====Task====
+  
+  X	  Holder for Antennna
+  X	  App that queries Wifi and is able to get RSSI values 
+  X	  3 Patterns from Antenna Characterizations 
+
+==== Phase 2 ====
+
+
+==== Phase 3 ====
+
+
+################################
