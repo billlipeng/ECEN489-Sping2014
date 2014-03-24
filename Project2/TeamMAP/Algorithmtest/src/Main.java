@@ -21,13 +21,13 @@ public class Main {
 	    ArrayList<Double> olongitude = new ArrayList<Double>();
 	    try {
 	        Class.forName("org.sqlite.JDBC");
-	        c = DriverManager.getConnection("jdbc:sqlite:projtwo.db");
+	        c = DriverManager.getConnection("jdbc:sqlite:projtwo1.db");
 	        c.setAutoCommit(false);
 	        System.out.println("Opened database successfully");
 
 	        //get point data
 	        stmt = c.createStatement();
-	        ResultSet rs = stmt.executeQuery( "SELECT * FROM SampleData2;" );
+	        ResultSet rs = stmt.executeQuery( "SELECT * FROM prepared_ecen489_project2_data;" );
 	        while ( rs.next() ) {
 	          bearing.add(rs.getDouble("bearing"));
 	          speed.add(rs.getDouble("speed"));
@@ -41,7 +41,7 @@ public class Main {
 	        
 	        //get complete points
 	        stmt = c.createStatement();
-	        rs = stmt.executeQuery( "SELECT * FROM SampleData1;" );
+	        rs = stmt.executeQuery( "SELECT * FROM ecen489_project2_data;" );
 	        while ( rs.next() ) {
 	          olatitude.add(rs.getDouble("latitude"));
 	          olongitude.add(rs.getDouble("longitude"));
@@ -59,7 +59,7 @@ public class Main {
 	    //forward(bearing, speed, latitude, longitude, olatitude, olongitude);
 		//avg_forward(bearing, speed, latitude, longitude, olatitude, olongitude);
 		//half_half(bearing, speed, latitude, longitude, olatitude, olongitude);
-		forward_back_scaled(bearing, speed, latitude, longitude, olatitude, olongitude);
+		//forward_back_scaled(bearing, speed, latitude, longitude, olatitude, olongitude);
 	   
 		
 		
