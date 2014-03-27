@@ -1,0 +1,10 @@
+{
+	"DB_PATH": "C:/Users/Zachary/Desktop/projecttwoteamdata.db",
+	"TABLE_NAME": "team2",
+	"FUSION_TABLE_NAME": "1wBCyK6GHyFahftu8kGymu4nFmPHTZhKmB_N2e7xr",
+	"PORT": 5555,
+	"COLUMN_NAMES": ["time", "longitude", "latitude", "bearing", "speed", "accelX", "accelY",
+					"accelZ", "orientationA","orientationP", "orientationR", "rotVecX", "rotVecY", "rotVecZ",
+					"rotVecC", "linAccX", "linAccY", "linAccZ", "gravityX", "gravityY", "gravityZ",
+					"gyroX", "gyroX", "gyroX"]
+}
