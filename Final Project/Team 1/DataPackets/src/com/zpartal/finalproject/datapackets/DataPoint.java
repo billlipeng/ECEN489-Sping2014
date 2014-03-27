@@ -91,6 +91,7 @@ public class DataPoint implements Serializable {
         return latitude;
     }
 
+    // Use this to simplify the creation of SQL statments with all fields for inserts
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -1,10 +1,7 @@
 {
-	"DB_PATH": "C:/Users/Zachary/Desktop/projecttwoteamdata.db",
-	"TABLE_NAME": "team2",
-	"FUSION_TABLE_NAME": "1wBCyK6GHyFahftu8kGymu4nFmPHTZhKmB_N2e7xr",
+	"DB_PATH": "C:\Users\Zachary\Desktop\ECEN489-Spring2014\Final Project\Team 1\finalprojectdata.db",
+	"TABLE_NAME": "team1",
+	"FUSION_TABLE_NAME": "15eA3-_j3QoA9Wa1nzx9bb0ZL37PS0Ha7FIUglXd7",
 	"PORT": 5555,
-	"COLUMN_NAMES": ["time", "longitude", "latitude", "bearing", "speed", "accelX", "accelY",
-					"accelZ", "orientationA","orientationP", "orientationR", "rotVecX", "rotVecY", "rotVecZ",
-					"rotVecC", "linAccX", "linAccY", "linAccZ", "gravityX", "gravityY", "gravityZ",
-					"gyroX", "gyroX", "gyroX"]
+	"COLUMN_NAMES": ["time", "device_id", "ssid", "rssi", "longitude", "latitude"]
 }
