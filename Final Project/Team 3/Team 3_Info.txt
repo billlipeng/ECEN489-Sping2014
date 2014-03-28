@@ -20,7 +20,7 @@ Miguel Alvarez
 
 xxxxx Algorithm xxxxx
 
-Joesph Binder
+Joseph Binder
 
 xxxxx Hardware xxxxx 
 
@@ -47,8 +47,8 @@ Database Start
 
 =Done=    ====Task====
   
-  X	  Holder for Antennna
-  X	  App that queries Wifi and is able to get RSSI values 
+  +	  Holder for Antennna
+  +	  App that queries Wifi and is able to get RSSI values 
   X	  3 Patterns from Antenna Characterizations 
 
 ==== Phase 2 ====
