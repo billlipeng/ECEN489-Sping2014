@@ -1,0 +1,38 @@
+ _______                   ______  
+(_______)                 (_____ \ 
+    _ _____ _____ ____      ____) )
+   | | ___ (____ |    \    / ____/ 
+   | | ____/ ___ | | | |  | (_____ 
+   |_|_____)_____|_|_|_|  |_______)
+
+###################################
+
+Members:
+
+Cameron Shaw,
+Alexandre Lopes,
+Peng Li,
+Mark Hardiman,
+Sam Carey.
+
+###################################
+
+###################################
+
+Roles:
+
+###################################
+
+Fearless Leader: Cameron Shaw
+
+Crack App Developer: Mark Hardiman
+
+Algorithm Wizard: Alexandre Lopes
+
+Hardware Guru: Peng Li
+
+Server Savant: Sam Carey
+
+###################################
+
+###################################
