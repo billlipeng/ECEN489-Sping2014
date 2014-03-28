@@ -19,6 +19,8 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,7 +28,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.team1.finalapp.DataPoint.Builder;
+import com.zpartal.finalproject.datapackets.DataPoint;
+import com.zpartal.finalproject.datapackets.DataPoint.Builder;
 
 public class FinalAppMainActivity extends Activity implements LocationListener {
 	
@@ -50,6 +53,7 @@ public class FinalAppMainActivity extends Activity implements LocationListener {
 	
 	// app elements
 	TextView outputTextView;
+	TextView outputTextView2;
 	TextView ipTextView;
 	TextView portTextView;
 	Button beginButton;
@@ -65,6 +69,9 @@ public class FinalAppMainActivity extends Activity implements LocationListener {
 	private String SSID;
 	
 	ArrayList<DataPoint> dp = new ArrayList<DataPoint>();
+	long startTime = 0;
+	int interval = 1;
+	Handler timerHandler = new Handler();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +81,14 @@ public class FinalAppMainActivity extends Activity implements LocationListener {
 		beginButton = (Button) findViewById(R.id.beginButton);
 		connectButton = (Button) findViewById(R.id.connectButton);
 		outputTextView = (TextView) findViewById(R.id.outputTextView);
+		outputTextView2 = (TextView) findViewById(R.id.outputTextView2);
 		ipEditText = (EditText) findViewById(R.id.ipEditText);
 		portEditText = (EditText) findViewById(R.id.portEditText);
 		ipTextView = (TextView) findViewById(R.id.ipTextView);
 		portTextView = (TextView) findViewById(R.id.portTextView);
 		
 		outputTextView.setTextColor(Color.parseColor("#FFFFFF"));
+		outputTextView2.setTextColor(Color.parseColor("#FFFFFF"));
 		ipEditText.setTextColor(Color.parseColor("#FFFFFF"));
 		portEditText.setTextColor(Color.parseColor("#FFFFFF"));
 		ipTextView.setTextColor(Color.parseColor("#FFFFFF"));
@@ -87,7 +96,9 @@ public class FinalAppMainActivity extends Activity implements LocationListener {
 		connectButton.setTextColor(Color.parseColor("#FFFFFF"));
 		beginButton.setTextColor(Color.parseColor("#FFFFFF"));
 		
-		beginButton.setVisibility(View.INVISIBLE);
+		//beginButton.setVisibility(View.INVISIBLE);
+		outputTextView.setMovementMethod(new ScrollingMovementMethod());
+		outputTextView2.setMovementMethod(new ScrollingMovementMethod());
 		
 		// GPS setup
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -107,11 +118,41 @@ public class FinalAppMainActivity extends Activity implements LocationListener {
 			onLocationChanged(location);
 		}
 		
+		// when begin button is pushed, we want to start recording data
+		beginButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (beginButton.getText().equals("Begin Measurements")) {
+					beginButton.setText("Stop Measurements");
+					outputTextView2.setText("Measurements Started!");
+					startTime = System.currentTimeMillis();
+					timerHandler.postDelayed(timer, 0);
+				} else {
+					outputTextView2.setText("Measurements Stopped!");
+					beginButton.setText("Begin Measurements");
+					timerHandler.removeCallbacks(timer);
+					
+					for (int i = 0; i < dp.size(); ++i) {
+						outputTextView.append("\n----Record " + i + "----\n");
+						outputTextView.append("Latitude:\t" + dp.get(i).getLatitude() + "\nLongitude:\t" + 
+												dp.get(i).getLongitude() + "\nTime:\t" + 
+												dp.get(i).getTime() + "\nRSSI:\t" + 
+												dp.get(i).getRssi() + "\nSSID:\t" +
+												dp.get(i).getSsid() + "\nDevice ID:\t" +
+												dp.get(i).getDevice_id() + "\n");
+					}
+				}
+			}
+		});
+		
 		// connect to server when connect button pushed
 		connectButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
+				
 				// TODO Auto-generated method stub
 				IP = ipEditText.getText().toString().trim();
 				Port = Integer.parseInt(portEditText.getText().toString());
@@ -120,6 +161,37 @@ public class FinalAppMainActivity extends Activity implements LocationListener {
 				createConnection.execute();
 			}
 		});
+	}
+	
+	Runnable timer = new Runnable() {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			
+			long millis = System.currentTimeMillis() - startTime;
+			int seconds = (int) (millis / 1000);
+			int minutes = seconds / 60;
+			seconds = seconds % 60;
+			
+			if (seconds % interval == 0) {
+				takeMeasurements();
+			}
+			timerHandler.postDelayed(this, 1000);
+		}
+	};
+	
+	public void takeMeasurements() {
+		getRSSIandSSID();
+		Builder build = new Builder();
+		build.latitude(lat);
+		build.longitude(lon);
+		build.time(time);
+		build.rssi(RSSI);
+		build.ssid(SSID);
+		build.device_id(deviceID);
+		DataPoint data = new DataPoint(build);
+		dp.add(data);
 	}
 	
 	public void getRSSIandSSID() {
@@ -176,21 +248,12 @@ public class FinalAppMainActivity extends Activity implements LocationListener {
 		lon = (double) (location.getLongitude());
 		time = (long) location.getTime();
 		getRSSIandSSID();
-		outputTextView.setText("Latitude:\t" + lat + "\nLongitude:\t" + 
+		outputTextView2.setText("Latitude:\t" + lat + "\nLongitude:\t" + 
 							   lon + "\nTime:\t" + 
 							   time + "\nRSSI:\t" + 
 							   RSSI + "\nSSID:\t" +
 							   SSID + "\nDevice ID:\t" +
 							   deviceID);
-		Builder build = new Builder();
-		build.latitude(lat);
-		build.longitude(lon);
-		build.time(time);
-		build.rssi(RSSI);
-		build.ssid(null);
-		build.device_id(deviceID);
-		DataPoint data = new DataPoint(build);
-		dp.add(data);
 	}
 
 	@Override
@@ -212,7 +275,4 @@ public class FinalAppMainActivity extends Activity implements LocationListener {
 		// TODO Auto-generated method stub
 		
 	}
-
-	
-
 }
