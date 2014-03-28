@@ -7,10 +7,10 @@ const int PULSE = 2;
 const int DIR = 3;
 const int EN = 4;
 String command; // command from serial
-int angle; // rorate angle
+double angle; // rorate angle
 int number; // rotate number
-double dirct = 0;
-
+double dirct;
+int start_flag;
 void setup()
 {
     pinMode(PULSE, OUTPUT);
@@ -21,10 +21,13 @@ void setup()
     digitalWrite(PULSE, LOW);
     digitalWrite(DIR, LOW);
     digitalWrite(EN, LOW);
+    dirct = 0;
+    start_flag = 0;
 }
 
 void loop()
 { 
+    angle = 0;
     number = 0;
     while (Serial.available()) {
       char c = Serial.read();  //gets one byte from serial buffer
@@ -35,14 +38,23 @@ void loop()
       Serial.println(command);  //so you can see the captured string 
       angle = command.toInt();  //convert readString into a number
       command = "";
+      start_flag = 1;
     }
-    if(number){
-      if(abs(number)<180)
+    if(start_flag){
+      if(abs(angle)>180)
       {
-        
+        Serial.println("Angles between -180 ~ 180");
+      }
+      else{
+        angle = angle - dirct;
+        number = angle/0.18;
         rotate(number);
         dirct = dirct + number * 0.18;
+        Serial.println("Rotate finished...");
       }
+      Serial.print("Direction is ");
+      Serial.println(dirct);
+      start_flag = 0;
     }
 }
 
@@ -67,5 +79,13 @@ void rotate(int number)
       digitalWrite(PULSE, LOW);
       digitalWrite(EN, LOW);
     }
+}
 
+int cal_steps(double angle, double dirct)
+{
+    int number = 0;
+    if(abs(angle + dirct)<180)
+      return number = angle/0.18;
+    else
+      return 0;
 }
