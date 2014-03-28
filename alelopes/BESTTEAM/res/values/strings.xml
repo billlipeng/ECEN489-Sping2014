@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">BESTTEAM</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="button1">Set Wifi</string>
+    <string name="button2">Update</string>
+    <string name="button3">Sendd</string>
+    
+    <string name="value1">Choose Wifi</string>
+    
+        
+</resources>
