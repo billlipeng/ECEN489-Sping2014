@@ -18,13 +18,6 @@ public double calculateAngle(GeoPoint startPoint, GeoPoint endPoint) {
 	} else if (angle <= -180) {
 		angle = angle + 180;
 		return angle;
-	} else {
+	} else 
 		return angle;
-	}
-	
-	
-
-	
-	
-	return angle;
 }
