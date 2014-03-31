@@ -25,13 +25,13 @@ Roles:
 
 Fearless Leader: Cameron Shaw
 
-Crack App Developer: Mark Hardiman
+Crack App Developer: Alexandre Lopes
 
-Algorithm Wizard: Alexandre Lopes
+Algorithm Wizard: Sam Carey
 
 Hardware Guru: Peng Li
 
-Server Savant: Sam Carey
+Server Savant: Mark Hardiman
 
 ###################################
 
