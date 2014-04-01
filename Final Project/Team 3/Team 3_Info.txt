@@ -2,7 +2,7 @@
 
 #############################
 
-Members: Miguel Alvarez, Joao Marcos de Aguiar, Joesph Binder, Colin Brasher, Yuanxig Yin
+Members: Miguel Alvarez, Joao Marcos de Aguiar, Joesph Binder, Colin Brasher, Yuanxing Yin
 
 ############################# 
 
@@ -28,7 +28,7 @@ Joao Marcos de Aguiar
 
 xxxxx Server xxxxx
 
-Yuanxig Yin
+Yuanxing Yin
 
 ###############################
 
