@@ -2,23 +2,22 @@
 public class propogation {
 
 	/* data_points = array of class RSSI_point objects with x, y, interpolated flag, and rssi value
-	 * 
+	 * raw_data = array of RSSI_point objects filled with original, raw data
 	 * 
 	 * 
 	 * for each RSSI_point i in data_points
 	 * {
-	 * 		if (!interpolated) //if this point hasn't been assigned a value, we need to perform the superposition summation
+	 * 		if (!i.interpolated) //if this point hasn't been assigned a value, we need to perform the max finding
 	 * 		{
-	 * 			superposition_value = ;
-	 * 			for each RSSI_point j in data_points
+	 * 			max_value = -10000;
+	 * 			for each RSSI_point j in raw_data
 	 * 			{
-	 * 				if (interpolated) //find the contribution from this source and add it to superposition_value
-	 * 				{
-	 * 					compute distance between i.(x,y) and j.(x,y)
-	 * 					contribution from this point = alpha*j.RSSI_value / distance^2;//could also do exponential decay here
-	 * 				}
+	 * 				compute distance between i.(x,y) and j.(x,y)
+	 * 				decayed_value = alpha*j.RSSI_value / distance^2;
+	 * 				if (decayed_value > max_value)
+	 * 					max_value = decayed_value;
 	 * 			}
-	 * 			i.RSSI_value = superposition_value;
+	 * 			i.rssi_value = max_value; //assign the rssi value as the highest probable value
 	 * 		}
 	 * }
 	 * 
