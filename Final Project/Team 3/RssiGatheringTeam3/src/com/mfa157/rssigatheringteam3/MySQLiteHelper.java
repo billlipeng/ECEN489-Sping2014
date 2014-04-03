@@ -1,12 +1,16 @@
 package com.mfa157.rssigatheringteam3;
 
+import java.io.File;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
+  public static final String FILE_DIR = "";
   public static final String TABLE_RSSI = "RSSI_data";
   public static final String COLUMN_ID = "ID";
   public static final String COLUMN_RSSI = "RSSI";
@@ -26,7 +30,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
       + ");";
 
   public MySQLiteHelper(Context context) {
-    super(context, DATABASE_NAME, null, DATABASE_VERSION);
+   // super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	  super(context, Environment.getExternalStorageDirectory()
+	            + File.separator + FILE_DIR
+	            + File.separator + DATABASE_NAME, null, DATABASE_VERSION);
   }
 
   @Override

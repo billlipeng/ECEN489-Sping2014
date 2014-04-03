@@ -8,16 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <Button
-        android:id="@+id/bStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="74dp"
-        android:onClick="Start"
-        android:text="Start" />
-
     <TextView
         android:id="@+id/tvStatus"
         android:layout_width="wrap_content"
@@ -77,5 +67,72 @@
         android:layout_below="@+id/tvStatus"
         android:text="Data:"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/bSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/bClear"
+        android:onClick="Send"
+        android:text="Send" />
+
+    <EditText
+        android:id="@+id/etPort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/etIP"
+        android:ems="10"
+        android:hint="Port"
+        android:inputType="number" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/bStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/etPort"
+        android:onClick="Start"
+        android:text="Start GPS" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvData" >
+
+        <RadioButton
+            android:id="@+id/rbCollection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:onClick="Mode"
+            android:text="Data Collection" />
+
+        <RadioButton
+            android:id="@+id/rbStream"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="Mode"
+            android:text="Data Stream" />
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/etIP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/radioGroup1"
+        android:ems="10"
+        android:hint="IP address" />
 
 </RelativeLayout>
