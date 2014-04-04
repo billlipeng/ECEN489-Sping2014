@@ -1,0 +1,1 @@
+Sam wrote the entirety of the algorithm (the LinearSurface6.java file). He did not upload it because he is experiencing difficulties with git.
