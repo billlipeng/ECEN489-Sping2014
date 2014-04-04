@@ -8,7 +8,7 @@ void setup()
   Serial.begin(9600);
 // Uncomment the code below if you've forgot what's the current 
 // baudrate set to SD02B.
-  Serial.print('U');  // set motor controller baudrate to
+/*  Serial.print('U');  // set motor controller baudrate to
   Serial.write(1);    // 9600bps
   Serial.begin(19200);
   Serial.print('U');  // set motor controller baudrate to
