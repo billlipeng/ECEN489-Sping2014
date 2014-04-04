@@ -95,6 +95,7 @@ public class MainActivity extends Activity {
 			bCollect.setEnabled(false);
 			bView.setEnabled(false);
 			bClear.setEnabled(false);
+			streamArray = new double[] {0,0,0,0,0,0};
 		}
 	
 	}

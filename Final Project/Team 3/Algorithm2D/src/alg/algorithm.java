@@ -1,14 +1,20 @@
 package alg;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 
 public class algorithm {
-	static int size = 100; //size of the matrix
+	static int size = 25; //size of the matrix
 	static int[][] Data = new int[size][size];
 	static int[][] Data1 = new int[size][size];
-	static int APbuildNumber = 2;
+	static int APbuildNumber = 1;
 	static int scale = 2; //this is for creating test data
 	static int range = 10; //range for AP recreation
 	static int depth = 0; // DO NOT CHANGE PLOX
@@ -17,21 +23,85 @@ public class algorithm {
 	static double finScale = .07;
 	static String print = " ";
 	
+	 static Connection c = null;
+	 static Statement stmt = null;
+	 static String table = "AntennaTwo";
+	 
+	 static ArrayList<Double> lat = new ArrayList<Double>();
+	 static ArrayList<Double> lon = new ArrayList<Double>();
+	 static ArrayList<Integer> rssi = new ArrayList<Integer>();
+	 
+	 static ArrayList<Double> latOut = new ArrayList<Double>();
+	 static ArrayList<Double> lonOut = new ArrayList<Double>();
+	 static ArrayList<Integer> rssiOut = new ArrayList<Integer>();
+	 
+	 static double maxLat = 0;
+	 static double maxLon=0; 
+	 static double minLat = 0;
+	 static double minLon=0; 
+	 static double scaling=0;
+	 
+	
 	public static void main(String[] args)  {
-		Data1 = buildTestData(APbuildNumber);//insert desired # of ap's here
+		//Data1 = buildTestData(APbuildNumber);//insert desired # of ap's here
 
+		 
+	     try {
+	    	 Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:C:/Users/Miguel/Desktop/Antenna2.sqlite");
+			c.setAutoCommit(false);
+			String sql=null;
+			
+			stmt = c.createStatement();
+			int maxid=0;
+			//System.out.println("Querying for maxid");
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM "+table+";" );
+			while ( rs.next() ) {
+				lat.add(rs.getDouble("Latitude"));	
+				lon.add(rs.getDouble("Longitude"));	
+				rssi.add(rs.getInt("RSSI"));	
+		      }
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    maxLat=Collections.max(lat);
+	    maxLon=Collections.max(lon);
+	    minLat=Collections.min(lat);
+	    minLon=Collections.min(lon);
+	    
+	    if(Math.abs(maxLat-minLat)>Math.abs(maxLon-minLon))
+	    	scaling = size/(maxLat-minLat);
+	    else
+	    	scaling = size/(maxLon-minLon);
+	     
+	    System.out.println("scaling"+scaling);
+	    System.out.println("xsize="+(maxLon-minLon)*scaling+" ysize="+(maxLat-minLat)*scaling);
+	    System.out.println("xsize="+(maxLon-minLon)+" ysize="+(maxLat-minLat));
+	    for(int i=0; i<lat.size(); i++){
+	    	int x=(int) ((lon.get(i)-minLon)*scaling);
+	    	int y=(int) ((lat.get(i)-minLat)*scaling);
+	    	Data1[x][y]=rssi.get(i);
+	    	//System.out.println("lon i ="+lon.get(i)+" min lon="+minLon);
+	    	System.out.println(""+x+", "+y+", rssi="+rssi.get(i));
+	    }
 		//PRINT FUNCS
 		for (int i=0;i<size;i++)
 		{
 			for (int j=0;j<size;j++)
 			{
-				print = print + " " + Integer.toString(Data[i][j]);
+				print = print + " " + Integer.toString(Data1[i][j]);
 			}
 			System.out.println(print);
 			print = " ";
 		}
 		
-		
+		/*
+		System.out.println("Stripping and printing");
 		//importData();
 		Data = stripTestData(Data1);
 		
@@ -48,13 +118,13 @@ public class algorithm {
 		}
 		
 		
-		
+		*/
 		
 		int[][] newData = new int[size][size];
 		
 		if(APbuildNumber == 1)
 		{
-			newData = execAlgAP1(Data);
+			newData = execAlgAP1(Data1);
 		}
 		if(APbuildNumber == 2)
 		{
@@ -65,6 +135,10 @@ public class algorithm {
 			for (int j=0;j<size;j++)
 			{
 				print = print + " " + Integer.toString(newData[i][j]);
+				lonOut.add(maxLon-((double)i)/scaling);
+				latOut.add(maxLat-((double)j)/scaling);
+				rssiOut.add(newData[i][j]);
+				
 			}
 			System.out.println(print);
 			print = " ";
@@ -82,6 +156,32 @@ public class algorithm {
 		double normError = error/(size*size);
 				
 		System.out.println("The normalized Error: " + normError);
+		
+		try{
+		for(int i=0; i<latOut.size(); i++){
+		stmt = c.createStatement();
+		String sql = "INSERT INTO OutputTwo("
+				+ "Latitude"
+				+ ", Longitude"
+				+ ", RSSI"
+				+ ") " +
+ 				"VALUES ("
+ 						+ ""+latOut.get(i)+""						//id
+ 						+ ", '" + lonOut.get(i) +"'"				//date
+						+ ", '" + rssiOut.get(i) +"'"				//time
+						+ ");"; 				
+		//System.out.println("Executing statement "+sql+"");
+		stmt.executeUpdate(sql);
+		//System.out.println("closing Statement ");
+        stmt.close();
+		}
+		c.commit();
+	    c.close();
+		}catch(SQLException e){
+			
+		
+		}
+		
 		
 	}
 	private static int[][] execAlgAP1(int[][] data) {
