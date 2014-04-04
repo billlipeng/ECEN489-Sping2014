@@ -17,14 +17,16 @@ public class ServoDriver implements Runnable {
 
     @Override
     public void run() {
+        int count = 0;
         sh = new SerialHandler();
         try {
             if ( sh.initialize() ) {
                 while(true) {
                     DataPoint dp = queue.take();
                     if (dp.getSsid().equals(config.END_CODE)) { break; }
-                    double bearing = calculateBearing(config.BASE_LAT, dp.getLatitude(), config.BASE_LON, dp.getLongitude());
-                    sh.sendData(String.valueOf(bearing));
+                    int bearing = (int) calculateBearing(config.BASE_LAT, dp.getLatitude(), config.BASE_LON, dp.getLongitude());
+                    if (count %5 == 0) sh.sendData(String.valueOf(bearing));
+                    System.out.println(String.valueOf(bearing)+'\n');
                 }
             }
         } catch (InterruptedException e) {

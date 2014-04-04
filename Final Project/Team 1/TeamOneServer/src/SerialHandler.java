@@ -18,7 +18,7 @@ public class SerialHandler implements SerialPortEventListener {
 //        "/dev/usbdev", // Linux
 //        "/dev/tty", // Linux
 //        "/dev/serial", // Linux
-        "COM11", // Windows
+        "COM12", // Windows
     };
 
     private String appName;
