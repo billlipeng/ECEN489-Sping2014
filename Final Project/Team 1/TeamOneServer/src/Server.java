@@ -14,7 +14,9 @@ public class Server {
         config = new Config();
         pl = new ConfigLoader(config);
 
-        System.out.println("Configuring server on port " + Integer.toString(config.PORT) + "...");
+        System.out.println("IP: " + Inet4Address.getLocalHost().getHostAddress());
+        System.out.println("Port: " + Integer.toString(config.PORT));
+
 		try {
 			server = new ServerSocket(config.PORT);
 			// Worker threads are launched upon acceptance of client connection

@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.concurrent.BlockingQueue;
 
 import com.zpartal.finalproject.datapackets.*;
 
@@ -13,10 +14,12 @@ public class DatabaseHandler implements Runnable {
     private Connection connection = null;
     private ArrayList<DataPoint> dataset = null;
 
-    public DatabaseHandler(ArrayList<DataPoint> _dataset) throws ClassNotFoundException {
+    protected BlockingQueue<DataPoint> queue = null;
+
+    public DatabaseHandler(BlockingQueue<DataPoint> _queue) throws ClassNotFoundException {
         // load the sqlite-JDBC driver using the current class loader
         Class.forName("org.sqlite.JDBC");
-        this.dataset = _dataset;
+        this.queue = _queue;
     }
 
     @Override
@@ -28,17 +31,17 @@ public class DatabaseHandler implements Runnable {
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
-            // Add all datapoints from the data set array
-            for (DataPoint dp : dataset) {
+            while(true) {
+                DataPoint dp = queue.take();
+                if (dp.getSsid().equals("quit")) { break; }
                 statement.executeUpdate(createInsertSQL(dp));
             }
-        }
-        catch(SQLException e)
-        {
+
+        } catch(SQLException e) {
             System.err.println(e.getMessage());
-        }
-        finally
-        {
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
             try
             {
                 if(connection != null)

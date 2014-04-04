@@ -1,5 +1,5 @@
 {
-	"DB_PATH": "C:\Users\Zachary\Desktop\ECEN489-Spring2014\Final Project\Team 1\finalprojectdata.db",
+	"DB_PATH": "C:/Users/Zachary/Desktop/ECEN489-Spring2014/Final Project/Team 1/TeamOneServer/finalprojectdata.db",
 	"TABLE_NAME": "team1",
 	"FUSION_TABLE_NAME": "15eA3-_j3QoA9Wa1nzx9bb0ZL37PS0Ha7FIUglXd7",
 	"PORT": 5555,
