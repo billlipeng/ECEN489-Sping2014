@@ -10,6 +10,10 @@ public class Config {
     public static String TABLE_NAME;
     public static String FUSION_TABLE_NAME;
     public static ArrayList<String> COLUMN_NAMES;
+    public static double BASE_LAT;
+    public static double BASE_LON;
+    public static String END_CODE;
+    public static String COM_PORT;
 
     public static void setPORT(int PORT) {
         Config.PORT = PORT;
@@ -29,6 +33,22 @@ public class Config {
 
     public static void setCOLUMN_NAMES(ArrayList<String> COLUMN_NAMES) {
         Config.COLUMN_NAMES = COLUMN_NAMES;
+    }
+
+    public static void setBASE_LAT(double BASE_LAT) {
+        Config.BASE_LAT = BASE_LAT;
+    }
+
+    public static void setBASE_LON(double BASE_LON) {
+        Config.BASE_LON = BASE_LON;
+    }
+
+    public static void setEND_CODE(String END_CODE) {
+        Config.END_CODE = END_CODE;
+    }
+
+    public static void setCOM_PORT(String COM_PORT) {
+        Config.COM_PORT = COM_PORT;
     }
 
     @Override

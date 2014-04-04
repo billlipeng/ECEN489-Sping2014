@@ -34,7 +34,7 @@ public class Worker implements Runnable {
             while(true) {
                 DataPoint dp = (DataPoint) ois.readObject();
                 System.out.println(dp.toString());
-                if (dp.getSsid().equals("stop")) { break; }
+                if (dp.getSsid().equals(config.END_CODE)) { break; }
                 dataset.add(dp);
                 DBQueue.put(dp);
                 servoQueue.put(dp);

@@ -14,11 +14,11 @@ public class SerialHandler implements SerialPortEventListener {
     SerialPort serialPort = null;
 
     private static final String PORT_NAMES[] = {
-            "/dev/tty.usbmodem", // Mac OS X
+//            "/dev/tty.usbmodem", // Mac OS X
 //        "/dev/usbdev", // Linux
 //        "/dev/tty", // Linux
 //        "/dev/serial", // Linux
-//        "COM3", // Windows
+        "COM11", // Windows
     };
 
     private String appName;
@@ -40,7 +40,7 @@ public class SerialHandler implements SerialPortEventListener {
                 // Iterate through your host computer's serial port IDs
                 //
                 CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
-                System.out.println( "   port" + currPortId.getName() );
+                System.out.println( "   port " + currPortId.getName() );
                 for (String portName : PORT_NAMES) {
                     if ( currPortId.getName().equals(portName)
                             || currPortId.getName().startsWith(portName)) {
@@ -50,7 +50,7 @@ public class SerialHandler implements SerialPortEventListener {
                         // Open serial port
                         serialPort = (SerialPort)currPortId.open(appName, TIME_OUT);
                         portId = currPortId;
-                        System.out.println( "Connected on port" + currPortId.getName() );
+                        System.out.println( "Connected on port " + currPortId.getName() );
                         break;
                     }
                 }
@@ -136,19 +136,6 @@ public class SerialHandler implements SerialPortEventListener {
         appName = getClass().getName();
     }
 
-//    public static void main(String[] args) throws Exception {
-//        ArduinoTest1 test = new ArduinoTest1();
-//        if ( test.initialize() ) {
-//            test.sendData("y");
-//            try { Thread.sleep(2000); } catch (InterruptedException ie) {}
-//            test.sendData("n");
-//            try { Thread.sleep(2000); } catch (InterruptedException ie) {}
-//            test.close();
-//        }
-//
-//        // Wait 5 seconds then shutdown
-//        try { Thread.sleep(2000); } catch (InterruptedException ie) {}
-//    }
 }
 
 

@@ -6,7 +6,7 @@ import java.util.ArrayList;
  */
 public class Tester {
     public static void main(String[] args) throws Exception {
-        Config props = new Config();
+        /*Config props = new Config();
         new ConfigLoader(props);
 //        System.out.println(props.toString());
 //
@@ -42,7 +42,9 @@ public class Tester {
 //        FusionTableHandler fth = new FusionTableHandler(dataset);
 //        System.out.println(fth.createMultipleInsertSQL(dataset));
 
-        new Thread(new FusionTableHandler(dataset)).start();
+        new Thread(new FusionTableHandler(dataset)).start();*/
+
+        new Thread(new ServoDriver()).start();
 
 
     }

@@ -16,6 +16,10 @@ public class ConfigLoader {
         _config.setTABLE_NAME(propHold.TABLE_NAME);
         _config.setFUSION_TABLE_NAME(propHold.FUSION_TABLE_NAME);
         _config.setCOLUMN_NAMES(propHold.COLUMN_NAMES);
+        _config.setBASE_LAT(propHold.BASE_LAT);
+        _config.setBASE_LON(propHold.BASE_LON);
+        _config.setEND_CODE(propHold.END_CODE);
+        _config.setCOM_PORT(propHold.COM_PORT);
     }
 
     class ConfigHolder {
@@ -24,5 +28,9 @@ public class ConfigLoader {
         public String TABLE_NAME;
         public String FUSION_TABLE_NAME;
         public ArrayList<String> COLUMN_NAMES;
+        double BASE_LAT;
+        double BASE_LON;
+        String END_CODE;
+        String COM_PORT;
     }
 }

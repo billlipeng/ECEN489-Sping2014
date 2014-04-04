@@ -9,15 +9,17 @@ public class Server {
 	private static Config config;
     private static ConfigLoader pl;
 
-	public static void main(String[] args) throws Exception {
+  	public static void main(String[] args) throws Exception {
         // Load config
         config = new Config();
         pl = new ConfigLoader(config);
 
         System.out.println("IP: " + Inet4Address.getLocalHost().getHostAddress());
         System.out.println("Port: " + Integer.toString(config.PORT));
+        System.out.println("Lat: " + config.BASE_LAT);
+        System.out.println("Lon: " + config.BASE_LON);
 
-		try {
+    	try {
 			server = new ServerSocket(config.PORT);
 			// Worker threads are launched upon acceptance of client connection
 			while(true) {

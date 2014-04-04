@@ -33,7 +33,7 @@ public class DatabaseHandler implements Runnable {
 
             while(true) {
                 DataPoint dp = queue.take();
-                if (dp.getSsid().equals("quit")) { break; }
+                if (dp.getSsid().equals(config.END_CODE)) { break; }
                 statement.executeUpdate(createInsertSQL(dp));
             }
 
