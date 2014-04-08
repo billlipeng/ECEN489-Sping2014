@@ -46,26 +46,42 @@ public class Tester {
         new Thread(new FusionTableHandler(dataset)).start();*/
 
 //        new Thread(new ServoDriver()).start();
-        double lat1 = 30.61869655;
-        double lon1 = -96.34153996;
-        double testlat = 30.6180784;
-        double testlon = -96.3412879;
-        int bearing = (int) calculateBearing(lat1, testlat, lon1, testlon);
+        double base_lat = 30.623399;
+        double base_lon = -96.335571;
+        double cal_lat = 30.623698;
+        double cal_lon = -96.334913;
+        double trc_lat = 30.623566;
+        double trc_lon = -96.334748;
+
+        int bearing = (int) getAngle(base_lat, base_lon, cal_lat, cal_lon, trc_lat, trc_lon);
         System.out.println(bearing);
 
-        SerialHandler sh = new SerialHandler();
-        if ( sh.initialize() ) {
-            while(true) {
-                Random ran = new Random();
-                int x = ran.nextInt(360)-180;
-                sh.sendData(String.valueOf(x));
-                try { Thread.sleep(4000); } catch (InterruptedException ie) {}
-//                System.out.println(String.valueOf(bearing)+'\n');
-            }
-        }
+//        SerialHandler sh = new SerialHandler();
+//        if ( sh.initialize() ) {
+//            while(true) {
+//                Random ran = new Random();
+//                int x = ran.nextInt(360)-180;
+//                sh.sendData(String.valueOf(x));
+//                try { Thread.sleep(4000); } catch (InterruptedException ie) {}
+////                System.out.println(String.valueOf(bearing)+'\n');
+//            }
+//        }
 
 
 
+    }
+
+    public static double getAngle(double base_lat, double base_lon, double cal_lat, double cal_lon, double trc_lat, double trc_lon) {
+        double cal_base_lat = Math.toRadians(base_lat) - Math.toRadians(cal_lat);
+        double cal_base_lon = Math.toRadians(base_lon) - Math.toRadians(cal_lon);
+        double cal_base_mag = Math.sqrt(cal_base_lat*cal_base_lat+cal_base_lon*cal_base_lon);
+
+        double cal_trc_lat = Math.toRadians(trc_lat) - Math.toRadians(cal_lat);
+        double cal_trc_lon = Math.toRadians(trc_lon) - Math.toRadians(cal_lon);
+        double cal_trc_mag = Math.sqrt(cal_trc_lat*cal_trc_lat+cal_trc_lon*cal_trc_lon);
+
+        double return_ang = Math.asin((cal_base_lat*cal_trc_lon - cal_base_lon*cal_trc_lat)/(cal_base_mag*cal_trc_mag));
+        return Math.toDegrees(return_ang);
     }
 
     public static double calculateBearing(double lat1, double lat2, double long1, double long2) {

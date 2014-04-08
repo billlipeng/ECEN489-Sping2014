@@ -39,6 +39,19 @@ public class ServoDriver implements Runnable {
         try { Thread.sleep(2000); } catch (InterruptedException ie) {}
     }
 
+    public double getAngle(double base_lat, double base_lon, double cal_lat, double cal_lon, double trc_lat, double trc_lon) {
+        double cal_base_lat = Math.toRadians(base_lat) - Math.toRadians(cal_lat);
+        double cal_base_lon = Math.toRadians(base_lon) - Math.toRadians(cal_lon);
+        double cal_base_mag = Math.sqrt(cal_base_lat*cal_base_lat+cal_base_lon*cal_base_lon);
+
+        double cal_trc_lat = Math.toRadians(trc_lat) - Math.toRadians(cal_lat);
+        double cal_trc_lon = Math.toRadians(trc_lon) - Math.toRadians(cal_lon);
+        double cal_trc_mag = Math.sqrt(cal_trc_lat*cal_trc_lat+cal_trc_lon*cal_trc_lon);
+
+        double return_ang = Math.asin((cal_base_lat*cal_trc_lon - cal_base_lon*cal_trc_lat)/(cal_base_mag*cal_trc_mag));
+        return Math.toDegrees(return_ang);
+    }
+
     public static double calculateBearing(double lat1, double lat2, double long1, double long2) {
 
         lat1 = deg2rad(lat1);

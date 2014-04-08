@@ -6,6 +6,6 @@
 	"COLUMN_NAMES": ["time", "device_id", "ssid", "rssi", "longitude", "latitude"],
 	"BASE_LAT": 30.62233499,
 	"BASE_LON": -96.33657372,
-	"END_CODE": "quit",
+	"END_CODE": "stop",
 	"COM_PORT": "COM16"
 }
