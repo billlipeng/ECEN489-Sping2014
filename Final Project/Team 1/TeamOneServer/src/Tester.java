@@ -1,4 +1,6 @@
 
+import com.zpartal.finalproject.datapackets.DataPoint;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -6,6 +8,8 @@ import java.util.Random;
 Class made soley to test functionality, do not run as main
 */
 public class Tester {
+
+
     public static void main(String[] args) throws Exception {
        
     
@@ -18,8 +22,38 @@ public class Tester {
 
     int bearing = (int) getMotorAngle(base_lat, base_lon, cal_lat, cal_lon, trc_lat, trc_lon);
     System.out.println(bearing);
-    
 
+    SerialHandler sh = null;
+    int count = 0;
+    sh = new SerialHandler();
+    if ( sh.initialize() ) {
+        while(true) {
+//            int test = randInt(-180,180);
+            for (int i = -179; i <= 179; i++) {
+                if (i % 5 == 0) sh.sendData(String.valueOf(i));
+                Thread.sleep(200);
+            }
+//            sh.sendData(String.valueOf(test));
+//            System.out.println("TESTVAL: " + String.valueOf(test)+'\n');
+//            Thread.sleep(7000);
+        }
+    }
+    sh.close();
+
+    // Wait 5 seconds then shutdown
+    try { Thread.sleep(2000); } catch (InterruptedException ie) {}
+}
+
+public static int randInt(int min, int max) {
+
+    // Usually this can be a field rather than a method variable
+    Random rand = new Random();
+
+    // nextInt is normally exclusive of the top value,
+    // so add 1 to make it inclusive
+    int randomNum = rand.nextInt((max - min) + 1) + min;
+
+    return randomNum;
 }
 
 public static double getMotorAngle(double base_lat, double base_lon, double cal_lat, double cal_lon, double trc_lat, double trc_lon) {

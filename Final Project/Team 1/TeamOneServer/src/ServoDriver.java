@@ -19,14 +19,33 @@ public class ServoDriver implements Runnable {
     public void run() {
         int count = 0;
         sh = new SerialHandler();
+
+        double base_lat = 0.0;
+        double base_lon = 0.0;
+        double cal_lat = 0.0;
+        double cal_lon = 0.0;
+
         try {
             if ( sh.initialize() ) {
                 while(true) {
                     DataPoint dp = queue.take();
+
+                    if (dp.getSsid().equals("base")) {
+                        base_lat = dp.getLatitude();
+                        base_lon = dp.getLongitude();
+                    }
+
+                    if (dp.getSsid().equals("cal")) {
+                        cal_lat = dp.getLatitude();
+                        cal_lon = dp.getLongitude();
+                    }
+
                     if (dp.getSsid().equals(config.END_CODE)) { break; }
-                    int bearing = (int) calculateBearing(config.BASE_LAT, dp.getLatitude(), config.BASE_LON, dp.getLongitude());
-                    if (count %5 == 0) sh.sendData(String.valueOf(bearing));
-                    System.out.println(String.valueOf(bearing)+'\n');
+
+                    int motorAngle = (int) getMotorAngle(base_lat,  base_lon, cal_lat, cal_lon, dp.getLatitude(), dp.getLongitude());
+//                    if (count % 5 == 0) sh.sendData(String.valueOf(motorAngle));
+                    sh.sendData(String.valueOf(motorAngle));
+                    System.out.println(String.valueOf(motorAngle)+'\n');
                 }
             }
         } catch (InterruptedException e) {
@@ -39,9 +58,77 @@ public class ServoDriver implements Runnable {
         try { Thread.sleep(2000); } catch (InterruptedException ie) {}
     }
 
-    public double getAngle(double base_lat, double base_lon, double cal_lat, double cal_lon, double trc_lat, double trc_lon) {
+    public static double getMotorAngle(double base_lat, double base_lon, double cal_lat, double cal_lon, double trc_lat, double trc_lon) {
+        int calquad = getQuadrant(cal_lat,cal_lon,base_lat,base_lon);
+        int trcquad = getQuadrant(cal_lat,cal_lon,trc_lat,trc_lon);
+
+        System.out.println("calquad "+ calquad + " trcquad " + trcquad);
+
+
+
+        double alpha = getAlphaBeta(base_lat,base_lon,cal_lat,cal_lon);
+        double beta = getAlphaBeta(trc_lat,trc_lon,cal_lat,cal_lon);
+
+        System.out.println("alpha "+ alpha + " beta " + beta);
+
+        if(calquad == trcquad){
+            if(alpha > beta){
+                return -1.0*getAngle(base_lat,base_lon,cal_lat,cal_lon,trc_lat,trc_lon);
+            }else{
+                return getAngle(base_lat,base_lon,cal_lat,cal_lon,trc_lat,trc_lon);
+            }
+        }else if((int)Math.abs((double)(calquad-trcquad))%4 == 2){
+            if(alpha > beta){
+                return (180.0 + getAngle(base_lat,base_lon,cal_lat,cal_lon,trc_lat,trc_lon));
+            }else{
+                return -1.0*(180.0 - getAngle(base_lat,base_lon,cal_lat,cal_lon,trc_lat,trc_lon));
+            }
+        }else if(((trcquad == 1 && calquad == 4)) || ((trcquad > calquad) && (trcquad != 4))){
+            if(beta > alpha){
+                return (beta - alpha) + 90.0;
+                //return (180.0 + getAngle(base_lat,base_lon,cal_lat,cal_lon,trc_lat,trc_lon));
+            }else{
+                return getAngle(base_lat,base_lon,cal_lat,cal_lon,trc_lat,trc_lon);
+            }
+        }else{
+            if(beta > alpha){
+                return -1.0*getAngle(base_lat,base_lon,cal_lat,cal_lon,trc_lat,trc_lon);
+            }else{
+                return -1.0*(180.0 - getAngle(base_lat,base_lon,cal_lat,cal_lon,trc_lat,trc_lon));
+            }
+        }
+    }
+
+    public static double getAlphaBeta(double base_lat, double base_lon, double cal_lat, double cal_lon) {
+        int calquad = getQuadrant(cal_lat,cal_lon,base_lat,base_lon);
+
+        double alpha = 0.0;
+
+        switch(calquad){
+            case 1:
+                alpha = getAngle(base_lat,base_lon, cal_lat,cal_lon,cal_lat,base_lon);
+                break;
+            case 2:
+                alpha = getAngle(base_lat,base_lon, cal_lat,cal_lon,base_lat,cal_lon);
+                break;
+            case 3:
+                alpha = getAngle(base_lat,base_lon, cal_lat,cal_lon,cal_lat,base_lon);
+                break;
+            case 4:
+                alpha = getAngle(base_lat,base_lon, cal_lat,cal_lon,base_lat,cal_lon);
+                break;
+            default:
+                alpha = 0.0;
+        }
+        return alpha;
+    }
+
+    public static double getAngle(double base_lat, double base_lon, double cal_lat, double cal_lon, double trc_lat, double trc_lon) {
         double cal_base_lat = Math.toRadians(base_lat) - Math.toRadians(cal_lat);
         double cal_base_lon = Math.toRadians(base_lon) - Math.toRadians(cal_lon);
+
+
+
         double cal_base_mag = Math.sqrt(cal_base_lat*cal_base_lat+cal_base_lon*cal_base_lon);
 
         double cal_trc_lat = Math.toRadians(trc_lat) - Math.toRadians(cal_lat);
@@ -49,7 +136,24 @@ public class ServoDriver implements Runnable {
         double cal_trc_mag = Math.sqrt(cal_trc_lat*cal_trc_lat+cal_trc_lon*cal_trc_lon);
 
         double return_ang = Math.asin((cal_base_lat*cal_trc_lon - cal_base_lon*cal_trc_lat)/(cal_base_mag*cal_trc_mag));
+        // System.out.println("angle "+return_ang);
         return Math.toDegrees(return_ang);
+    }
+
+    public static int getQuadrant(double cal_lat, double cal_lon, double trc_lat, double trc_lon){
+        double cal_base_lat = Math.toRadians(trc_lat) - Math.toRadians(cal_lat);
+        double cal_base_lon = Math.toRadians(trc_lon) - Math.toRadians(cal_lon);
+
+//System.out.println("lat "+cal_base_lat+" lon "+cal_base_lon);
+        if((cal_base_lat >= 0) && (cal_base_lon >= 0)){
+            return 1;
+        }else if((cal_base_lat >= 0) && (cal_base_lon < 0)){
+            return 2;
+        }else if((cal_base_lat < 0) && (cal_base_lon < 0)){
+            return 3;
+        }else{
+            return 4;
+        }
     }
 
     public static double calculateBearing(double lat1, double lat2, double long1, double long2) {
