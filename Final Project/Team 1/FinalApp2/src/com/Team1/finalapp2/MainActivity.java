@@ -39,6 +39,7 @@ public class MainActivity extends Activity implements LocationListener {
 	Boolean stopStreamButtonPressed = false;
 	Boolean cal1Pressed = false;
 	Boolean cal2Pressed = false;
+	Boolean disconnectFromServer = false;
 	
 	// SQLite variables
 	SQLiteDatabase dbStreamingData;
@@ -47,7 +48,6 @@ public class MainActivity extends Activity implements LocationListener {
 	// app elements
 	Button calPoint1Button;
 	Button calPoint2Button;
-	Button dataPointButton;
 	Button connectButton;
 	Button beginMeasurementButton;
 	TextView outputTextView;
@@ -77,7 +77,7 @@ public class MainActivity extends Activity implements LocationListener {
 	private String SSID;
 	
 	ArrayList<DataPoint> dp = new ArrayList<DataPoint>();
-	DataPoint point;
+	//DataPoint point;
 	
 
 	@Override
@@ -88,7 +88,6 @@ public class MainActivity extends Activity implements LocationListener {
 		// intitialize app elements
 		calPoint1Button = (Button) findViewById(R.id.calPoint1Button);
 		calPoint2Button = (Button) findViewById(R.id.calPoint2Button);
-		dataPointButton = (Button) findViewById(R.id.dataPointButton);
 		connectButton = (Button) findViewById(R.id.connectButton);
 		beginMeasurementButton = (Button) findViewById(R.id.beginMeasurementsButton);
 		outputTextView = (TextView) findViewById(R.id.outputTextView);
@@ -141,10 +140,13 @@ public class MainActivity extends Activity implements LocationListener {
 					beginButtonPressed = true;
 					stopStreamButtonPressed = false;
 					beginMeasurementButton.setText("Stop Stream");
+					connectButton.setEnabled(false);
 				} else {
+					beginMeasurementButton.setText("Begin Streaming Measurement");
 					outputTextView.setText("Streaming Stopped");
 					stopStreamButtonPressed = true;
 					beginButtonPressed = false;
+					connectButton.setEnabled(true);
 				}
 			}
 		});
@@ -162,12 +164,17 @@ public class MainActivity extends Activity implements LocationListener {
 					IP = ipEditText.getText().toString().trim();
 					Port = Integer.parseInt(portNumEditText.getText().toString());
 					
+					disconnectFromServer = false;
+					ipEditText.setEnabled(false);
+					portNumEditText.setEnabled(false);
+					
 					AsyncCreateConnection createConnection = new AsyncCreateConnection();
 					createConnection.execute();
 					
 				} else {
 					connectButton.setText("Connect To Server");
 					outputTextView.setText("Disconnect From Server");
+					disconnectFromServer = true;
 				}
 			}
 		});
@@ -268,7 +275,7 @@ public class MainActivity extends Activity implements LocationListener {
 		build.rssi(RSSI);
 		build.ssid(SSID);
 		build.device_id(deviceID);
-		point = new DataPoint(build);
+		DataPoint point = new DataPoint(build);
 		dp.add(point);
 		return point;
 		//addToMeasurementsDatabase(point);
@@ -302,51 +309,59 @@ public class MainActivity extends Activity implements LocationListener {
 		protected Void doInBackground(Void... arg0) {
 			// TODO Auto-generated method stub
 			try {
-				socket = new Socket(InetAddress.getByName(IP), Port);
-				out = new ObjectOutputStream(socket.getOutputStream());
+				if (!disconnectFromServer) {
+					socket = new Socket(InetAddress.getByName(IP), Port);
+					out = new ObjectOutputStream(socket.getOutputStream());
+				}
 				
 				while (true) {
-					android.os.SystemClock.sleep(1000); // one second wait
+					//android.os.SystemClock.sleep(1000); // one second wait
 					DataPoint point = takeMeasurements();
 					Builder build = new Builder();
 					build.latitude(point.getLatitude());
 					build.longitude(point.getLongitude());
 					build.time(point.getTime());
 					build.rssi(point.getRssi());
+					build.ssid(point.getSsid());
 					build.device_id(point.getDevice_id());
 					if (beginButtonPressed) {
-						out.writeObject(point);
+						DataPoint dp = new DataPoint(build);
+						out.writeObject((DataPoint)dp);
 						out.flush();
-						addToStreamingDatabase(point);
+						addToStreamingDatabase(dp);
 					}
 					if (cal1Pressed) {
 						build.ssid("base");
 						DataPoint dp = new DataPoint(build);
-						out.writeObject(dp);
+						out.writeObject((DataPoint)dp);
 						out.flush();
 						cal1Pressed = false;
 					}
 					if (cal2Pressed) {
 						build.ssid("calibration");
 						DataPoint dp = new DataPoint(build);
-						out.writeObject(dp);
+						out.writeObject((DataPoint)dp);
 						out.flush();
 						cal2Pressed = false;
 					}
 					if (stopStreamButtonPressed) {
 						beginButtonPressed = false;
+					}
+					if (disconnectFromServer) {
+						try {
+							socket.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							outputTextView.append(e.getMessage());
+						}
 						break;
 					}
+					android.os.SystemClock.sleep(5000); // five second wait
 				}
 			} catch (IOException e) {
 				outputTextView.append(e.getMessage());
 			}
-			try {
-				socket.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				outputTextView.append(e.getMessage());
-			}
+			
 			return null;
 		}
 	}

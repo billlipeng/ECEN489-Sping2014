@@ -57,13 +57,13 @@ public static double getMotorAngle(double base_lat, double base_lon, double cal_
         	return (beta - alpha) + 90.0;
             //return (180.0 + getAngle(base_lat,base_lon,cal_lat,cal_lon,trc_lat,trc_lon));
         }else{
-            return getAngle(base_lat,base_lon,cal_lat,cal_lon,trc_lat,trc_lon);
+            return -1.0*getAngle(base_lat,base_lon,cal_lat,cal_lon,trc_lat,trc_lon);
         }
     }else{
         if(beta > alpha){
             return -1.0*getAngle(base_lat,base_lon,cal_lat,cal_lon,trc_lat,trc_lon);
         }else{
-            return getAngle(base_lat,base_lon,cal_lat,cal_lon,trc_lat,trc_lon);
+            return -1.0*(180 - getAngle(base_lat,base_lon,cal_lat,cal_lon,trc_lat,trc_lon));
         }
     }
 }

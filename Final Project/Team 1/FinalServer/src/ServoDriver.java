@@ -25,8 +25,9 @@ public class ServoDriver implements Runnable {
                     DataPoint dp = queue.take();
                     if (dp.getSsid().equals(config.END_CODE)) { break; }
                     int bearing = (int) calculateBearing(config.BASE_LAT, dp.getLatitude(), config.BASE_LON, dp.getLongitude());
-                    if (count %5 == 0) sh.sendData(String.valueOf(Tester.MAIN_ANGLE));
-                    System.out.println(String.valueOf(Tester.MAIN_ANGLE)+'\n');
+                    System.out.println("WRITING ANGLE "+ (int) Tester.MAIN_ANGLE);
+                    if (count %5 == 0) sh.sendData(String.valueOf((int)Tester.MAIN_ANGLE));
+                    //System.out.println(String.valueOf(Tester.MAIN_ANGLE)+'\n');
                 }
             }
         } catch (InterruptedException e) {
