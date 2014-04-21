@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">BESTTEAM</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Database</string>
+    <string name="button1">Set Wifi</string>
+    <string name="button2">Update</string>
+    <string name="button3">PengTest</string>
+    <string name="button4">Stop</string>
+    
+    
+    <string name="value1">Choose Wifi</string>
+    <string name="value2">Choose IP</string>
+    <string name="title_activity_sql">SQLActivity</string>
+    <string name="button_change">View</string>
+    <string name="buttonnew">Delete</string>
+    
+        
+</resources>
