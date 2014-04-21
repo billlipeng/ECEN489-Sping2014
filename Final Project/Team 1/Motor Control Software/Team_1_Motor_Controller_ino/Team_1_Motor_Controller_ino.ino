@@ -1,9 +1,12 @@
-/*
+/*****************************************************
 Team: 1
 Title: Final Project Stepper Motor Control Software
 ECEN 489
-*/
+******************************************************/
 
+//************************************************************//
+
+//define pins that are connected to Steppper Motor Driver
 const int DIR = 3;
 const int EN = 4;
 const int PULSE = 5;
@@ -16,6 +19,7 @@ double pos;
 int number; // rotate number
 int start_flag;
 
+//************************************************************//
 
 void setup()
 {
@@ -41,6 +45,8 @@ void setup()
     start_flag = 0;
 }
 
+//************************************************************//
+
 void loop()
 { 
     //initialize
@@ -64,7 +70,7 @@ void loop()
     }    
 
 	//start checking user input to determine course of action	
-    if(start_flag){
+    if(start_flag) {
 	  
 	  // range of motion is between -180 and 180 degrees
 	  // server will only send values within this range
@@ -82,11 +88,12 @@ void loop()
         number = angle/0.09;
 		
 		//rotate by number of steps
-        rotateStepper(-number);
+        rotateStepper(number);
                 
 		//calculate new position
         pos = pos + number * 0.09;
 
+//************************************************************//		
 //debugging outputs, uncomment and monitor as needed		
 //        Serial.print("Angle: ");
 //        Serial.println(angle);		
@@ -95,14 +102,15 @@ void loop()
 //        Serial.print("Position: ");
 //        Serial.println(pos);
 //        Serial.println("-----------");		
-       
+ //************************************************************//      
       }
 ;
-        
+//************************************************************//        
 //      Serial1.println("");
 //      Serial1.print("Antenna position: ");
 //      Serial1.print(pos);
 //      Serial1.print(" degrees");
+//************************************************************//
 
       Serial.flush();	//flush to prepare for new data
       
@@ -110,6 +118,7 @@ void loop()
     }
 }
 
+//************************************************************//
 //function to determine which direction in which to rotate 
 //and rotate by number of steps calculated in main
 void rotateStepper(int number)
@@ -139,18 +148,6 @@ void rotateStepper(int number)
       //disable motor -- necessary to avoid erratic behavior
       digitalWrite(EN, LOW);
 
-      
     }
 }
-
-//might not need this function...never called
-/*
-int cal_steps(double angle, double pos)
-{
-    int number = 0;
-    if(abs(angle + pos)<180)
-      return number = angle/0.18;
-    else
-      return 0;
-}
-*/
+//****************************END********************************//
