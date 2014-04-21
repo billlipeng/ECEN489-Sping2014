@@ -41,7 +41,7 @@ public class Worker implements Runnable {
         servoQueue = new ArrayBlockingQueue<DataPoint>(1024);
 
         try {
-            //new Thread(new DatabaseHandler(DBQueue)).start();
+            new Thread(new DatabaseHandler(DBQueue)).start();
             new Thread(new ServoDriver(servoQueue)).start();
             ois = new ObjectInputStream(client.getInputStream());
 

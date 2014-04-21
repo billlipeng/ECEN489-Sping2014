@@ -27,7 +27,7 @@ public class DatabaseHandler implements Runnable {
         try
         {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:"+ config.DB_PATH);
+            connection = DriverManager.getConnection("jdbc:sqlite:FinalDB.sqlite");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
