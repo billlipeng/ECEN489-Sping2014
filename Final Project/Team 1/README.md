@@ -12,3 +12,4 @@ The following project directories are intended to be graded:<br>
 * FinalApp2: Android Application
 * FinalServer: Server
 * Motor Control Software: Arduino Sketch
+* Algorithm Software is located in Jason's directory for now. We will move it over to here.
