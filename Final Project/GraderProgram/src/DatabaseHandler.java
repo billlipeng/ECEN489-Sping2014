@@ -16,8 +16,8 @@ public class DatabaseHandler {
         System.out.println("Made DB Connection...");
     }
 
-    public ArrayList<Coordinates> readDBData(String tableName) {
-        ArrayList<Coordinates> dataset = new ArrayList<Coordinates>();
+    public ArrayList<Tuple> readDBData(String tableName) {
+        ArrayList<Tuple> dataset = new ArrayList<Tuple>();
         try {
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
@@ -25,7 +25,7 @@ public class DatabaseHandler {
             ResultSet rs = statement.executeQuery("select * from " + tableName);
             while(rs.next())
             {
-                dataset.add(new Coordinates(rs.getDouble("latitude"), rs.getDouble("longitude")));
+                dataset.add(new Tuple(rs.getInt("number"), rs.getDouble("rssi")));
             }
             rs.close();
         } catch (SQLException e) {
