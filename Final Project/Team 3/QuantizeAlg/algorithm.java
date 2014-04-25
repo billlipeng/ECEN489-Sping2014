@@ -155,7 +155,6 @@ public class algorithm {
 					lonOut.add(maxLon-((double)i)/scaling);
 					latOut.add(maxLat-((double)j)/scaling);
 					rssiOut.add(newData[i][j]);
-
 				}
 				System.out.println(print);
 				print = " ";
@@ -163,10 +162,27 @@ public class algorithm {
 		}
 		else
 		{
-			for( int i=0; i<lonOut.size(); i++)
+			for( int i=0; i<lat.size(); i++)
 			{
+				
 				lonOut.add(lon.get(i));
 				latOut.add(lat.get(i));
+				if(xBox[i] < 0)
+				{
+					xBox[i] = 0;
+				}
+				if(yBox[i] < 0)
+				{
+					yBox[i] = 0;
+				}
+				if(xBox[i] > size)
+				{
+					xBox[i] = size;
+				}
+				if(yBox[i] > size)
+				{
+					yBox[i] = size;
+				}
 				rssiOut.add(newData[xBox[i]][yBox[i]]);
 			}
 		}
