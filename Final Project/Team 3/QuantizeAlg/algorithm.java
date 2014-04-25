@@ -92,15 +92,16 @@ public class algorithm {
 	    	int x=(int) ((lon.get(i)-minLon)*scaling);
 	    	int y=(int) ((lat.get(i)-minLat)*scaling);
 	    	
-	    	xBox[i] = x; 
-	    	yBox[i] = y;
+	    	
 	    	
 	    	if(x<size && y<size){
 	    	Data1[x][y]=rssi.get(i);
 	    	//System.out.println("lon i ="+lon.get(i)+" min lon="+minLon);
 	    	System.out.println(""+x+", "+y+", rssi="+rssi.get(i));
 
-
+	    	xBox[i] = x; 
+	    	yBox[i] = y;
+	    	
 	    	}
 
 	    }
@@ -162,7 +163,7 @@ public class algorithm {
 		}
 		else
 		{
-			for( int i=0; i<lat.size(); i++)
+			for( int i=0; i<xBox.length; i++)
 			{
 				
 				lonOut.add(lon.get(i));
