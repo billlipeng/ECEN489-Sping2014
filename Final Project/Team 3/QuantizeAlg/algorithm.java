@@ -176,13 +176,13 @@ public class algorithm {
 				{
 					yBox[i] = 0;
 				}
-				if(xBox[i] > size)
+				if(xBox[i] >= size)
 				{
-					xBox[i] = size;
+					xBox[i] = size -1;
 				}
-				if(yBox[i] > size)
+				if(yBox[i] >= size)
 				{
-					yBox[i] = size;
+					yBox[i] = size -1;
 				}
 				rssiOut.add(newData[xBox[i]][yBox[i]]);
 			}
