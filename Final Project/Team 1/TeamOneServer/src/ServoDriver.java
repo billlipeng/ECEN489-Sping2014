@@ -6,13 +6,28 @@ public class ServoDriver implements Runnable {
     private Config config = new Config();
     protected BlockingQueue<DataPoint> queue = null;
     SerialHandler sh = null;
+    double base_lat = 0.0;
+    double base_lon = 0.0;
+    double cal_lat = 0.0;
+    double cal_lon = 0.0;
 
-    public ServoDriver(BlockingQueue<DataPoint> _queue) {
+    public ServoDriver(BlockingQueue<DataPoint> _queue,double _base_lat, double _base_lon, double _cal_lat, double _cal_lon) {
         this.queue = _queue;
+        this.base_lat = _base_lat;
+        this.base_lon = _base_lon;
+        this.cal_lat = _cal_lat;
+        this.cal_lon = _cal_lon;
     }
 
     public ServoDriver() {
         this.queue = null;
+    }
+
+    public void setPoints(double _base_lat, double _base_lon, double _cal_lat, double _cal_lon) {
+        this.base_lat = _base_lat;
+        this.base_lon = _base_lon;
+        this.cal_lat = _cal_lat;
+        this.cal_lon = _cal_lon;
     }
 
     @Override
@@ -20,28 +35,11 @@ public class ServoDriver implements Runnable {
         int count = 0;
         sh = new SerialHandler();
 
-        double base_lat = 0.0;
-        double base_lon = 0.0;
-        double cal_lat = 0.0;
-        double cal_lon = 0.0;
-
         try {
             if ( sh.initialize() ) {
                 while(true) {
                     DataPoint dp = queue.take();
-
-                    if (dp.getSsid().equals("base")) {
-                        base_lat = dp.getLatitude();
-                        base_lon = dp.getLongitude();
-                    }
-
-                    if (dp.getSsid().equals("cal")) {
-                        cal_lat = dp.getLatitude();
-                        cal_lon = dp.getLongitude();
-                    }
-
                     if (dp.getSsid().equals(config.END_CODE)) { break; }
-
                     int motorAngle = (int) getMotorAngle(base_lat,  base_lon, cal_lat, cal_lon, dp.getLatitude(), dp.getLongitude());
 //                    if (count % 5 == 0) sh.sendData(String.valueOf(motorAngle));
                     sh.sendData(String.valueOf(motorAngle));

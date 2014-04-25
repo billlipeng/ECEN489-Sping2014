@@ -15,6 +15,11 @@ public class Worker implements Runnable {
     BlockingQueue<DataPoint> DBQueue = null;
     BlockingQueue<DataPoint> servoQueue = null;
 
+    double base_lat = 0.0;
+    double base_lon = 0.0;
+    double cal_lat = 0.0;
+    double cal_lon = 0.0;
+
 	public Worker(Socket client) {
 		super();
 		this.client = client;
@@ -27,18 +32,34 @@ public class Worker implements Runnable {
         servoQueue = new ArrayBlockingQueue<DataPoint>(1024);
 
         try {
-            new Thread(new DatabaseHandler(DBQueue)).start();
-            new Thread(new ServoDriver(servoQueue)).start();
             ois = new ObjectInputStream(client.getInputStream());
+            DataPoint dp = (DataPoint) ois.readObject();
+
+            if (dp.getSsid().equals("base")) {
+                base_lat = dp.getLatitude();
+                base_lon = dp.getLongitude();
+                System.out.println("Base value set");
+            }
+
+            dp = (DataPoint) ois.readObject();
+            if (dp.getSsid().equals("calibration")) {
+                cal_lat = dp.getLatitude();
+                cal_lon = dp.getLongitude();
+                System.out.println("Calibration value set");
+            }
+
+            new Thread(new DatabaseHandler(DBQueue)).start();
+            new Thread(new ServoDriver(servoQueue, base_lat,base_lon,cal_lat,cal_lon)).start();
 
             while(true) {
-                DataPoint dp = (DataPoint) ois.readObject();
+                dp = (DataPoint) ois.readObject();
                 System.out.println(dp.toString());
                 if (dp.getSsid().equals(config.END_CODE)) { break; }
                 dataset.add(dp);
                 DBQueue.put(dp);
                 servoQueue.put(dp);
             }
+
             ois.close();
             client.close();
 
