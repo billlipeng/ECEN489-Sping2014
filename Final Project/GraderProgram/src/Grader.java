@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.lang.Math;
 
 /**
  * Created by Zachary on 3/7/14.
@@ -17,14 +18,14 @@ public class Grader {
         System.out.println(studentdbpath);
         ArrayList<Double> averages = new ArrayList<Double>();
         for (String table : tables) {
-            ArrayList<Tuple> masterCoords = masterDBH.readDBData(table);
+            ArrayList<Tuple> masterData = masterDBH.readDBData(table);
             ArrayList<Tuple> studentCoords = studentDBH.readDBData(table);
 
             Double average = 0.0;
-            for (int i = 0; i < masterCoords.size(); i++) {
-                average += haversine(masterCoords.get(i), studentCoords.get(i));
+            for (int i = 0; i < masterData.size(); i++) {
+                average += Math.pow((masterData.get(i).y - studentCoords.get(i).y),2.0);
             }
-            average = average/masterCoords.size();
+            average = average/masterData.size();
             averages.add(average);
             System.out.println(table + " " + average*1000 + "m");
         }
@@ -34,16 +35,6 @@ public class Grader {
         }
         System.out.println("Total Average: " + totalaverage/averages.size()*1000 + "m");
     }
-    static double haversine(Coordinates coordinates0, Coordinates coordinates1) {
-        double EarthRadius = 6372.8; // Kilometers
-        double deltaLatitude = coordinates1.getLatitude() - coordinates0.getLatitude();
-        double deltaLongitude = coordinates1.getLongitude() - coordinates0.getLongitude();
 
-        double a = Math.sin(deltaLatitude * 0.5) * Math.sin(deltaLatitude * 0.5)
-                + Math.cos(coordinates0.getLatitude()) * Math.cos(coordinates1.getLatitude())
-                * Math.sin(deltaLongitude * 0.5) * Math.sin(deltaLongitude * 0.5);
-
-        return (2 * EarthRadius * Math.asin(Math.sqrt(a)));
-    }
 }
 
